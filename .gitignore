@@ -1,0 +1,11 @@
+venv
+deploy
+logs
+ansible/group_vars/all/custom.yml
+.idea
+*.iml
+*.swp
+bench-scripts/
+reports/
+bench-site/public
+bin/.build
