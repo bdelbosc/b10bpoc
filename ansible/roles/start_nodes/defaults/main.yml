@@ -1,21 +1,16 @@
 ---
 keypair: Jenkins
-aws_region: eu-west-1
 security_group: jenkins-vpc
 subnet_id: subnet-dbac2a82
 instance_profile: JenkinsRole
-dbprofile: pgsql
-mongo: false
 amis:
   nuxeo: ami-910fa9e2
-  es: ami-910fa9e2
+  mongodb: ami-1e4cd86d
 types:
-  nuxeo: c4.xlarge
-  es: c4.xlarge
+  nuxeo: c3.xlarge
+  mongodb: c3.xlarge
 counts:
-  nuxeo: 2
-  es: 3
-volsizes:
-  nuxeo: 10
-  es: 10
+  nuxeo: 1
+  mongodb: 1
+
 

@@ -1,3 +1,2 @@
 ---
-dbprofile: pgsql
 mongo: false

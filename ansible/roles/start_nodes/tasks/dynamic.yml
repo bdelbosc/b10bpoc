@@ -34,7 +34,7 @@
     group: "{{security_group}}"
     instance_profile_name: "{{instance_profile}}"
     assign_public_ip: yes
-    ebs_optimized: true
+    # ebs_optimized: true  useless when using instance storage
     instance_tags:
       Name: bench-{{bench}}-{{type}}
       bench: "{{bench}}"
@@ -47,36 +47,13 @@
       bench_role: "{{type}}"
     volumes:
     - device_name: /dev/xvdf
-      device_type: gp2
-      volume_type: gp2
+      ephemeral: true
+      volume_type
       volume_size: "{{volsizes[type]}}"
       delete_on_termination: true
     wait: yes
   register: created_instances
-- name: List new volumes
-  ec2_vol:
-    region: "{{aws_region}}"
-    instance: "{{item.id}}"
-    state: list
-  with_items: created_instances.instances
-  when: created_instances.changed
-  register: created_volumes
-- name: Register empty list for new volumes
-  set_fact:
-    created_volumes: {"results": []}
-  when: not created_instances.changed
-- name: Tag new volumes
-  ec2_tag:
-    region: "{{aws_region}}"
-    resource: "{{item.1.id}}"
-    state: present
-    tags:
-      Name: bench-{{bench}}-{{type}}
-      bench: "{{bench}}"
-      bench_role: "{{type}}"
-  with_subelements:
-    - created_volumes.results
-    - volumes
+
 - name: Add new instances to group
   add_host: hostname={{item.private_ip if keypair == "Jenkins" else item.public_ip}} groupname={{type}}
   with_items: created_instances.instances

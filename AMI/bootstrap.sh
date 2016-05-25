@@ -8,11 +8,11 @@ echo '*       hard    nofile      8192' >> /etc/security/limits.conf
 export DEBIAN_FRONTEND=noninteractive
 locale-gen en_US.UTF-8
 update-locale LANG=en_US.UTF-8
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.0.list
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.2.list
 apt-get update
 apt-get -q -y upgrade
-apt-get -q -y install openssh-server openssh-client vim postfix curl git
+apt-get -q -y install openssh-server openssh-client vim postfix curl git atop sysstat screen
 update-alternatives --set editor /usr/bin/vim.basic
 
 # Secure postfix
@@ -30,10 +30,6 @@ dpkg -i packages/ffmpeg-nuxeo_2.7.2-1_amd64.deb
 popd
 rm -rf nuxeo-tools-docker
 docker images -q | xargs docker rmi
-
-# Install Java 7
-apt-get -q -y install openjdk-7-jdk
-update-java-alternatives -s java-1.7.0-openjdk-amd64
 
 # Install Nuxeo dependencies & misc tools
 apt-get -q -y install \
