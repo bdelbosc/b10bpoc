@@ -1,0 +1,60 @@
+---
+- name: List stopped instances
+  shell: aws ec2 describe-instances --filters "Name=tag:bench,Values={{bench}}" "Name=tag:bench_role,Values={{type}}" "Name=instance-state-name,Values=stopped" --region={{aws_region}} --no-paginate --query "Reservations[*].Instances[*].InstanceId" | grep "i-" | tr -d '" ,' | paste -d, -s
+  changed_when: False
+  register: stopped_instances
+
+- name: Start stopped instances
+  ec2:
+    region: "{{aws_region}}"
+    instance_ids: "{{stopped_instances.stdout}}"
+    instance_tags:
+      bench: "{{bench}}"
+      bench_role: "{{type}}"
+      billing-category: build
+      billing-subcategory: bench
+    state: "running"
+    wait: yes
+  when: stopped_instances.stdout != ""
+  register: started_instances
+
+- name: Register empty list for started instances
+  set_fact:
+    started_instances: {"instances": []}
+  when: stopped_instances.stdout == ""
+
+- name: Add started instances to group
+  add_host: hostname={{item.private_ip if keypair == "Jenkins" else item.public_ip}} groupname={{type}}
+  with_items: started_instances.instances
+
+- name: Create/destroy instances
+  ec2:
+    region: "{{aws_region}}"
+    key_name: "{{keypair}}"
+    instance_type: "{{types[type]}}"
+    image: "{{amis[type]}}"
+    vpc_subnet_id: "{{subnet_id}}"
+    group: "{{security_group}}"
+    instance_profile_name: "{{instance_profile}}"
+    assign_public_ip: yes
+    # ebs_optimized: true  useless when using instance storage
+    instance_tags:
+      Name: bench-{{bench}}-{{type}}
+      bench: "{{bench}}"
+      bench_role: "{{type}}"
+      billing-category: build
+      billing-subcategory: bench
+    exact_count: "{{counts[type]}}"
+    count_tag:
+      bench: "{{bench}}"
+      bench_role: "{{type}}"
+  register: created_instances
+
+- name: Add new instances to group
+  add_host: hostname={{item.private_ip if keypair == "Jenkins" else item.public_ip}} groupname={{type}}
+  with_items: created_instances.instances
+  when: created_instances.changed
+
+- name: Wait for SSH to be available on all instances
+  wait_for: host={{item.private_ip if keypair == "Jenkins" else item.public_ip}} port=22 delay=10 timeout=320 state=started
+  with_items: started_instances.instances + created_instances.instances

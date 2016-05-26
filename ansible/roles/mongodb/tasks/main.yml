@@ -13,21 +13,8 @@
 - name: Upgrade/install tools
   apt: state=latest name={{item}}
   with_items:
-  - unzip
-  - tree
-  - atop
-  - sysstat
   - xfsprogs
   - mongodb-org
-
-- name: Activate sysstat
-  lineinfile:
-    dest: /etc/default/sysstat
-    regexp: '^#?ENABLED\s*='
-    line: "ENABLED=\"true\""
-
-- name: Restart sysstat
-  service: name=sysstat state=restarted
 
 # disk
 - name: Umount /mnt
@@ -87,9 +74,6 @@
   when: mounted.stdout == ""
 
 # mongodb setup
-
-- name: Display all variables/facts known for a host
-  debug: var=hostvars[inventory_hostname] verbosity=4
 
 - name: Set mongo configuration file
   template: src=mongod.j2 dest=/etc/mongod.conf

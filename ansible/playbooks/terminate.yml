@@ -2,4 +2,4 @@
 - hosts: localhost
   gather_facts: no
   tasks:
-  - include: ../roles/common/tasks/terminate.yml
+  - include: ../roles/ec2/tasks/terminate.yml

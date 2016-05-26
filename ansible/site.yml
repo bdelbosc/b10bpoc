@@ -3,8 +3,15 @@
   gather_facts: no
   sudo: no
   roles:
-  - {role: common, type: mongodb}
-  - {role: common, type: nuxeo}
+  - {role: ec2, type: mongodb}
+  - {role: ec2, type: nuxeo}
+
+- hosts: all
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: common
 
 - hosts: mongodb
   gather_facts: no
