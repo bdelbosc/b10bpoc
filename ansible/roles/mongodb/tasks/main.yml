@@ -99,7 +99,7 @@
         state=link
         force=yes
 
-
 # restart
 - name: Restart mongod
   service: name=mongod state=restarted
+  when: mounted.stdout == ""

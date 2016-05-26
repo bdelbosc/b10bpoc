@@ -1,4 +1,15 @@
 ---
+# Ensure instance is clean
+- name: Check for nuxeoctl wrapper
+  stat: path=/usr/bin/nuxeoctl
+  register: nuxeoctl
+
+- name: Check for nuxeoctl wrapper
+  shell: nuxeoctl status | grep "Server is running"
+  register: nuxeorunning
+  failed_when: False
+  when: nuxeoctl.stat.exists
+
 - name: Upload distribution and settings
   synchronize:
     src: ../deploy
@@ -6,7 +17,6 @@
     delete: yes
 
 # disk
-
 # ssd1
 - name: Check if /ssd1 volume is mounted
   shell: cat /proc/mounts | grep /dev/xvdb
@@ -161,9 +171,33 @@
     regexp: '^#?JAVA_OPTS\s*(.*)FlightRecorder'
     line: "JAVA_OPTS=$JAVA_OPTS -Dcom.sun.management.jmxremote.autodiscovery=true -Dcom.sun.management.jdp.name=Nuxeo -XX:+UnlockCommercialFeatures -XX:+FlightRecorder"
 
+# tuning
+- name: Config - low softref
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?JAVA_OPTS\s*(.*)SoftRefLRUPolicyMSPerMB'
+    line: "JAVA_OPTS=$JAVA_OPTS -XX:SoftRefLRUPolicyMSPerMB=1"
+- name: Config - Disable fulltext
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?nuxeo.vcs.fulltext.disabled\s*(.*)'
+    line: "nuxeo.vcs.fulltext.disabled=true"
+- name: Config - Disable elastic
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.enabled\s*(.*)'
+    line: "elasticsearch.enabled=false"
+- name: Config - Disable elastic audit
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?audit.elasticsearch.enabled=\s*(.*)'
+    line: "audit.elasticsearch.enabled=false"
+
+
 # Add distribution packages
 - name: Add distribution packages
   shell: nuxeoctl mp-init
+  when: nuxeorunning.stdout == ""
 
 # Add custom bundles
 - name: Check for custom bundles
@@ -214,7 +248,7 @@
   register: installpkg
 - name: Install custom packages
   shell: nuxeoctl --accept=true --relax=false mp-install $(cat /deploy/mp-list | tr '\n' ' ')
-  when: installpkg.stat.exists
+  when: installpkg.stat.exists and nuxeorunning.stdout == ''
 
 # Add custom config
 - name: Check for custom configuration

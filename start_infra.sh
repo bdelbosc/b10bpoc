@@ -48,6 +48,8 @@ function get_nuxeo_distribution() {
   cp /opt/build/hudson/instance.clid $HERE/deploy/ || /bin/true
   echo "nuxeo-platform-importer" > $HERE/deploy/mp-list
   cp /opt/build/hudson/instance.clid $HERE/deploy/ || /bin/true
+  cp -r /opt/build/hudson/bundles $HERE/deploy/ || /bin/true
+  cp -r /opt/build/hudson/templates $HERE/deploy/ || /bin/true
 }
 
 function setup_ansible() {
