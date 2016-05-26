@@ -5,12 +5,11 @@ HERE=`readlink -e .`
 distrib="lastbuild"
 keypair="Jenkins"
 set -e
-set -x
+#set -x
 
 function help {
     echo "Usage: $0 -m -d<distribution>"
     echo "  -d distribution : nuxeo distribution (default: lastbuild) (see bin/get-nuxeo-distribution.py for details)"
-    echo "  -k keypair      : use this keypair instead of jenkins"
     exit 0
 }
 
@@ -21,9 +20,6 @@ while getopts ":P:md:k:n:h" opt; do
             ;;
         d)
             distrib=$OPTARG
-            ;;
-        k)
-            keypair=$OPTARG
             ;;
         :)
             echo "Option -$OPTARG requires an argument" >&2
@@ -58,20 +54,12 @@ function setup_ansible() {
     virtualenv venv
   fi
   . venv/bin/activate
-  pip install -r ansible/requirements.txt
-  echo "---" > ansible/group_vars/all/custom.yml
-  echo "keypair: $keypair" >> ansible/group_vars/all/custom.yml
+  pip install -q -r ansible/requirements.txt
 }
 
-function start_nodes() {
+function run_ansible() {
   pushd ansible
-  ansible-playbook -i inventory.py start_nodes.yml -v
-  popd
-}
-
-function setup_nodes() {
-  pushd ansible
-  ansible-playbook -i inventory.py setup.yml -v
+  ansible-playbook -i inventory.py site.yml -vv
   popd
 }
 
@@ -80,5 +68,4 @@ function setup_nodes() {
 prepare_deploy_directory
 # build_nuxeo
 setup_ansible
-start_nodes
-setup_nodes
+run_ansible

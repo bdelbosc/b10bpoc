@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  gather_facts: no
+  sudo: no
+  roles:
+  - {role: common, type: mongodb}
+  - {role: common, type: nuxeo}
+
+- hosts: mongodb
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: mongodb
+
+- hosts: nuxeo
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: nuxeo

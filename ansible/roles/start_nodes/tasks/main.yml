@@ -1,4 +1,0 @@
----
-- include: dynamic.yml
-  when: type in ["nuxeo", "mongodb"]
-

@@ -11,16 +11,14 @@ abspath = os.path.abspath(__file__)
 dirname = os.path.dirname(abspath)
 os.chdir(dirname)
 
-f = open("group_vars/all/main.yml", "r")
+f = open("group_vars/all.yml", "r")
 default = yaml.load(f)
 f.close()
-f = open("group_vars/all/custom.yml", "r")
-custom = yaml.load(f)
-f.close()
+
 region = default["aws_region"]
 bench = default["bench"]
-dbprofile = custom["dbprofile"]
-keypair = custom["keypair"]
+dbprofile = default["dbprofile"]
+keypair = default["keypair"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--hosts", help="List the hosts for the specified group")

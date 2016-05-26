@@ -4,14 +4,13 @@ set -e
 
 . venv/bin/activate
 
-function terminate_nodes() {
+function terminate() {
   pushd ansible
-  ansible-playbook -i inventory.py terminate_nodes.yml -v
+  ansible-playbook -i inventory.py ./playbooks/terminate.yml -v
   popd
 }
 
 # ------------------------------
 # main
-
-teminate_nodes
+terminate
 

@@ -1,5 +1,0 @@
----
-- name: Delete mongodb contents
-  shell: mongo bench --eval 'dbdrop=db.dropDatabase(); printjson(dbdrop);'
-  when: mongo
-
