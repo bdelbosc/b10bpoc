@@ -16,4 +16,4 @@ types:
   nuxeo: c3.xlarge
 counts:
   mongodb: 1
-  nuxeo: 0
+  nuxeo: 1

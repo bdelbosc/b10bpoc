@@ -41,12 +41,13 @@ function prepare_deploy_directory() {
 }
 
 function get_nuxeo_distribution() {
-  sudo apt-get update
-  sudo apt-get -q -y install python-lxml python-requests
+  #sudo apt-get update
+  #sudo apt-get -q -y install python-lxml python-requests
+  pip install lxml requests
   ./bin/get-nuxeo-distribution.py -v $distrib -o $HERE/deploy/nuxeo-distribution.zip
-  cp /opt/build/hudson/instance.clid $HERE/deploy/
+  cp /opt/build/hudson/instance.clid $HERE/deploy/ || /bin/true
   echo "nuxeo-platform-importer" > $HERE/deploy/mp-list
-  cp /opt/build/hudson/instance.clid $HERE/deploy/
+  cp /opt/build/hudson/instance.clid $HERE/deploy/ || /bin/true
 }
 
 function setup_ansible() {
@@ -66,6 +67,6 @@ function run_ansible() {
 # main -----------------------------------------
 #
 prepare_deploy_directory
-# build_nuxeo
+get_nuxeo_distribution
 setup_ansible
 run_ansible
