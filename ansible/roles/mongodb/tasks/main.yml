@@ -68,10 +68,16 @@
   shell: echo noop > /sys/block/xvdc/queue/scheduler
   when: mounted.stdout == ""
 
+
 # hugepage
+- name: Disable hugepage defrag
+  shell: echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  when: mounted.stdout == ""
+
 - name: Disable hugepage
   shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
   when: mounted.stdout == ""
+
 
 # mongodb setup
 

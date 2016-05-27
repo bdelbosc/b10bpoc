@@ -4,6 +4,10 @@
   stat: path=/usr/bin/nuxeoctl
   register: nuxeoctl
 
+- name: Register empty nuxeorunning
+  set_fact:
+    nuxeorunning.stdout: ""
+
 - name: Check for nuxeoctl wrapper
   shell: nuxeoctl status | grep "Server is running"
   register: nuxeorunning
@@ -17,6 +21,12 @@
     delete: yes
 
 # disk
+- name: Empty /mnt
+  shell: rm -f /mnt/*
+
+- name: Umount /mnt
+  mount: name=/mnt src=/dev/xvdb fstype=ext4 state=absent
+
 # ssd1
 - name: Check if /ssd1 volume is mounted
   shell: cat /proc/mounts | grep /dev/xvdb

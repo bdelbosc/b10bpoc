@@ -6,7 +6,10 @@ storage:
   wiredTiger:
     engineConfig:
       directoryForIndexes: true
-
+      collectionConfig:
+         blockCompressor: snappy
+      indexConfig:
+         prefixCompression: true
 systemLog:
   destination: file
   logAppend: true

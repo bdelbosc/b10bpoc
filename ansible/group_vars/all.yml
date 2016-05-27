@@ -1,6 +1,6 @@
 ---
 aws_region: eu-west-1
-bench: b10b
+bench: b10bbis
 #keypair: Jenkins
 keypair: bdelbosc
 dbprofile: mongodb
@@ -12,8 +12,8 @@ amis:
   mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2
 types:
-  mongodb: c3.xlarge
-  nuxeo: c3.xlarge
+  mongodb: c3.2xlarge
+  nuxeo: c3.2xlarge
 counts:
   mongodb: 1
   nuxeo: 1
