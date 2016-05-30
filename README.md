@@ -23,7 +23,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 ## Import
   Here we use only 2 servers a Nuxeo and a MongoDB server.
-  ES Indexing and audit is disabled.
+  ES Indexing and audit is disabled, the repository use a /dev/null binary store 
   
 ## ES Indexation
   Add an ES cluster and index repository content.
@@ -52,6 +52,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - No fulltext extraction
   - No audit
   - Elasticsearch disabled
+  - Fake binary storage, it does not write binary to disk.
  
 
 
