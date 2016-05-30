@@ -1,33 +1,58 @@
-# About Nuxeo Big Benchmarks
+# About Nuxeo Benchmark 10b
 
-Helper scripts to run Big Benchmark on MongoDB/AWS
+Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
-## Servers
+# Goal
 
-- MongoDB: the MongoDB database and Redis, using SSD
-- Nuxeo: One or more Nuxeo node
-- Elasticsearch: one or more Elasticsearch node, using SSD
-- Monitor: A graphite server on EBS ?
-- Gatling: Run Gatling test on EBS ?
+  Deploy minimum and tuned Nuxeo/MongoDB archi to support best throughput per simulation.
+  
+  For instance injecting 
 
-## Benchmark phases
+# Choices
 
-Phases are:
+## AWS instance
+  Use AWS ec2 instance with ephemeral storage instance, because SSD is faster than EBS
+  
+  The instance type must be choose in :
+  
+  - c3.*
+  - i2.*  
+  - d2.*
 
-1. Mass import of document (only Nuxeo and MongoDB)
-  servers: MongoDB, Nuxeo, Monitor
-1. MongoDB indexing
-  servers: MongoDB, Monitor
-1. Elasticsearch indexing, Monitor
-  Servers: MongoDB, Nuxeo, Elasticsearch, Monitor
-1. Run Gatling benchmarks
-  Servers: MongoDB, Nuxeo x n, Elasticsearch, Gatling, Monitor
+# Simulations
 
-## Goal
+## Import
+  Here we use only 2 servers a Nuxeo and a MongoDB server.
+  ES Indexing and audit is disabled.
+  
+## ES Indexation
+  Add an ES cluster and index repository content.
 
-- Launch only necessary ec2 for each phase
-- Support multiple configuration (type of ec2, number of Nuxeo Node)
+## Gatling simulations
+  Run default gatling simulation on top of the imported content.
 
+# Tuning
+
+## MongoDB 
+
+  We follow the "Performance Best Practices forMongoDB" "MongoDB 3.2/ March 2016" PDF:
+  
+  - Use XFS filesystem, atime and diratime disabled
+  - Use different disk for data and index
+  - Readahead block size to 32 (16kb)
+  - Use a NOOP scheduler
+  - Huge pages disabled
+  - Open file limits increased
+  
+   
+## Nuxeo
+
+  Import:
+  
+  - No fulltext extraction
+  - No audit
+  - Elasticsearch disabled
+ 
 
 
 # About Nuxeo
