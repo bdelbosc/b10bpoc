@@ -1,0 +1,12 @@
+sharding:
+  clusterRole: configsvr
+replication:
+  replSetName: configReplSet
+storage:
+  dbPath: /ssd1/mongocs
+  journal:
+    enabled: false
+  engine: wiredTiger
+net:
+  port: 27018
+  bindIp: {{private_ip}}

@@ -1,4 +1,5 @@
 ---
+# common task on all mongo server
 # apt
 
 - name: Add mongodb repo key
@@ -76,36 +77,4 @@
 
 - name: Disable hugepage
   shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
-  when: mounted.stdout == ""
-
-
-# mongodb setup
-
-- name: Set mongo configuration file
-  template: src=mongod.j2 dest=/etc/mongod.conf
-
-- name: Create mongodb data dir
-  file: path=/ssd1/mongodb-data state=directory owner=mongodb group=mongodb
-
-- name: Create mongodb index dir
-  file: path=/ssd2/mongodb-index state=directory owner=mongodb group=mongodb
-
-- name: Create mongodb index dir
-  file: path=/ssd2/mongodb-log state=directory owner=mongodb group=mongodb
-
-- name: Link mongodb index dir
-  file: path=/ssd1/mongodb-data/index
-        src=/ssd2/mongodb-index
-        state=link
-        force=yes
-
-- name: Link log
-  file: path=/var/log/mongod.log
-        src=/ssd2/mongodb-log/mongod.log
-        state=link
-        force=yes
-
-# restart
-- name: Restart mongod
-  service: name=mongod state=restarted
   when: mounted.stdout == ""

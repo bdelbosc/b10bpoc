@@ -1,21 +1,15 @@
 storage:
-  dbPath: /ssd1/mongodb-data
+  dbPath: /ssd1/mongod-data
   journal:
     enabled: false
   engine: wiredTiger
   wiredTiger:
     engineConfig:
       directoryForIndexes: true
-      collectionConfig:
-         blockCompressor: snappy
-      indexConfig:
-         prefixCompression: true
 systemLog:
   destination: file
   logAppend: true
-  path: /ssd2/mongodb-log/mongod.log
-
-# network interfaces
+  path: /ssd2/mongod-log/mongod.log
 net:
   port: 27017
   bindIp: {{private_ip}}

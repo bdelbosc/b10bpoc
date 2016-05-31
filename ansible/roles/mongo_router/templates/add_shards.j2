@@ -1,0 +1,3 @@
+{% for host in groups['mongodb'] %}
+sh.addShard( "{{ host }}:27019" )
+{% endfor %}
