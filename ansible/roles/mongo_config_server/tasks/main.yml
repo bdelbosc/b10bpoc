@@ -1,23 +1,41 @@
 ---
-# install mongoc config server
+# mongocs or mongo config server replica set setup
+- name: Check if mongocs is already setup
+  stat: path=/etc/mongocs.conf
+  register: stcs
+
 - name: Set mongocs configuration file
   template: src=mongocs.conf.j2 dest=/etc/mongocs.conf
 
 - name: Set mongocs upstart file
   template: src=mongocs.j2 dest=/etc/init/mongocs.conf
 
-- name: Create mongocs dir
+- include: disk_layout
+
+- name: Create mongocs directory
   file: path=/ssd1/mongocs state=directory owner=mongodb group=mongodb
 
-# restart
+- name: Create mongo log dir
+  file: path=/ssd2/mongo-log state=directory owner=mongodb group=mongodb
+
 - name: Restart mongocs
   service: name=mongocs state=restarted
+  when: not stcs.stat.exists
 
-- name: Create the file to initialize the mongod replica set
+- name: Wait for all mongocs replica startup
+  pause: seconds=10
+  when: not stcs.stat.exists
+
+- name: Link mongocs log
+  file: path=/var/log/mongocs.log
+        src=/ssd2/mongo-log/mongocs.log
+        state=link
+        force=yes
+
+- name: Create mongocs replica set init script
   template: src=repset_init.j2 dest=/tmp/repset_init.js
 
-- name: Pause for a while
-  pause: seconds=20
-
-- name: Initialize the replication set
-  shell: /usr/bin/mongo --port "27018" /tmp/repset_init.js
+- name: Initialize mongocs replica set
+  run_once: true
+  shell: /usr/bin/mongo --host {{ private_ip }} --port "27018" /tmp/repset_init.js
+  when: not stcs.stat.exists

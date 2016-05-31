@@ -1,6 +1,9 @@
 ---
-# install mongod server
-# mongodb setup
+# mongod setup
+
+- name: Check if mongod is already setup
+  stat: path=/ssd2/mongo-log/mongod.log
+  register: std
 
 - name: Set mongod configuration file
   template: src=mongod.conf.j2 dest=/etc/mongod.conf
@@ -11,8 +14,8 @@
 - name: Create mongod index dir
   file: path=/ssd2/mongod-index state=directory owner=mongodb group=mongodb
 
-- name: Create mongod index dir
-  file: path=/ssd2/mongod-log state=directory owner=mongodb group=mongodb
+- name: Create mongo log dir
+  file: path=/ssd2/mongo-log state=directory owner=mongodb group=mongodb
 
 - name: Link mongod index dir
   file: path=/ssd1/mongod-data/index
@@ -22,11 +25,11 @@
 
 - name: Link mongod log
   file: path=/var/log/mongod.log
-        src=/ssd2/mongod-log/mongod.log
+        src=/ssd2/mongo-log/mongod.log
         state=link
         force=yes
 
 # restart
 - name: Restart mongod
   service: name=mongod state=restarted
-  when: mounted.stdout == ""
+  when: not std.stat.exists

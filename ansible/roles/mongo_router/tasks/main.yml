@@ -1,32 +1,30 @@
 ---
-# install mongod server
-# mongodb setup
+# Setup mongos router
 
-- name: Set mongod configuration file
-  template: src=mongod.conf.j2 dest=/etc/mongod.conf
+- name: Check if mongos is already setup
+  stat: path=/etc/mongos.confxxxxxxxxxxxxxxxxxxxxxxxxxx
+  register: sts
 
-- name: Create mongod data dir
-  file: path=/ssd1/mongod-data state=directory owner=mongodb group=mongodb
+- name: Set mongos configuration file
+  template: src=mongos.conf.j2 dest=/etc/mongos.conf
 
-- name: Create mongod index dir
-  file: path=/ssd2/mongod-index state=directory owner=mongodb group=mongodb
+- name: Set mongos upstart file
+  template: src=mongos.j2 dest=/etc/init/mongos.conf
 
-- name: Create mongod index dir
-  file: path=/ssd2/mongod-log state=directory owner=mongodb group=mongodb
+- name: Restart mongos
+  service: name=mongos state=restarted
+  when: not sts.stat.exists
 
-- name: Link mongod index dir
-  file: path=/ssd1/mongod-data/index
-        src=/ssd2/mongod-index
+- name: Link mongos log
+  file: path=/var/log/mongos.log
+        src=/ssd2/mongo-log/mongos.log
         state=link
         force=yes
 
-- name: Link mongod log
-  file: path=/var/log/mongod.log
-        src=/ssd2/mongod-log/mongod.log
-        state=link
-        force=yes
+- name: Create mongos shard init script
+  template: src=add_shards.j2 dest=/tmp/add_shards.js
 
-# restart
-- name: Restart mongod
-  service: name=mongod state=restarted
-  when: mounted.stdout == ""
+- name: Add shards to cluster
+  run_once: true
+  shell: /usr/bin/mongo --host {{ private_ip }} --port "27017" /tmp/add_shards.js
+  when: not sts.stat.exists

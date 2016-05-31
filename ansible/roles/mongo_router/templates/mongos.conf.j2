@@ -1,16 +1,19 @@
 sharding:
-  clusterRole: configsvr
-replication:
-  replSetName: configReplSet
-storage:
-  dbPath: /ssd1/mongocs
-  journal:
-    enabled: false
-  engine: wiredTiger
-net:
-  port: 27018
-  bindIp: {{private_ip}}
+  autoSplit: true
+{% set mshosts = '' %}
+{% for host in groups['mongodb'] %}
+{% if loop.last %}
+{% set mshosts = mshosts + hostvars[host].private_ip + ':27018' %}
+  configDB: configReplSet/{{ mshosts }}
+{% else %}
+{% set mshosts = mshosts + hostvars[host].private_ip + ':27018,'  %}
+{% endif %}
+{% endfor %}
+  chunkSize: 64
 systemLog:
   destination: file
   logAppend: true
-  path: /ssd2/mongo-log/mongocs.log
+  path: /ssd2/mongo-log/mongos.log
+net:
+  port: 27017
+  bindIp: {{private_ip}}

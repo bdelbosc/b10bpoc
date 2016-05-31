@@ -1,7 +1,14 @@
-rs.initiate()
-sleep(13000)
-{% for host in groups['replication_servers'] %}
-rs.add("{{ host }}:{{ mongod_port }}")
-sleep(8000)
+rs.initiate({
+   _id: "configReplSet",
+   configsvr: true,
+{% set mhosts = '' %}
+{% for host in groups['mongodb'] %}
+{% if loop.last %}
+{% set mhosts = mhosts + '{ _id: ' ~ loop.index0 ~ ', host: "' + hostvars[host].private_ip + ':27018" }' %}
+   members: [ {{ mhosts }} ]
+{% else %}
+{% set mhosts = mhosts + '{ _id: ' ~ loop.index0 ~ ', host: "' + hostvars[host].private_ip + ':27018" },' %}
+{% endif %}
 {% endfor %}
+})
 printjson(rs.status())

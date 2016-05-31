@@ -11,6 +11,7 @@
   - tree
   - atop
   - sysstat
+  - xfsprogs
 
 - name: Activate sysstat
   lineinfile:

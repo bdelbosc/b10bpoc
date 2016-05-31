@@ -12,8 +12,8 @@ amis:
   mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2
 types:
-  mongodb: c3.2xlarge
-  nuxeo: c3.2xlarge
+  mongodb: c3.large
+  nuxeo: c3.large
 counts:
-  mongodb: 1
+  mongodb: 3
   nuxeo: 1

@@ -18,7 +18,28 @@
   user: ubuntu
   become: yes
   roles:
-  - role: mongodb
+  - role: mongo_common
+
+- hosts: mongodb
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: mongo_config_server
+
+- hosts: mongodb
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: mongo_db
+
+- hosts: mongodb
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: mongo_router
 
 - hosts: nuxeo
   gather_facts: no

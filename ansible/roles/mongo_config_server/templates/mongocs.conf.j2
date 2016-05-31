@@ -10,3 +10,7 @@ storage:
 net:
   port: 27018
   bindIp: {{private_ip}}
+systemLog:
+  destination: file
+  logAppend: true
+  path: /ssd2/mongo-log/mongocs.log

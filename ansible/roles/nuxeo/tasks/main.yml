@@ -1,35 +1,47 @@
 ---
 # Ensure instance is clean
+- name: Init nuxeorunning
+  set_fact:
+    nuxeorunning: false
+
 - name: Check for nuxeoctl wrapper
   stat: path=/usr/bin/nuxeoctl
   register: nuxeoctl
 
-- name: Register empty nuxeorunning
-  set_fact:
-    nuxeorunning.stdout: ""
-
 - name: Check for nuxeoctl wrapper
   shell: nuxeoctl status | grep "Server is running"
-  register: nuxeorunning
+  register: nuxeorunningstatus
   failed_when: False
   when: nuxeoctl.stat.exists
+
+- name: Flag nuxeo as running
+  set_fact:
+    nuxeorunning: true
+  when: nuxeorunningstatus is defined and nuxeorunningstatus.output != ""
+
+
 
 - name: Upload distribution and settings
   synchronize:
     src: ../deploy
     dest: /
     delete: yes
+    checksum: yes
 
 # disk
-- name: Empty /mnt
-  shell: rm -f /mnt/*
+- name: Check if /mnt volume is mounted
+  shell: cat /proc/mounts | grep /dev/xvdb | grep /mnt
+  changed_when: False
+  failed_when: False
+  register: mntmounted
 
 - name: Umount /mnt
   mount: name=/mnt src=/dev/xvdb fstype=ext4 state=absent
+  when: mntmounted.stdout == ""
 
 # ssd1
 - name: Check if /ssd1 volume is mounted
-  shell: cat /proc/mounts | grep /dev/xvdb
+  shell: cat /proc/mounts | grep /dev/xvdb | grep ssd1
   changed_when: False
   failed_when: False
   register: mounted
@@ -53,7 +65,7 @@
 
 # ssd2
 - name: Check if ssd2 volume is mounted
-  shell: cat /proc/mounts | grep /dev/xvdc
+  shell: cat /proc/mounts | grep /dev/xvdc | grep ssd2
   changed_when: False
   failed_when: False
   register: mounted
@@ -207,7 +219,7 @@
 # Add distribution packages
 - name: Add distribution packages
   shell: nuxeoctl mp-init
-  when: nuxeorunning.stdout == ""
+  when: not nuxeorunning
 
 # Add custom bundles
 - name: Check for custom bundles
@@ -258,7 +270,7 @@
   register: installpkg
 - name: Install custom packages
   shell: nuxeoctl --accept=true --relax=false mp-install $(cat /deploy/mp-list | tr '\n' ' ')
-  when: installpkg.stat.exists and nuxeorunning.stdout == ''
+  when: installpkg.stat.exists and not nuxeorunning
 
 # Add custom config
 - name: Check for custom configuration
