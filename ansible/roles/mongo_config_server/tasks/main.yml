@@ -1,16 +1,20 @@
 ---
 # mongocs or mongo config server replica set setup
 - name: Check if mongocs is already setup
-  stat: path=/etc/mongocs.conf
+  stat: path=/etc/init/mongocs.conf
   register: stcs
+
+- name: Install mongo
+  apt: state=latest name={{item}}
+  with_items:
+  - mongodb-org
+  when: not stcs.stat.exists
 
 - name: Set mongocs configuration file
   template: src=mongocs.conf.j2 dest=/etc/mongocs.conf
 
 - name: Set mongocs upstart file
   template: src=mongocs.j2 dest=/etc/init/mongocs.conf
-
-- include: disk_layout
 
 - name: Create mongocs directory
   file: path=/ssd1/mongocs state=directory owner=mongodb group=mongodb
@@ -21,6 +25,10 @@
 - name: Restart mongocs
   service: name=mongocs state=restarted
   when: not stcs.stat.exists
+
+- name: Ensure mongocs started
+  service: name=mongocs state=started
+  when: stcs.stat.exists
 
 - name: Wait for all mongocs replica startup
   pause: seconds=10

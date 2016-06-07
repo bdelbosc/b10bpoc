@@ -1,9 +1,13 @@
 ---
 # mongod setup
-
 - name: Check if mongod is already setup
   stat: path=/ssd2/mongo-log/mongod.log
   register: std
+
+- name: Install mongodb
+  apt: state=latest name={{item}}
+  with_items:
+  - mongodb-org
 
 - name: Set mongod configuration file
   template: src=mongod.conf.j2 dest=/etc/mongod.conf
@@ -29,7 +33,10 @@
         state=link
         force=yes
 
-# restart
 - name: Restart mongod
   service: name=mongod state=restarted
   when: not std.stat.exists
+
+- name: Ensure mongod started
+  service: name=mongod state=started
+  when: std.stat.exists

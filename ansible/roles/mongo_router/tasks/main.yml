@@ -2,8 +2,19 @@
 # Setup mongos router
 
 - name: Check if mongos is already setup
-  stat: path=/etc/mongos.confxxxxxxxxxxxxxxxxxxxxxxxxxx
+  stat: path=/etc/init/mongos.conf
   register: sts
+
+- name: Install mongos
+  apt: state=latest name={{item}}
+  with_items:
+  - mongodb-org-mongos
+  when: not sts.stat.exists
+
+- user: name=mongodb
+
+- name: Create mongo log dir
+  file: path=/ssd2/mongo-log state=directory owner=mongodb
 
 - name: Set mongos configuration file
   template: src=mongos.conf.j2 dest=/etc/mongos.conf
@@ -14,6 +25,10 @@
 - name: Restart mongos
   service: name=mongos state=restarted
   when: not sts.stat.exists
+
+- name: Ensure mongos started
+  service: name=mongos state=started
+  when: sts.stat.exists
 
 - name: Link mongos log
   file: path=/var/log/mongos.log
@@ -26,5 +41,5 @@
 
 - name: Add shards to cluster
   run_once: true
-  shell: /usr/bin/mongo --host {{ private_ip }} --port "27017" /tmp/add_shards.js
+  shell: /usr/bin/mongo --host 127.0.0.1 --port 27017 /tmp/add_shards.js
   when: not sts.stat.exists

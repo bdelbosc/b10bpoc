@@ -13,12 +13,18 @@
   roles:
   - role: common
 
-- hosts: mongodb
+- hosts: all
   gather_facts: no
   user: ubuntu
   become: yes
   roles:
   - role: mongo_common
+
+- hosts: mongodb
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/mongo_common/tasks/disk_layout.yml
 
 - hosts: mongodb
   gather_facts: no
@@ -34,7 +40,7 @@
   roles:
   - role: mongo_db
 
-- hosts: mongodb
+- hosts: nuxeo
   gather_facts: no
   user: ubuntu
   become: yes

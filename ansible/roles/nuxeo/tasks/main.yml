@@ -36,8 +36,8 @@
   register: mntmounted
 
 - name: Umount /mnt
-  mount: name=/mnt src=/dev/xvdb fstype=ext4 state=absent
-  when: mntmounted.stdout == ""
+  shell: umount /mnt
+  when: mntmounted.stdout != ""
 
 # ssd1
 - name: Check if /ssd1 volume is mounted
@@ -162,7 +162,8 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.mongodb\.server\s*='
-    line: "nuxeo.mongodb.server={{mongodb_hosts[0]}}"
+    line: "nuxeo.mongodb.server=127.0.0.1"
+#    line: "nuxeo.mongodb.server={{mongodb_hosts[0]}}"
 - name: Config - nuxeo.mongodb.dbname
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf

@@ -11,14 +11,3 @@
 - name: Update apt cache
   apt: update_cache=yes cache_valid_time=7200
 
-- name: Upgrade/install tools
-  apt: state=latest name={{item}}
-  with_items:
-  - mongodb-org
-
-# hugepage
-- name: Disable hugepage defrag
-  shell: echo never > /sys/kernel/mm/transparent_hugepage/defrag
-
-- name: Disable hugepage
-  shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
