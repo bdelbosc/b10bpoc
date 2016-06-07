@@ -1,0 +1,4 @@
+b10b.target=.
+
+nuxeo.core.binarymanager=org.nuxeo.ecm.core.blob.binary.FakeBinaryManager
+
