@@ -20,13 +20,20 @@
   when: nuxeorunningstatus is defined and nuxeorunningstatus.output != ""
 
 
-
 - name: Upload distribution and settings
   synchronize:
     src: ../deploy
     dest: /
-    delete: yes
-    checksum: yes
+#    delete: yes
+#    checksum: yes
+
+- name: Check nuxeo distribution
+  stat: path=/deploy/nuxeo-distribution.zip
+  register: nuxeozip
+
+- name: Download nuxeo distribution
+  get_url: url={{ nuxeo_distribution }} dest=/deploy/nuxeo-distribution.zip
+  when: not nuxeozip.stat.exists
 
 # disk
 - name: Check if /mnt volume is mounted
@@ -162,8 +169,8 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.mongodb\.server\s*='
-    line: "nuxeo.mongodb.server=127.0.0.1"
-#    line: "nuxeo.mongodb.server={{mongodb_hosts[0]}}"
+    line: "nuxeo.mongodb.server={{mongodb_hosts[0]}}"
+    #line: "nuxeo.mongodb.server=127.0.0.1"
 - name: Config - nuxeo.mongodb.dbname
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -270,7 +277,7 @@
   stat: path=/deploy/mp-list
   register: installpkg
 - name: Install custom packages
-  shell: nuxeoctl --accept=true --relax=false mp-install $(cat /deploy/mp-list | tr '\n' ' ')
+  shell: nuxeoctl --accept=true --relax=true mp-install $(cat /deploy/mp-list | tr '\n' ' ')
   when: installpkg.stat.exists and not nuxeorunning
 
 # Add custom config

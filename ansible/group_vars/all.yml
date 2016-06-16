@@ -1,19 +1,19 @@
 ---
 aws_region: eu-west-1
-bench: b10bbis
+bench: b10b
 #keypair: Jenkins
 keypair: bdelbosc
 dbprofile: mongodb
 security_group: jenkins-vpc
 subnet_id: subnet-dbac2a82
 instance_profile: JenkinsRole
-
+nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT.zip
 amis:
   mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2
 types:
-  mongodb: c3.large
-  nuxeo: c3.large
+  mongodb: c3.4xlarge
+  nuxeo: c3.4xlarge
 counts:
   mongodb: 3
   nuxeo: 1

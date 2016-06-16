@@ -48,6 +48,7 @@
     count_tag:
       bench: "{{bench}}"
       bench_role: "{{type}}"
+    wait: yes
   register: created_instances
 
 - name: Add new instances to group

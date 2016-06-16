@@ -41,5 +41,5 @@
 
 - name: Add shards to cluster
   run_once: true
-  shell: /usr/bin/mongo --host 127.0.0.1 --port 27017 /tmp/add_shards.js
+  shell: /usr/bin/mongo --host {{ private_ip }} --port 27017 /tmp/add_shards.js
   when: not sts.stat.exists

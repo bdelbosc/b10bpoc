@@ -2,18 +2,19 @@
 # Start the required infra to run a bench
 cd $(dirname $0)
 HERE=`readlink -e .`
-distrib="lastbuild"
-keypair="Jenkins"
+distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT.zip"
+clid=/opt/build/hudson/instance.clid
 set -e
-#set -x
 
 function help {
-    echo "Usage: $0 -m -d<distribution>"
+    echo "Usage: $0 -c<instance.clid> -d<distribution>"
     echo "  -d distribution : nuxeo distribution (default: lastbuild) (see bin/get-nuxeo-distribution.py for details)"
+    echo "  -u nuxeo zip url, conflict with -d option"
+    echo "  -c instance.clid : path to a nuxeo instance clid"
     exit 0
 }
 
-while getopts ":P:md:k:n:h" opt; do
+while getopts "d:c:u:h" opt; do
     case $opt in
         h)
             help
@@ -21,9 +22,11 @@ while getopts ":P:md:k:n:h" opt; do
         d)
             distrib=$OPTARG
             ;;
-        :)
-            echo "Option -$OPTARG requires an argument" >&2
-            exit 1
+        u)
+            distrib_url=$OPTARG
+            ;;
+        c)
+            clid=$OPTARG
             ;;
         \?)
             echo "Invalid option: -$OPTARG" >&2
@@ -38,17 +41,19 @@ function prepare_deploy_directory() {
     rm -rf $HERE/deploy
   fi
   mkdir $HERE/deploy
-}
-
-function get_nuxeo_distribution() {
-  #sudo apt-get update
-  #sudo apt-get -q -y install python-lxml python-requests
-  pip install lxml requests
-  ./bin/get-nuxeo-distribution.py -v $distrib -o $HERE/deploy/nuxeo-distribution.zip
-  cp /opt/build/hudson/instance.clid $HERE/deploy/ || /bin/true
+  cp $clid $HERE/deploy/ || /bin/true
   echo "nuxeo-platform-importer" > $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
   cp -r ./custom/templates $HERE/deploy/ || /bin/true
+}
+
+function get_nuxeo_distribution() {
+  if [ ! -z $distrib ]; then
+    #sudo apt-get update
+    #sudo apt-get -q -y install python-lxml python-requests
+    pip install lxml requests
+    ./bin/get-nuxeo-distribution.py -v $distrib -o $HERE/deploy/nuxeo-distribution.zip
+  fi
 }
 
 function setup_ansible() {
@@ -57,11 +62,13 @@ function setup_ansible() {
   fi
   . venv/bin/activate
   pip install -q -r ansible/requirements.txt
+  # prevent ssh auth checking fingerprints
+  export ANSIBLE_HOST_KEY_CHECKING=False
 }
 
 function run_ansible() {
   pushd ansible
-  ansible-playbook -i inventory.py site.yml -vv
+  ansible-playbook -vv  -i inventory.py --extra-vars "nuxeo_distribution=$distrib_url" site.yml
   popd
 }
 
