@@ -1,5 +1,17 @@
 ---
 - name: Start nuxeo
-  shell: nuxeoctl restart
+  shell: nuxeoctl start
+
+- name: Wait for Nuxeo to open 8080
+  wait_for: host=localhost port=8080 timeout=300
+
 - name: Save config
   shell: nuxeoctl showconf > /opt/nuxeo/logs/nuxeo_conf.log
+
+# require httplib2 installed
+# - name: Wait for Nuxeo to be ready to serve request
+#  uri: url=http://localhost:8080/nuxeo/runningstatus?info=started return_content=yes
+#  register: runningstatus
+#
+# - action: fail
+#   when: "'true' not in runningstatus.content"

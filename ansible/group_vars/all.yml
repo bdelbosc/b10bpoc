@@ -1,13 +1,18 @@
 ---
-aws_region: eu-west-1
-bench: b10b
 #keypair: Jenkins
 keypair: bdelbosc
-dbprofile: mongodb
+bench: b10b
+nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT-nuxeo-cap.zip
+
+impnbThreads: 60
+impbatchSize: 100
+impnbNodes: 5000000
+
+aws_region: eu-west-1
 security_group: jenkins-vpc
 subnet_id: subnet-dbac2a82
 instance_profile: JenkinsRole
-nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT.zip
+dbprofile: mongodb
 amis:
   mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2

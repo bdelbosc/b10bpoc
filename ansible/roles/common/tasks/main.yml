@@ -12,6 +12,7 @@
   - atop
   - sysstat
   - xfsprogs
+  - awscli
 
 - name: Activate sysstat
   lineinfile:
@@ -19,7 +20,54 @@
     regexp: '^#?ENABLED\s*='
     line: "ENABLED=\"true\""
 
+- name: Change sysstat frequency
+  lineinfile:
+    dest: /etc/cron.d/sysstat
+    regexp: '^5\-55/10'
+    line: "*/2 * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1"
+
+- name: Change atop frequency
+  lineinfile:
+    dest: /etc/init.d/atop
+    regexp: '^INTERVAL='
+    line: "INTERVAL=120"
+
 - name: Restart sysstat
   service: name=sysstat state=restarted
 
-# TODO set /etc/hosts
+- name: Restart atop
+  service: name=atop state=restarted
+
+- name: Display all variables/facts known for a host
+  debug: var=hostvars[inventory_hostname] verbosity=4
+  tags:
+    - hh
+
+- name: Find mongo hostname
+  set_fact:
+    hname: mongo{{ groups.mongodb.index(inventory_hostname) + 1 }}
+  when: "'mongodb' in group_names"
+  tags:
+    - hh
+
+- name: Find nuxeo hostname
+  set_fact:
+    hname: nuxeo{{ groups.nuxeo.index(inventory_hostname) + 1 }}
+  when: "'nuxeo' in group_names"
+  tags:
+    - hh
+
+- name: Set hostname
+  shell: hostname {{ hname }}
+  tags:
+    - hh
+
+- name: Update /etc/hostname
+  shell: echo -n {{ hname }} > /etc/hostname
+  tags:
+    - hh
+
+- name: Set /etc/hosts
+  template: src=hosts.j2 dest=/etc/hosts
+  tags:
+    - hh
