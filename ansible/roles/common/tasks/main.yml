@@ -9,37 +9,15 @@
 
 - name: Display all variables/facts known for a host
   debug: var=hostvars[inventory_hostname] verbosity=4
-  tags:
-    - hh
 
-- name: Find mongo hostname
-  set_fact:
-    hname: mongo{{ groups.mongodb.index(inventory_hostname) + 1 }}
-  when: "'mongodb' in group_names"
-  tags:
-    - hh
+# setup hosts and hostname
+- name: Check if /etc/hosts is set
+  stat: path=/etc/hosts.bak
+  register: hostdone
 
-- name: Find nuxeo hostname
-  set_fact:
-    hname: nuxeo{{ groups.nuxeo.index(inventory_hostname) + 1 }}
-  when: "'nuxeo' in group_names"
-  tags:
-    - hh
-
-- name: Set hostname
-  shell: hostname {{ hname }}
-  tags:
-    - hh
-
-- name: Update /etc/hostname
-  shell: echo -n {{ hname }} > /etc/hostname
-  tags:
-    - hh
-
-- name: Set /etc/hosts
-  template: src=hosts.j2 dest=/etc/hosts
-  tags:
-    - hh
+- name: Setup hosts names
+  include: ./set_hosts.yml
+  when: not hostdone.stat.exists
 
 # apt
 - name: Update apt cache

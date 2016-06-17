@@ -1,4 +1,8 @@
 ---
+# Add screenrc
+- name: Add screen conf
+  copy: src=screenrc dest=/home/ubuntu/.screenrc
+
 # Ensure instance is clean
 - name: Init nuxeorunning
   set_fact:
@@ -169,9 +173,11 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.mongodb\.server\s*='
-    line: "nuxeo.mongodb.server=mongodb://{{ mongodb_hosts | map('regex_replace', '^(.*)$', '\\\\1') | join(',') }}/bench"
+    line: "nuxeo.mongodb.server=mongodb://{% for host in groups['mongodb'] -%}{{ hostvars[host]['private_ip'] }}{%- if not loop.last %},{% endif -%}{%- endfor %}/bench"
     #line: "nuxeo.mongodb.server={{mongodb_hosts[0]}}"
     #line: "nuxeo.mongodb.server=127.0.0.1"
+  tags:
+    - hh
 - name: Config - nuxeo.mongodb.dbname
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf

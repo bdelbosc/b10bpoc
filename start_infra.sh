@@ -69,6 +69,7 @@ function setup_ansible() {
 function run_ansible() {
   pushd ansible
   # --limit nuxeo
+  #  --tags "hh"
   ansible-playbook -vv  -i inventory.py --extra-vars "nuxeo_distribution=$distrib_url" site.yml
   popd
 }

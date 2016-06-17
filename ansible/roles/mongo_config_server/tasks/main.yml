@@ -45,5 +45,5 @@
 
 - name: Initialize mongocs replica set
   run_once: true
-  shell: /usr/bin/mongo --host {{ private_ip }} --port "27018" /tmp/repset_init.js
+  shell: /usr/bin/mongo --host mongo1 --port "27018" /tmp/repset_init.js
   when: not stcs.stat.exists

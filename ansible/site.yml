@@ -6,14 +6,14 @@
   - {role: ec2, type: mongodb}
   - {role: ec2, type: nuxeo}
 
-- hosts: mongodb, nuxeo
+- hosts: mongodb:nuxeo
   gather_facts: no
   user: ubuntu
   become: yes
   roles:
   - role: common
 
-- hosts: mongodb, nuxeo
+- hosts: mongodb:nuxeo
   gather_facts: no
   user: ubuntu
   become: yes

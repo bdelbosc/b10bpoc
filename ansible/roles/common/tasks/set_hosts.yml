@@ -1,0 +1,23 @@
+---
+
+- name: Find mongo hostname
+  set_fact:
+    hname: mongo{{ groups.mongodb.index(inventory_hostname) + 1 }}
+  when: "'mongodb' in group_names"
+
+- name: Find nuxeo hostname
+  set_fact:
+    hname: nuxeo{{ groups.nuxeo.index(inventory_hostname) + 1 }}
+  when: "'nuxeo' in group_names"
+
+- name: Set hostname
+  shell: hostname {{ hname }}
+
+- name: Update /etc/hostname
+  shell: echo -n {{ hname }} > /etc/hostname
+
+- name: Backup /etc/hosts
+  copy: src=/etc/hosts dest=/etc/hosts.bak
+
+- name: Set /etc/hosts
+  template: src=hosts.j2 dest=/etc/hosts
