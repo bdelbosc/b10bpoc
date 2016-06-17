@@ -1,6 +1,47 @@
 ---
-# apt
+- name: Gather ec2 facts
+  action: ec2_facts
 
+- name: Set pub and private ip
+  set_fact:
+    private_ip: "{{ansible_ec2_local_ipv4}}"
+    public_ip: "{{ansible_ec2_public_ipv4}}"
+
+- name: Display all variables/facts known for a host
+  debug: var=hostvars[inventory_hostname] verbosity=4
+  tags:
+    - hh
+
+- name: Find mongo hostname
+  set_fact:
+    hname: mongo{{ groups.mongodb.index(inventory_hostname) + 1 }}
+  when: "'mongodb' in group_names"
+  tags:
+    - hh
+
+- name: Find nuxeo hostname
+  set_fact:
+    hname: nuxeo{{ groups.nuxeo.index(inventory_hostname) + 1 }}
+  when: "'nuxeo' in group_names"
+  tags:
+    - hh
+
+- name: Set hostname
+  shell: hostname {{ hname }}
+  tags:
+    - hh
+
+- name: Update /etc/hostname
+  shell: echo -n {{ hname }} > /etc/hostname
+  tags:
+    - hh
+
+- name: Set /etc/hosts
+  template: src=hosts.j2 dest=/etc/hosts
+  tags:
+    - hh
+
+# apt
 - name: Update apt cache
   apt: update_cache=yes cache_valid_time=7200
 
@@ -38,36 +79,3 @@
 - name: Restart atop
   service: name=atop state=restarted
 
-- name: Display all variables/facts known for a host
-  debug: var=hostvars[inventory_hostname] verbosity=4
-  tags:
-    - hh
-
-- name: Find mongo hostname
-  set_fact:
-    hname: mongo{{ groups.mongodb.index(inventory_hostname) + 1 }}
-  when: "'mongodb' in group_names"
-  tags:
-    - hh
-
-- name: Find nuxeo hostname
-  set_fact:
-    hname: nuxeo{{ groups.nuxeo.index(inventory_hostname) + 1 }}
-  when: "'nuxeo' in group_names"
-  tags:
-    - hh
-
-- name: Set hostname
-  shell: hostname {{ hname }}
-  tags:
-    - hh
-
-- name: Update /etc/hostname
-  shell: echo -n {{ hname }} > /etc/hostname
-  tags:
-    - hh
-
-- name: Set /etc/hosts
-  template: src=hosts.j2 dest=/etc/hosts
-  tags:
-    - hh

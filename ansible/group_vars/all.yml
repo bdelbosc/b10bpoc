@@ -4,9 +4,9 @@ keypair: bdelbosc
 bench: b10b
 nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT-nuxeo-cap.zip
 
-impnbThreads: 60
-impbatchSize: 100
-impnbNodes: 5000000
+impnbThreads: 100
+impbatchSize: 200
+impnbNodes: 25000000
 
 aws_region: eu-west-1
 security_group: jenkins-vpc
@@ -17,8 +17,10 @@ amis:
   mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2
 types:
-  mongodb: c3.4xlarge
-  nuxeo: c3.4xlarge
+  mongodb: c3.xlarge
+  nuxeo: c3.xlarge
+#  mongodb: c3.4xlarge
+#  nuxeo: c3.4xlarge
 counts:
-  mongodb: 3
+  mongodb: 2
   nuxeo: 1

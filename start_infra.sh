@@ -2,7 +2,7 @@
 # Start the required infra to run a bench
 cd $(dirname $0)
 HERE=`readlink -e .`
-distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT.zip"
+distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT-nuxeo-cap.zip"
 clid=/opt/build/hudson/instance.clid
 set -e
 
@@ -69,7 +69,7 @@ function setup_ansible() {
 function run_ansible() {
   pushd ansible
   # --limit nuxeo
-  ansible-playbook -vv  -i inventory.py --tags "hh" --extra-vars "nuxeo_distribution=$distrib_url" site.yml
+  ansible-playbook -vv  -i inventory.py --extra-vars "nuxeo_distribution=$distrib_url" site.yml
   popd
 }
 
