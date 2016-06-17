@@ -1,0 +1,21 @@
+---
+- name: Gather ec2 facts
+  action: ec2_facts
+
+- name: copy csv import files
+  shell: /bin/cp /opt/nuxeo/server/nxserver/*.csv /opt/nuxeo/logs/
+  when: "'nuxeo' in group_names"
+
+- name: upload nuxeo logs
+  shell: aws s3 sync /opt/nuxeo/logs s3://{{bucket_results}}/{{bench_tag}}/`hostname`/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=system@nuxeo.com --region {{ansible_ec2_placement_region}}
+  when: "'nuxeo' in group_names"
+
+- name: Save atop info
+  shell: aws s3 sync /var/log/atop s3://{{bucket_results}}/{{bench_tag}}/`hostname`/atop/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=system@nuxeo.com --region {{ansible_ec2_placement_region}}
+
+- name: Save sysstat info
+  shell: aws s3 sync /var/log/sysstat s3://{{bucket_results}}/{{bench_tag}}/`hostname`/sysstat/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=system@nuxeo.com --region {{ansible_ec2_placement_region}}
+
+- name: upload nuxeo logs
+  shell: aws s3 sync /opt/nuxeo/logs s3://{{bucket_results}}/{{bench_tag}}/`hostname`/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=system@nuxeo.com --region {{ansible_ec2_placement_region}}
+  when: "'nuxeo' in group_names"

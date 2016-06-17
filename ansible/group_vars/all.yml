@@ -1,12 +1,22 @@
 ---
 #keypair: Jenkins
 keypair: bdelbosc
+# this is a tag used to flag ec2 used for the bench
 bench: b10b
+# The s3 bucket to save the results
+bucket_results: nuxeo-b10b-results
+# The default Nuxeo distribution to use
 nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT-nuxeo-cap.zip
+types:
+  mongodb: c3.2xlarge
+  nuxeo: c3.2xlarge
+counts:
+  mongodb: 3
+  nuxeo: 1
 
-impnbThreads: 100
+impnbThreads: 60
 impbatchSize: 200
-impnbNodes: 25000000
+impnbNodes: 10000000
 
 aws_region: eu-west-1
 security_group: jenkins-vpc
@@ -16,11 +26,3 @@ dbprofile: mongodb
 amis:
   mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2
-types:
-  mongodb: c3.xlarge
-  nuxeo: c3.xlarge
-#  mongodb: c3.4xlarge
-#  nuxeo: c3.4xlarge
-counts:
-  mongodb: 2
-  nuxeo: 1

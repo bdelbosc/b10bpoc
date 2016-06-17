@@ -71,7 +71,8 @@ for i in allinstances:
     hvars["image_id"] = i.image_id
     hvars["public_ip"] = i.ip_address
     hvars["private_ip"] = i.private_ip_address
-
+    hvars["bench"] = i.tags.get('bench', '')
+    hvars["bench_tag"] = i.tags.get('bench_tag', 'unknown')
     hostvars[address] = hvars
 
 

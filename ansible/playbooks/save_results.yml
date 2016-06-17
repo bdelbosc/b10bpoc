@@ -1,0 +1,5 @@
+---
+- hosts: nuxeo:mongodb
+  gather_facts: no
+  tasks:
+  - include: ../roles/common/tasks/save_results.yml

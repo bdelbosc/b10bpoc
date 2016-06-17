@@ -47,7 +47,7 @@
 
 - name: Change atop frequency
   lineinfile:
-    dest: /etc/init.d/atop
+    dest: /etc/default/atop
     regexp: '^INTERVAL='
     line: "INTERVAL=120"
 
