@@ -11,12 +11,12 @@ types:
   mongodb: c3.2xlarge
   nuxeo: c3.2xlarge
 counts:
-  mongodb: 3
-  nuxeo: 1
+  mongodb: 4
+  nuxeo: 2
 
 impnbThreads: 60
 impbatchSize: 200
-impnbNodes: 10000000
+impnbNodes: 5000000
 
 aws_region: eu-west-1
 security_group: jenkins-vpc

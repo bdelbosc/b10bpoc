@@ -1,5 +1,7 @@
 ---
 - hosts: nuxeo
   gather_facts: no
+  user: ubuntu
+  sudo: yes
   tasks:
   - include: ../roles/nuxeo/tasks/start.yml

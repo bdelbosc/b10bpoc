@@ -2,5 +2,5 @@
 - include: start.yml
 
 - name: Run importer in background
-  get_url: url="http://Administrator:Administrator@127.0.0.1:8080/nuxeo/site/randomImporter/run?targetPath=/default-domain/workspaces&batchSize={{impbatchSize}}&nbThreads={{impnbThreads}}&interactive=false&nbNodes={{impnbNodes}}&fileSizeKB=0&bulkMode=true&onlyText=false&withProperties=true&blockAsyncProcessing=true&blockSyncPostCommitProcessing=true" dest=/dev/null force=yes
+  shell: curl -XGET -vv -u Administrator:Administrator "http://127.0.0.1:8080/nuxeo/site/randomImporter/run?targetPath=/default-domain/workspaces&batchSize={{impbatchSize}}&nbThreads={{impnbThreads}}&interactive=false&nbNodes={{impnbNodes}}&fileSizeKB=0&bulkMode=true&onlyText=false&withProperties=true&blockAsyncProcessing=true&blockSyncPostCommitProcessing=true"
 

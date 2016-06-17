@@ -27,10 +27,6 @@
   add_host: hostname={{item.private_ip if keypair == "Jenkins" else item.public_ip}} groupname={{type}}
   with_items: started_instances.instances
 
-- name: Get a timestamp
-  shell: date +%Y%m%d%H%M
-  register: tag_prefix
-
 - name: Create/destroy instances
   ec2:
     region: "{{aws_region}}"
@@ -48,7 +44,7 @@
       bench_role: "{{type}}"
       billing-category: build
       billing-subcategory: bench
-      bench_tag: "{{tag_prefix}}_{{counts.mongodb}}mongo-as-{{types.mongodb}}_{{counts.nuxeo}}nuxeo-as-{{types.nuxeo}}"
+      bench_tag: "{{stamp_tag.stdout}}"
     exact_count: "{{counts[type]}}"
     count_tag:
       bench: "{{bench}}"
