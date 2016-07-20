@@ -47,7 +47,8 @@
   become: yes
   roles:
   - role: mongo_db
-  - role: mongo_router
+#  - role: mongo_router
+
 
 - hosts: nuxeo
   gather_facts: no
@@ -55,3 +56,4 @@
   become: yes
   roles:
   - role: nuxeo
+  - role: mongo_router

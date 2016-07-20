@@ -8,15 +8,15 @@ bucket_results: nuxeo-b10b-results
 # The default Nuxeo distribution to use
 nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.3-SNAPSHOT-nuxeo-cap.zip
 types:
-  mongodb: c3.2xlarge
-  nuxeo: c3.2xlarge
+  mongodb: m3.2xlarge
+  nuxeo: c3.4xlarge
 counts:
-  mongodb: 4
-  nuxeo: 2
+  mongodb: 1
+  nuxeo: 1
 
-impnbThreads: 60
-impbatchSize: 200
-impnbNodes: 5000000
+impnbThreads: 90
+impbatchSize: 100
+impnbNodes: 1000000000
 
 aws_region: eu-west-1
 security_group: jenkins-vpc

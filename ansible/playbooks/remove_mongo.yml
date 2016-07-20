@@ -1,0 +1,7 @@
+---
+- hosts: nuxeo:mongodb
+  gather_facts: no
+  user: ubuntu
+  sudo: yes
+  tasks:
+  - include: ../roles/mongo_common/tasks/remove.yml
