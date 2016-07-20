@@ -59,3 +59,7 @@
 
 - name: Disable hugepage
   shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: Disable zone reclaim
+  shell: echo 0 > /proc/sys/vm/zone_reclaim_mode
+

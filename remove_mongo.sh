@@ -4,12 +4,12 @@ set -e
 
 . venv/bin/activate
 
-function save_results() {
+function remove_mongo() {
   pushd ansible
-  ansible-playbook -vv -i inventory.py ./playbooks/save_results.yml
+  ansible-playbook -vv -i inventory.py ./playbooks/remove_mongo.yml
   popd
 }
 
 # ------------------------------
 # main
-save_results
+remove_mongo
