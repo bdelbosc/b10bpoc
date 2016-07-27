@@ -5,26 +5,26 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 # Goal
 
   Deploy minimum and tuned Nuxeo/MongoDB archi to support best throughput per simulation.
-  
-  For instance injecting 
+
+  For instance injecting
 
 # Choices
 
 ## AWS instance
   Use AWS ec2 instance with ephemeral storage instance, because SSD is faster than EBS
-  
+
   The instance type must be choose in :
-  
+
   - c3.*
-  - i2.*  
+  - i2.*
   - d2.*
 
 # Simulations
 
 ## Import
   Here we use only 2 servers a Nuxeo and a MongoDB server.
-  ES Indexing and audit is disabled, the repository use a /dev/null binary store 
-  
+  ES Indexing and audit is disabled, the repository use a /dev/null binary store
+
 ## ES Indexation
   Add an ES cluster and index repository content.
 
@@ -33,32 +33,32 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 # Tuning
 
-## MongoDB 
+## MongoDB
 
   We follow the "Performance Best Practices forMongoDB" "MongoDB 3.2/ March 2016" PDF:
-  
+
   - Use XFS filesystem, atime and diratime disabled
   - Use different disk for data and index
   - Readahead block size to 32 (16kb)
   - Use a NOOP scheduler
   - Huge pages disabled
   - Open file limits increased
-  
-   
+
+
 ## Nuxeo
 
   Import:
-  
+
   - No fulltext extraction
   - No audit
   - Elasticsearch disabled
-  - Fake binary storage, it does not write binary to disk.
- 
+  (- Fake binary storage, it does not write binary to disk.) not necessary when creating file without attachement
+
 
 # Run
 
 1. edit ansible/group_vars/all.yml to set your keypair and the ec2 type
-2. edit your ~/.ssh/config to use your keypair when accessing AWS, for eu-west-1 
+2. edit your ~/.ssh/config to use your keypair when accessing AWS, for eu-west-1
 
 
       Host 52.*
@@ -66,22 +66,15 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
           IdentityFile "/home/XXX/.ssh/your-key-pair.pem"
 
 
-3. Download a [Nuxeo 8.3](http://community.nuxeo.com/static/snapshots/?C=M;O=D) in /tmp
-4. Create Mongo cluster and Nuxeo
+3. Create Mongo cluster and setup Nuxeo using latest 8.4 snapshot
 
 
-      ./start_infra.sh -c /opt/build/hudson/instance.clid -d file:///tmp/nuxeo-distribution-tomcat-8.3-SNAPSHOT.zip 
+      ./start_infra.sh -c /opt/build/hudson/instance.clid
 
-6. Log to Nuxeo and start
-   
-   
-       sudo -s
-       nuxeoctl start
-       
-7. Run import from the Nuxeo server:
+4. Run import from the Nuxeo server:
 
 
-       nohup time curl -u Administrator:Administrator "http://127.0.0.1:8080/nuxeo/site/randomImporter/run?targetPath=/default-domain/workspaces&batchSize=30&nbThreads=26&interactive=true&nbNodes=500000&fileSizeKB=1&bulkMode=true&onlyText=false"
+       ./run_bench.sh
 
 
 
