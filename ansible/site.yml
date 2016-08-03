@@ -1,4 +1,5 @@
 ---
+# init the benchmark instances needed to run the import phase
 - hosts: localhost
   gather_facts: no
   sudo: no

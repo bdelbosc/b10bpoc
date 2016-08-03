@@ -1,0 +1,67 @@
+---
+# install java 8
+- name: Add repo for java 8
+  apt_repository: repo='ppa:webupd8team/java' state=present
+
+- name: Set licence selected
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+  sudo: yes
+
+- name: Set licence seen
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
+  sudo: yes
+
+- name: Install java 8
+  apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
+  sudo: yes
+
+
+# install elastic
+- name: Check if elastic is already setup
+  stat: path=//etc/elasticsearch/elasticsearch.yml
+  register: stes
+
+- name: Add elastic repo key
+  shell: wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  when: not stes.stat.exists
+
+- name: Add elastic repo
+  shell: echo "deb http://packages.elastic.co/elasticsearch/1.7/debian stable main" | tee /etc/apt/sources.list.d/elasticsearch-1.7.list
+  when: not stes.stat.exists
+
+- name: Install Elasticsearch
+  apt:
+    name={{item}}
+    state=latest
+    force=yes
+    update_cache=yes
+  with_items:
+  - elasticsearch
+  sudo: yes
+  when: not stes.stat.exists
+
+- name: Create elastic dir on ssd1
+  file: path=/ssd1/elasticsearch state=directory owner=elasticsearch group=elasticsearch
+  when: not stes.stat.exists
+
+- name: Create elastic dir on ssd2
+  file: path=/ssd2/elasticsearch state=directory owner=elasticsearch group=elasticsearch
+  when: not stes.stat.exists
+
+- name: Get heap size
+  shell: echo "$(( $(grep MemTotal /proc/meminfo | awk '{print $2}') / 1024 / 1024 / 2 ))g"
+  register: es_heap
+  when: not stes.stat.exists
+
+- name: Setup elastic configuration
+  template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
+  when: not stes.stat.exists
+
+- name: Setup elastic default configuration
+  template: src=elasticsearch.j2 dest=/etc/default/elasticsearch
+  when: not stes.stat.exists
+
+- name: Restart elastic
+  service: name=elasticsearch state=restarted
+  when: not stes.stat.exists
+

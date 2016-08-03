@@ -1,11 +1,20 @@
 127.0.0.1 localhost
-
+{% if groups['mongodb'] is defined %}
 {% for host in groups['mongodb'] %}
 {{ hostvars[host].private_ip }} mongo{{loop.index}}
 {% endfor %}
+{% endif %}
+{% if groups['nuxeo'] is defined %}
 {% for host in groups['nuxeo'] %}
 {{ hostvars[host].private_ip }} nuxeo{{loop.index}}
 {% endfor %}
+{% endif %}
+{% if groups['elastic'] is defined %}
+{% for host in groups['elastic'] %}
+{{ hostvars[host].private_ip }} elastic{{loop.index}}
+{% endfor %}
+{% endif %}
+
 # The following lines are desirable for IPv6 capable hosts
 
 ::1 ip6-localhost ip6-loopback

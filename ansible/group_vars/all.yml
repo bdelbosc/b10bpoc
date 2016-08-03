@@ -10,9 +10,12 @@ nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distributi
 types:
   mongodb: m3.2xlarge
   nuxeo: c3.4xlarge
+  elastic: m3.xlarge
+#  elastic: m3.2xlarge
 counts:
-  mongodb: 4
-  nuxeo: 2
+  mongodb: 0
+  nuxeo: 0
+  elastic: 2
 
 impnbThreads: 90
 impbatchSize: 100
@@ -26,3 +29,4 @@ dbprofile: mongodb
 amis:
   mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2
+  elastic: ami-1e4cd86d

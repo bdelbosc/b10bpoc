@@ -81,23 +81,23 @@ inventory.update(groups)
 
 if "nuxeo" not in inventory:
     inventory["nuxeo"] = {}
-if "es" not in inventory:
-    inventory["es"] = {}
-inventory["nuxeo"]["vars"] = {"db_hosts": [], "es_hosts": [], "mongodb_hosts": [], "mgmt_hosts": []}
-inventory["es"]["vars"] = {"mgmt_hosts": []}
+if "elastic" not in inventory:
+    inventory["elastic"] = {}
+inventory["nuxeo"]["vars"] = {"db_hosts": [], "elastic_hosts": [], "mongodb_hosts": [], "mgmt_hosts": []}
+inventory["elastic"]["vars"] = {"mgmt_hosts": []}
 if "db" in groups:
     for i in groups["db"]["hosts"]:
         inventory["nuxeo"]["vars"]["db_hosts"].append(hostvars[i]["private_ip"])
-if "es" in groups:
-    for i in groups["es"]["hosts"]:
-        inventory["nuxeo"]["vars"]["es_hosts"].append(hostvars[i]["private_ip"])
+if "elastic" in groups:
+    for i in groups["elastic"]["hosts"]:
+        inventory["nuxeo"]["vars"]["elastic_hosts"].append(hostvars[i]["private_ip"])
 if "mongodb" in groups:
     for i in groups["mongodb"]["hosts"]:
         inventory["nuxeo"]["vars"]["mongodb_hosts"].append(hostvars[i]["private_ip"])
 if "mgmt" in groups:
     for i in groups["mgmt"]["hosts"]:
         inventory["nuxeo"]["vars"]["mgmt_hosts"].append(hostvars[i]["private_ip"])
-        inventory["es"]["vars"]["mgmt_hosts"].append(hostvars[i]["private_ip"])
+        inventory["elastic"]["vars"]["mgmt_hosts"].append(hostvars[i]["private_ip"])
 
 #print inventory
 
