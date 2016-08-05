@@ -5,7 +5,7 @@
   register: stcs
 
 - name: Install mongo
-  apt: state=latest name={{item}}
+  apt: state=latest name={{item}} force=yes
   with_items:
   - mongodb-org
   when: not stcs.stat.exists

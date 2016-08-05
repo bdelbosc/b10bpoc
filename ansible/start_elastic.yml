@@ -13,6 +13,7 @@
   gather_facts: no
   sudo: no
   roles:
+  - {role: ec2, type: nuxeo}
   - {role: ec2, type: elastic}
 
 - hosts: elastic
@@ -34,4 +35,11 @@
   become: yes
   roles:
   - role: elastic
+
+- hosts: nuxeo
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  tasks:
+  - include: ./roles/elastic/tasks/nuxeo_setup.yml
 

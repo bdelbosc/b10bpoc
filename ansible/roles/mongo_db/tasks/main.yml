@@ -5,7 +5,7 @@
   register: std
 
 - name: Install mongodb
-  apt: state=latest name={{item}}
+  apt: state=latest name={{item}} force=yes
   with_items:
   - mongodb-org
 

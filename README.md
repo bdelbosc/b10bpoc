@@ -4,32 +4,41 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 # Goal
 
-  Deploy minimum and tuned Nuxeo/MongoDB archi to support best throughput per simulation.
-
-  For instance injecting
+  Deploy minimum and tuned nodes for each benchmark step.
+  
+  The steps are:
+  - mass import
+  - elasticsearch indexing
+  - gatling simulation
 
 # Choices
 
 ## AWS instance
+
   Use AWS ec2 instance with ephemeral storage instance, because SSD is faster than EBS
 
   The instance type must be choose in :
 
   - c3.*
-  - i2.*
-  - d2.*
+  - m3.*
+  
+## Binaries
 
-# Simulations
+  The attached file per document is a null file so we don't need binary storage.
+
+# Steps
 
 ## Import
-  Here we use only 2 servers a Nuxeo and a MongoDB server.
-  ES Indexing and audit is disabled, the repository use a /dev/null binary store
+
+  ES Indexing and audit is disabled. Only Nuxeo and Mongo nodes are running.
 
 ## ES Indexation
-  Add an ES cluster and index repository content.
+
+  Add an ES cluster, add a Redis server for the workmanager, reconfigure Nuxeo to use it
 
 ## Gatling simulations
-  Run default gatling simulation on top of the imported content.
+
+  Add a Gatling node to deploy and run Gatling simulation over the imported content.
 
 # Tuning
 
@@ -44,7 +53,19 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - Huge pages disabled
   - Open file limits increased
 
+## Elasticsearch
 
+  We follow the Elasticsearch best practices:
+   
+  - Use ext4 filestystem, atime and diratime disabled
+  - use multiple drives to stripe data across them via multiple path.data directories
+  - Disable merge throttling entirely
+  - Set index.refresh_interval to 30s
+  - Disable replicas
+  - Set bulk size of 500 documents, may be too small (500KB instead of 5-15MB) but gives better results
+    with 24 threads concurrency
+  ...
+  
 ## Nuxeo
 
   Import:
@@ -52,12 +73,44 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - No fulltext extraction
   - No audit
   - Elasticsearch disabled
-  (- Fake binary storage, it does not write binary to disk.) not necessary when creating file without attachement
+  - Use jar from branch: test-NXBT-1103-import-tuning-1b, they must be present on ./custom/bundles
+   
+    - nuxeo-core-8.4-SNAPSHOT.jar
+    - nuxeo-core-storage-dbs-8.4-SNAPSHOT.jar
+    - nuxeo-core-storage-mongodb-8.4-SNAPSHOT.jar
+    - nuxeo-importer-core-8.4-SNAPSHOT.jar
+    
+    
+  Elasticsearch indexing:
+  
+  - Use jars from feature-NXP-20200-repo-scroll-api, they must be present on ./custom/bundles.indexing
+  
+    - nuxeo-core-8.4-SNAPSHOT.jar
+    - nuxeo-core-api-8.4-SNAPSHOT.jar
+    - nuxeo-core-storage-dbs-8.4-SNAPSHOT.jar
+    - nuxeo-core-storage-mongodb-8.4-SNAPSHOT.jar
+    - nuxeo-elasticsearch-core-8.4-SNAPSHOT.jar
 
+  
 
 # Run
 
+
+## Import
+
 1. edit ansible/group_vars/all.yml to set your keypair and the ec2 type
+   target for 1b can be:
+   
+        types:
+            mongodb: m3.2xlarge
+            nuxeo: c3.4xlarge
+            elastic: m3.2xlarge
+        counts:
+            mongodb: 4
+            nuxeo: 2
+            elastic: 0
+
+
 2. edit your ~/.ssh/config to use your keypair when accessing AWS, for eu-west-1
 
 
@@ -71,13 +124,35 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
       ./start_infra.sh -c /opt/build/hudson/instance.clid
 
-4. Run import from the Nuxeo server:
+
+4. Start Nuxeo, ssh on nuxeo instances one after the other:
+
+       nuxeoctl start
+
+5. Run import from the Nuxeo server:
 
 
        ./run_bench.sh
+       
+       
+## Indexing
+
+1. edit ansible/group_vars/all.yml to add ES nodes and reduce Nuxeo nodes
+
+        types:
+            mongodb: m3.2xlarge
+            nuxeo: c3.4xlarge
+            elastic: m3.2xlarge
+        counts:
+            mongodb: 4
+            nuxeo: 1
+            elastic: 3
 
 
+2. ssh on Nuxeo an run reindex using curl
 
+        curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.Index
+        curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{"timeoutSecond": "172800", "refresh": "true"},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.WaitForIndexing
 # About Nuxeo
 
 Nuxeo provides a modular, extensible, open source

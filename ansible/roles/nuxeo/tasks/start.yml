@@ -1,12 +1,17 @@
 ---
+- name: Get a time stamp
+  shell: echo "$(date +%y%m%d-%H%M%S)"
+  register: now_tag
+
 - name: Start nuxeo
   shell: nuxeoctl start
+#  serial: 1
 
 - name: Wait for Nuxeo to open 8080
   wait_for: host=localhost port=8080 timeout=300
 
 - name: Save config
-  shell: nuxeoctl showconf > /opt/nuxeo/logs/nuxeo_conf.log
+  shell: nuxeoctl showconf > /opt/nuxeo/logs/nuxeo_conf-{{now_tag.stdout}}.log
 
 # require httplib2 installed
 # - name: Wait for Nuxeo to be ready to serve request

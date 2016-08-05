@@ -1,0 +1,86 @@
+---
+# setup nuxeo conf, enabling elasticsearch
+- name: Config - Enable elastic
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.enabled\s*(.*)'
+    line: "elasticsearch.enabled=true"
+- name: Config - clustername
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.clusterName\s*(.*)'
+    line: "elasticsearch.clusterName=b10b"
+- name: Config - replicas
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.indexNumberOfReplicas\s*(.*)'
+    line: "elasticsearch.indexNumberOfReplicas=0"
+- name: Config - shards
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.indexNumberOfShards\s*(.*)'
+    line: "elasticsearch.indexNumberOfShards=6"
+- name: Config - bucket read
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.reindex.bucketReadSize\s*(.*)'
+    line: "elasticsearch.reindex.bucketReadSize=100000"
+- name: Config - bucket write
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.reindex.bucketWriteSize\s*(.*)'
+    line: "elasticsearch.reindex.bucketWriteSize=500"
+- name: Config - threads
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.indexing.maxThreads\s*(.*)'
+    line: "elasticsearch.indexing.maxThreads=32"
+- name: Config - cluster info
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch.adminCenter.displayClusterInfo\s*(.*)'
+    line: "elasticsearch.adminCenter.displayClusterInfo=true"
+- name: Config - addressList
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?elasticsearch\.addressList\s*='
+    line: "elasticsearch.addressList={{ elastic_hosts | map('regex_replace', '^(.*)$', '\\\\1:9300') | join(',') }}"
+- name: Config - Enable elastic audit
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?audit.elasticsearch.enabled=\s*(.*)'
+    line: "audit.elasticsearch.enabled=true"
+- name: Config - Enable Redis
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?nuxeo.redis.enabled\s*(.*)'
+    line: "nuxeo.redis.enabled=true"
+- name: Config - Set Redis host
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?nuxeo.redis.host\s*(.*)'
+    line: "nuxeo.redis.host=localhost"
+
+- name: Remove contrib that disable es
+  file: path=/opt/nuxeo/server/templates/b10b/nxserver/config/disable-es-config.xml state=absent
+
+- name: install Redis
+  apt: name=redis-server state=latest
+  sudo: yes
+
+- name: Restart Redis
+  service: name=redis-server state=restarted
+
+# Add custom bundles
+- name: Check for custom bundles
+  stat: path=/deploy/bundles.indexing
+  register: custombundles
+
+- name: Copy custom bundles for indexing
+  shell: cp -a /deploy/bundles.indexing/* /opt/nuxeo/server/nxserver/bundles/
+  when: custombundles.stat.exists
+  failed_when: False
+
+- name: Restart nuxeo
+  shell: nuxeoctl restart
+

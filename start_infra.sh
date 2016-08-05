@@ -44,6 +44,7 @@ function prepare_deploy_directory() {
   cp $clid $HERE/deploy/ || /bin/true
   echo "nuxeo-platform-importer" > $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
+  cp -r ./custom/bundles.indexing $HERE/deploy/ || /bin/true
   cp -r ./custom/templates $HERE/deploy/ || /bin/true
 }
 
