@@ -1,4 +1,9 @@
 ---
+
+- name: Get number of shard
+  shell: echo "$(( {{counts.elastic}} * 3))"
+  register: es_shard
+
 # setup nuxeo conf, enabling elasticsearch
 - name: Config - Enable elastic
   lineinfile:
@@ -19,7 +24,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch.indexNumberOfShards\s*(.*)'
-    line: "elasticsearch.indexNumberOfShards=6"
+    line: "elasticsearch.indexNumberOfShards={{es_shard.stdout}}"
 - name: Config - bucket read
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -29,7 +34,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch.reindex.bucketWriteSize\s*(.*)'
-    line: "elasticsearch.reindex.bucketWriteSize=1000"
+    line: "elasticsearch.reindex.bucketWriteSize=2500"
 - name: Config - threads
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -44,7 +49,8 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch\.addressList\s*='
-    line: "elasticsearch.addressList={{ elastic_hosts | map('regex_replace', '^(.*)$', '\\\\1:9300') | join(',') }}"
+    line: "elasticsearch.addressList={% for host in groups['elastic'] -%}{{ hostvars[host]['private_ip'] }}:9300{%- if not loop.last %},{% endif -%}{%- endfor %}"
+    # line: "elasticsearch.addressList={{ elastic_hosts | map('regex_replace', '^(.*)$', '\\\\1:9300') | join(',') }}"
 - name: Config - Enable elastic audit
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
