@@ -6,7 +6,7 @@ set -e
 
 function nuxeo_start() {
   pushd ansible
-  ansible-playbook -i inventory.py ./playbooks/nuxeo_start.yml -v
+  ansible-playbook -i inventory.py ./playbooks/nuxeo_start.yml -vv
   popd
 }
 
@@ -18,5 +18,5 @@ function run_import() {
 
 # ------------------------------
 # main
-#nuxeo_start
+nuxeo_start
 run_import

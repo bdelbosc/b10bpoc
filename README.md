@@ -60,8 +60,9 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - Use ext4 filestystem, atime and diratime disabled
   - use multiple drives to stripe data across them via multiple path.data directories
   - Disable merge throttling entirely
-  - Set index.refresh_interval to 30s
+  - Set index.refresh_interval to 10s
   - Disable replicas
+  
   - Set bulk size of 500 documents, may be too small (500KB instead of 5-15MB) but gives better results
     with 24 threads concurrency
   ...
@@ -83,20 +84,22 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
     
   Elasticsearch indexing:
   
-  - Use jars from feature-NXP-20200-repo-scroll-api, they must be present on ./custom/bundles.indexing
-  
-    - nuxeo-core-8.4-SNAPSHOT.jar
-    - nuxeo-core-api-8.4-SNAPSHOT.jar
-    - nuxeo-core-storage-dbs-8.4-SNAPSHOT.jar
-    - nuxeo-core-storage-mongodb-8.4-SNAPSHOT.jar
-    - nuxeo-elasticsearch-core-8.4-SNAPSHOT.jar
-
+  - restore pristine jars  
   
 
 # Run
 
+## Configure your ssh access
 
-## Import
+2. edit your ~/.ssh/config to use your keypair when accessing AWS, for eu-west-1
+
+
+      Host 52.*
+          User ubuntu
+          IdentityFile "/home/XXX/.ssh/your-key-pair.pem"
+
+
+## Step 1 - Import
 
 1. edit ansible/group_vars/all.yml to set your keypair and the ec2 type
    target for 1b can be:
@@ -111,31 +114,20 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
             elastic: 0
 
 
-2. edit your ~/.ssh/config to use your keypair when accessing AWS, for eu-west-1
 
-
-      Host 52.*
-          User ubuntu
-          IdentityFile "/home/XXX/.ssh/your-key-pair.pem"
-
-
-3. Create Mongo cluster and setup Nuxeo using latest 8.4 snapshot
+2. Create Mongo cluster and setup Nuxeo using latest 8.4 snapshot
 
 
       ./start_infra.sh -c /opt/build/hudson/instance.clid
 
 
-4. Start Nuxeo, ssh on nuxeo instances one after the other:
-
-       nuxeoctl start
-
-5. Run import from the Nuxeo server:
+3. Start Nuxeo and run the import on each nodes:
 
 
-       ./run_bench.sh
+      ./run_bench.sh
        
        
-## Indexing
+## Step 2 - Indexing
 
 1. edit ansible/group_vars/all.yml to add ES nodes and reduce Nuxeo nodes
 
@@ -146,13 +138,14 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
         counts:
             mongodb: 4
             nuxeo: 1
-            elastic: 3
 
 
-2. ssh on Nuxeo an run reindex using curl
+3. ssh on Nuxeo an run reindex using curl
 
         curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.Index
         curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{"timeoutSecond": "172800", "refresh": "true"},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.WaitForIndexing
+
+
 # About Nuxeo
 
 Nuxeo provides a modular, extensible, open source

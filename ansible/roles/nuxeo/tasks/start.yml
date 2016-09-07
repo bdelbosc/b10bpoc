@@ -5,7 +5,6 @@
 
 - name: Start nuxeo
   shell: nuxeoctl start
-#  serial: 1
 
 - name: Wait for Nuxeo to open 8080
   wait_for: host=localhost port=8080 timeout=300
