@@ -1,25 +1,35 @@
 ---
+# AWS keypair used to access the ec2 instances
 #keypair: Jenkins
 keypair: bdelbosc
-# this is a tag used to flag ec2 used for the bench
-bench: b10b
-# The s3 bucket to save the results
-bucket_results: nuxeo-b10b-results
-# The default Nuxeo distribution to use
-nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
+
+# Type of ec2 to use
 types:
   mongodb: m3.2xlarge
   nuxeo: c3.4xlarge
   elastic: m3.2xlarge
+
+# Number of nodes
 counts:
   mongodb: 3
-  nuxeo: 1
-  elastic: 3
+  nuxeo: 2
+  elastic: 5
 
+# An s3 bucket used to save bench results
+bucket_results: nuxeo-b10b-results
+
+# Tag used to flag ec2 used for the bench
+bench: b10b
+
+# The default Nuxeo distribution to use
+nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
+
+# Mass Import configuration
 impnbThreads: 90
 impbatchSize: 100
 impnbNodes: 500000000
 
+# AWS config
 aws_region: eu-west-1
 security_group: jenkins-vpc
 subnet_id: subnet-dbac2a82

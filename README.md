@@ -89,62 +89,62 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 # Run
 
-## Configure your ssh access
+## Configure access and nodes
 
-2. edit your ~/.ssh/config to use your keypair when accessing AWS, for eu-west-1
+1. Edit your `~/.ssh/config` to use your keypair when accessing AWS, for `eu-west-1` 
+
+        Host 52.*
+            User ubuntu
+            IdentityFile "/home/XXX/.ssh/your-key-pair.pem"
 
 
-      Host 52.*
-          User ubuntu
-          IdentityFile "/home/XXX/.ssh/your-key-pair.pem"
-
-
-## Step 1 - Import
-
-1. edit ansible/group_vars/all.yml to set your keypair and the ec2 type
-   target for 1b can be:
+2. Edit `ansible/group_vars/all.yml` to set your keypair and the ec2 type target for 1b can be:
    
         types:
             mongodb: m3.2xlarge
             nuxeo: c3.4xlarge
             elastic: m3.2xlarge
         counts:
-            mongodb: 4
+            mongodb: 3
             nuxeo: 2
-            elastic: 0
+            elastic: 3
 
+## Step 1 - Import
 
+1. Create Mongo cluster and setup Nuxeo using latest 8.4 snapshot
 
-2. Create Mongo cluster and setup Nuxeo using latest 8.4 snapshot
+        ./start_infra.sh -c /opt/build/hudson/instance.clid
+      
+      
+2. Start Nuxeo and run the importer on each Nuxeo nodes:
 
-
-      ./start_infra.sh -c /opt/build/hudson/instance.clid
-
-
-3. Start Nuxeo and run the import on each nodes:
-
-
-      ./run_bench.sh
+        ./run_import.sh
        
        
 ## Step 2 - Indexing
 
-1. edit ansible/group_vars/all.yml to add ES nodes and reduce Nuxeo nodes
+1. Create an Elasticsearch cluster and reconfigure Nuxeo to use it
 
-        types:
-            mongodb: m3.2xlarge
-            nuxeo: c3.4xlarge
-            elastic: m3.2xlarge
-        counts:
-            mongodb: 4
-            nuxeo: 1
+        ./start_elastic.sh
 
 
-3. ssh on Nuxeo an run reindex using curl
+2. Run a reindexing process
 
         curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.Index
         curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{"timeoutSecond": "172800", "refresh": "true"},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.WaitForIndexing
 
+## Step 3 - Gatling benchmark
+
+TODO
+
+## Capture monitoring and restuls
+
+
+        ./save_results.sh
+        
+## Shutdown all resources
+
+       ./terminate_infra.sh
 
 # About Nuxeo
 

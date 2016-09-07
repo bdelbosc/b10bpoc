@@ -1,0 +1,5 @@
+---
+- name: Stop nuxeo
+  shell: nuxeoctl stop
+
+# TODO: save gc log

@@ -4,7 +4,12 @@ cd $(dirname $0)
 HERE=`readlink -e .`
 set -e
 
-. venv/bin/activate
+
+function setup_ansible() {
+  . venv/bin/activate
+  # prevent ssh auth checking fingerprints
+  export ANSIBLE_HOST_KEY_CHECKING=False
+}
 
 function run_elastic() {
   pushd ansible
@@ -14,5 +19,6 @@ function run_elastic() {
 
 # ------------------------------
 # main
+setup_ansible
 run_elastic
 

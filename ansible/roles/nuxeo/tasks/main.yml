@@ -286,6 +286,10 @@
   shell: cat /deploy/conf >> /opt/nuxeo/conf/nuxeo.conf
   when: customconf.stat.exists
 
+# Backup pristine bundles
+- name: Backup custom bundles
+  shell: cp -ar /opt/nuxeo/server/nxserver/bundles /opt/nuxeo/server/nxserver/bundles.pristine
+
 # Add custom bundles
 - name: Check for custom bundles
   stat: path=/deploy/bundles

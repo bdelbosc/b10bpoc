@@ -29,12 +29,12 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch.reindex.bucketWriteSize\s*(.*)'
-    line: "elasticsearch.reindex.bucketWriteSize=500"
+    line: "elasticsearch.reindex.bucketWriteSize=1000"
 - name: Config - threads
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch.indexing.maxThreads\s*(.*)'
-    line: "elasticsearch.indexing.maxThreads=32"
+    line: "elasticsearch.indexing.maxThreads=40"
 - name: Config - cluster info
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -59,28 +59,24 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo.redis.host\s*(.*)'
-    line: "nuxeo.redis.host=localhost"
+    line: "nuxeo.redis.host=nuxeo1"
 
 - name: Remove contrib that disable es
   file: path=/opt/nuxeo/server/templates/b10b/nxserver/config/disable-es-config.xml state=absent
 
-- name: install Redis
+- name: Install Redis
   apt: name=redis-server state=latest
   sudo: yes
+
+- name: Redis bind
+  lineinfile:
+    dest: /etc/redis/redis.conf
+    regexp: '^#?bind\s*(.*)'
+    line: "bind {{ private_ip }}"
 
 - name: Restart Redis
   service: name=redis-server state=restarted
 
-# Add custom bundles
-- name: Check for custom bundles
-  stat: path=/deploy/bundles.indexing
-  register: custombundles
-
-- name: Copy custom bundles for indexing
-  shell: cp -a /deploy/bundles.indexing/* /opt/nuxeo/server/nxserver/bundles/
-  when: custombundles.stat.exists
-  failed_when: False
-
-- name: Restart nuxeo
-  shell: nuxeoctl restart
+- name: Restore pristine bundles
+  shell: cp -a /opt/nuxeo/server/nxserver/bundles.pristine/*.jar /opt/nuxeo/server/nxserver/bundles/
 

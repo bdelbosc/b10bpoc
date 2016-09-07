@@ -9,6 +9,12 @@
       shell: echo "$(date +%y%m%d-%H%M)_{{counts.mongodb}}mongo-as-{{types.mongodb}}_{{counts.nuxeo}}nuxeo-as-{{types.nuxeo}}"
       register: stamp_tag
 
+- hosts: nuxeo
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/nuxeo/tasks/stop.yml
+
 - hosts: localhost
   gather_facts: no
   sudo: no
@@ -43,3 +49,16 @@
   tasks:
   - include: ./roles/elastic/tasks/nuxeo_setup.yml
 
+- hosts: elastic
+  serial: 1
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/elastic/tasks/start.yml
+
+- hosts: nuxeo
+  gather_facts: no
+  serial: 1
+  sudo: yes
+  tasks:
+  - include: ./roles/nuxeo/tasks/start.yml

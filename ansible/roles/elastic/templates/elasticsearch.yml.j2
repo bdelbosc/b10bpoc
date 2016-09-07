@@ -20,3 +20,10 @@ threadpool.bulk.queue_size: 500
 index.search.slowlog.threshold.fetch.warn: 1s
 index.indexing.slowlog.threshold.index.warn: 2s
 monitor.jvm.gc.old.warn: 5s
+
+# you know for perf
+index.translog.durability: async
+indices.store.throttle.type: none
+index.refresh_interval: 60s
+index.number_of_replicas: 0
+index.translog.flush_threshold_size: 1GB

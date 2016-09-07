@@ -1,19 +1,24 @@
 ---
 # install java 8
-- name: Add repo for java 8
-  apt_repository: repo='ppa:webupd8team/java' state=present
+- name: Install add-apt-repostory
+  become: yes
+  apt: name=software-properties-common state=latest
 
-- name: Set licence selected
-  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-  sudo: yes
+- name: Add Oracle Java Repository
+  become: yes
+  apt_repository: repo='ppa:webupd8team/java'
 
-- name: Set licence seen
-  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
-  sudo: yes
+- name: Accept Java 8 License
+  become: yes
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
-- name: Install java 8
-  apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
-  sudo: yes
+- name: Install Oracle Java 8
+  become: yes
+  apt: name={{item}} state=latest
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
 
 
 # install elastic
@@ -23,10 +28,12 @@
 
 - name: Add elastic repo key
   shell: wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  sudo: yes
   when: not stes.stat.exists
 
 - name: Add elastic repo
-  shell: echo "deb http://packages.elastic.co/elasticsearch/1.7/debian stable main" | tee /etc/apt/sources.list.d/elasticsearch-1.7.list
+  shell: echo "deb https://packages.elastic.co/elasticsearch/2.x/debian stable main" | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
+  sudo: yes
   when: not stes.stat.exists
 
 - name: Install Elasticsearch
@@ -38,7 +45,6 @@
   with_items:
   - elasticsearch
   sudo: yes
-  when: not stes.stat.exists
 
 - name: Create elastic dir on ssd1
   file: path=/ssd1/elasticsearch state=directory owner=elasticsearch group=elasticsearch
@@ -61,7 +67,4 @@
   template: src=elasticsearch.j2 dest=/etc/default/elasticsearch
   when: not stes.stat.exists
 
-- name: Restart elastic
-  service: name=elasticsearch state=restarted
-  when: not stes.stat.exists
 
