@@ -1,0 +1,70 @@
+---
+# install java 8
+- name: Install add-apt-repostory
+  become: yes
+  apt: name=software-properties-common state=latest
+
+- name: Add Oracle Java Repository
+  become: yes
+  apt_repository: repo='ppa:webupd8team/java'
+
+- name: Accept Java 8 License
+  become: yes
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+- name: Install Oracle Java 8
+  become: yes
+  apt: name={{item}} state=latest
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
+
+
+# install elastic
+- name: Check if elastic is already setup
+  stat: path=//etc/elasticsearch/elasticsearch.yml
+  register: stes
+
+- name: Add elastic repo key
+  shell: wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  sudo: yes
+  when: not stes.stat.exists
+
+- name: Add elastic repo
+  shell: echo "deb https://packages.elastic.co/elasticsearch/2.x/debian stable main" | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
+  sudo: yes
+  when: not stes.stat.exists
+
+- name: Install Elasticsearch
+  apt:
+    name={{item}}
+    state=latest
+    force=yes
+    update_cache=yes
+  with_items:
+  - elasticsearch
+  sudo: yes
+
+- name: Create elastic dir on ssd1
+  file: path=/ssd1/elasticsearch state=directory owner=elasticsearch group=elasticsearch
+  when: not stes.stat.exists
+
+- name: Create elastic dir on ssd2
+  file: path=/ssd2/elasticsearch state=directory owner=elasticsearch group=elasticsearch
+  when: not stes.stat.exists
+
+- name: Get heap size
+  shell: echo "$(( $(grep MemTotal /proc/meminfo | awk '{print $2}') / 1024 / 1024 / 2 ))g"
+  register: es_heap
+  when: not stes.stat.exists
+
+- name: Setup elastic configuration
+  template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
+  when: not stes.stat.exists
+
+- name: Setup elastic default configuration
+  template: src=elasticsearch.j2 dest=/etc/default/elasticsearch
+  when: not stes.stat.exists
+
+

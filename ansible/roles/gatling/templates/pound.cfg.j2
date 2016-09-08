@@ -1,0 +1,34 @@
+## Logging: (goes to syslog by default)
+##      0       no logging
+##      1       normal
+##      2       extended
+##      3       Apache-style (common log format)
+LogLevel        2
+
+## check backend every X secs:
+Alive           60
+
+DynScale        1
+Client          1
+# one week
+TimeOut        604800
+
+ListenHTTP
+        Address 0.0.0.0
+        Port    8000
+        ## allow PUT and DELETE also (by default only GET, POST and HEAD)?:
+        xHTTP           0
+        Service
+{% for host in groups['nuxeo'] %}
+                BackEnd
+                        Address {{hostvars[host].private_ip}}
+                        Port    8080
+                End
+{% endfor %}
+                Session
+                      Type    COOKIE
+                      ID      "JSESSIONID"
+                      TTL     360
+                End
+        End
+End

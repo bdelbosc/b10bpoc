@@ -1,0 +1,64 @@
+---
+# init the elasticsearch infra needed to run indexing
+
+- hosts: localhost
+  gather_facts: no
+  sudo: no
+  tasks:
+    - name: Get a bench tag
+      shell: echo "$(date +%y%m%d-%H%M)_{{counts.mongodb}}mongo-as-{{types.mongodb}}_{{counts.nuxeo}}nuxeo-as-{{types.nuxeo}}"
+      register: stamp_tag
+
+- hosts: nuxeo
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/nuxeo/tasks/stop.yml
+
+- hosts: localhost
+  gather_facts: no
+  sudo: no
+  roles:
+  - {role: ec2, type: nuxeo}
+  - {role: ec2, type: elastic}
+
+- hosts: elastic
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: common
+
+- hosts: elastic
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/elastic/tasks/disk_layout.yml
+
+- hosts: elastic
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  roles:
+  - role: elastic
+
+- hosts: nuxeo
+  gather_facts: no
+  user: ubuntu
+  become: yes
+  tasks:
+  - include: ./roles/elastic/tasks/nuxeo_setup.yml
+
+- hosts: elastic
+  serial: 1
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/elastic/tasks/start.yml
+
+- hosts: nuxeo
+  gather_facts: no
+  serial: 1
+  sudo: yes
+  tasks:
+  - include: ./roles/nuxeo/tasks/start.yml
