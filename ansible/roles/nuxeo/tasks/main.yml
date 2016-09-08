@@ -1,7 +1,7 @@
 ---
 # Add screenrc
 - name: Add screen conf
-  copy: src=screenrc dest=/home/ubuntu/.screenrc
+  copy: src=screenrc dest=/home/ubuntu/.screenrc owner=ubuntu force=no
 
 # Ensure instance is clean
 - name: Init nuxeorunning

@@ -15,6 +15,11 @@
     hname: elastic{{ groups.elastic.index(inventory_hostname) + 1 }}
   when: "'elastic' in group_names"
 
+- name: Find gatling hostname
+  set_fact:
+    hname: gatling{{ groups.gatling.index(inventory_hostname) + 1 }}
+  when: "'gatling' in group_names"
+
 - name: Set hostname
   shell: hostname {{ hname }}
 

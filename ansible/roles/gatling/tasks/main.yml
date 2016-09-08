@@ -12,59 +12,57 @@
   become: yes
   debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
-- name: Install Oracle Java 8
+- name: Install Oracle Java 8 and other tools
   become: yes
   apt: name={{item}} state=latest
   with_items:
     - oracle-java8-installer
     - ca-certificates
     - oracle-java8-set-default
+    - git
+    - ant
+    - redis-server
+    - pound
+
+# install maven
+- name: Check if maven is already installed
+  stat: path=/opt/maven3/bin/mvn
+  register: stmvn
+
+- name: Download Apache Maven
+  get_url: url=http://apache.claz.org/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz dest=/tmp/apache-maven-3.3.9.tar.gz
+  when: not stmvn.stat.exists
+
+- name: Untar Maven
+  shell: chdir=/tmp creates=/opt/apache-maven-3.3.9 tar -zxf apache-maven-3.3.9.tar.gz -C /opt
+  when: not stmvn.stat.exists
+
+- name: Untar Maven
+  shell: mv /opt/apache-maven-3.3.9 /opt/maven3
+  when: not stmvn.stat.exists
 
 
-# install elastic
-- name: Check if elastic is already setup
-  stat: path=//etc/elasticsearch/elasticsearch.yml
-  register: stes
+# setup pound
+- name: Setup pound load balancer
+  template: src=pound.cfg.j2 dest=/etc/pound/pound.cfg
 
-- name: Add elastic repo key
-  shell: wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-  sudo: yes
-  when: not stes.stat.exists
+- name: Enable pound
+  lineinfile:
+    dest: /etc/default/pound
+    regexp: '^#?startup=\s*(.*)'
+    line: "startup=1"
 
-- name: Add elastic repo
-  shell: echo "deb https://packages.elastic.co/elasticsearch/2.x/debian stable main" | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
-  sudo: yes
-  when: not stes.stat.exists
+- name: Restart pound
+  shell: service pound restart
 
-- name: Install Elasticsearch
-  apt:
-    name={{item}}
-    state=latest
-    force=yes
-    update_cache=yes
-  with_items:
-  - elasticsearch
-  sudo: yes
+# Setup bench script
+- name: Setup the bench script
+  copy: src=run_bench.sh dest=/home/ubuntu/run_bench.sh mode=0755 owner=ubuntu force=no
 
-- name: Create elastic dir on ssd1
-  file: path=/ssd1/elasticsearch state=directory owner=elasticsearch group=elasticsearch
-  when: not stes.stat.exists
+- name: Add moustache
+  copy: src=data.mustache dest=/home/ubuntu/data.mustache owner=ubuntu force=no
 
-- name: Create elastic dir on ssd2
-  file: path=/ssd2/elasticsearch state=directory owner=elasticsearch group=elasticsearch
-  when: not stes.stat.exists
-
-- name: Get heap size
-  shell: echo "$(( $(grep MemTotal /proc/meminfo | awk '{print $2}') / 1024 / 1024 / 2 ))g"
-  register: es_heap
-  when: not stes.stat.exists
-
-- name: Setup elastic configuration
-  template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
-  when: not stes.stat.exists
-
-- name: Setup elastic default configuration
-  template: src=elasticsearch.j2 dest=/etc/default/elasticsearch
-  when: not stes.stat.exists
+- name: Add screen conf
+  copy: src=screenrc dest=/home/ubuntu/.screenrc owner=ubuntu force=no
 
 

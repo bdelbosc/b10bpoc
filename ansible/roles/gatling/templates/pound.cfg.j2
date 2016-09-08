@@ -14,10 +14,10 @@ Client          1
 TimeOut        604800
 
 ListenHTTP
-        Address 0.0.0.0
-        Port    8000
-        ## allow PUT and DELETE also (by default only GET, POST and HEAD)?:
-        xHTTP           0
+        Address 127.0.0.1
+        Port    8080
+        ## allow PUT and DELETE GET POST HEAD
+        xHTTP           1
         Service
 {% for host in groups['nuxeo'] %}
                 BackEnd

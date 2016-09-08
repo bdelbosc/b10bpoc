@@ -8,12 +8,14 @@ types:
   mongodb: m3.2xlarge
   nuxeo: c3.4xlarge
   elastic: m3.2xlarge
+  gatling: c3.2xlarge
 
 # Number of nodes
 counts:
   mongodb: 3
   nuxeo: 2
-  elastic: 5
+  elastic: 4
+  gatling: 1
 
 # An s3 bucket used to save bench results
 bucket_results: nuxeo-b10b-results
@@ -36,6 +38,7 @@ subnet_id: subnet-dbac2a82
 instance_profile: JenkinsRole
 dbprofile: mongodb
 amis:
-  mongodb: ami-1e4cd86d
   nuxeo: ami-910fa9e2
+  mongodb: ami-1e4cd86d
   elastic: ami-1e4cd86d
+  gatling: ami-1e4cd86d

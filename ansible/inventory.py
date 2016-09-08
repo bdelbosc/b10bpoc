@@ -34,13 +34,15 @@ mongodbreservations = ec2.get_all_instances(filters={"tag:bench_role": "db", "ta
 mongodbinstances = [i for r in mongodbreservations for i in r.instances]
 mgmtreservations = ec2.get_all_instances(filters={"tag:bench_role": "mgmt"})
 mgmtinstances = [i for r in mgmtreservations for i in r.instances]
+elasticreservations = ec2.get_all_instances(filters={"tag:bench_role": "elastic"})
+elasticinstances = [i for r in elasticreservations for i in r.instances]
 
 hostvars = {}
 groups = {}
 
 allinstances = []
 allids = []
-for i in instances + dbinstances + mongodbinstances + mgmtinstances:
+for i in instances + dbinstances + mongodbinstances + mgmtinstances + elasticinstances:
     if i.id not in allids:
         allinstances.append(i)
         allids.append(i.id)
@@ -83,8 +85,11 @@ if "nuxeo" not in inventory:
     inventory["nuxeo"] = {}
 if "elastic" not in inventory:
     inventory["elastic"] = {}
+if "gatling" not in inventory:
+    inventory["gatling"] = {}
 inventory["nuxeo"]["vars"] = {"db_hosts": [], "elastic_hosts": [], "mongodb_hosts": [], "mgmt_hosts": []}
 inventory["elastic"]["vars"] = {"mgmt_hosts": []}
+inventory["gatling"]["vars"] = {"mgmt_hosts": []}
 if "db" in groups:
     for i in groups["db"]["hosts"]:
         inventory["nuxeo"]["vars"]["db_hosts"].append(hostvars[i]["private_ip"])

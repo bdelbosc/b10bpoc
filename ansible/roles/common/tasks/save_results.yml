@@ -16,6 +16,6 @@
 - name: Save sysstat info
   shell: aws s3 sync /var/log/sysstat s3://{{bucket_results}}/{{bench_tag}}/`hostname`/sysstat/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=system@nuxeo.com --region {{ansible_ec2_placement_region}}
 
-- name: upload nuxeo logs
-  shell: aws s3 sync /opt/nuxeo/logs s3://{{bucket_results}}/{{bench_tag}}/`hostname`/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=system@nuxeo.com --region {{ansible_ec2_placement_region}}
-  when: "'nuxeo' in group_names"
+- name: Save gatling report
+  shell: aws s3 sync /home/ubuntu/reports s3://{{bucket_results}}/{{bench_tag}}/`hostname`/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers full=emailaddress=system@nuxeo.com --region {{ansible_ec2_placement_region}}
+  when: "'gatling' in group_names"

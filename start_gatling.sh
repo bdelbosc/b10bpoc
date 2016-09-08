@@ -1,5 +1,5 @@
 #!/bin/bash
-# Start the required infra to setup elasticsearch and start indexing
+# Start the required infra to run gatling tests
 cd $(dirname $0)
 HERE=`readlink -e .`
 set -e
@@ -11,14 +11,13 @@ function setup_ansible() {
   export ANSIBLE_HOST_KEY_CHECKING=False
 }
 
-function run_elastic() {
+function start_gatling() {
   pushd ansible
-  ansible-playbook -vv -i inventory.py ./start_elastic.yml -v
+  ansible-playbook -vv -i inventory.py ./start_gatling.yml -v
   popd
 }
 
 # ------------------------------
 # main
 setup_ansible
-run_elastic
-
+start_gatling

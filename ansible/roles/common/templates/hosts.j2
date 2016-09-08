@@ -13,6 +13,10 @@
 {% for host in groups['elastic'] %}
 {{ hostvars[host].private_ip }} elastic{{loop.index}}
 {% endfor %}
+{% if groups['gatling'] is defined %}
+{% for host in groups['gatling'] %}
+{{ hostvars[host].private_ip }} gatling{{loop.index}}
+{% endfor %}
 {% endif %}
 
 # The following lines are desirable for IPv6 capable hosts

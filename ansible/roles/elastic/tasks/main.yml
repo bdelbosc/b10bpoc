@@ -23,7 +23,7 @@
 
 # install elastic
 - name: Check if elastic is already setup
-  stat: path=//etc/elasticsearch/elasticsearch.yml
+  stat: path=/etc/elasticsearch/elasticsearch.yml
   register: stes
 
 - name: Add elastic repo key

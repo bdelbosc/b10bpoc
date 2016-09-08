@@ -131,7 +131,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 2. Run a reindexing process
 
         curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.Index
-        curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{"timeoutSecond": "172800", "refresh": "true"},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.WaitForIndexing
+        time curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{"timeoutSecond": "172800", "refresh": "true"},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.WaitForIndexing
 
 ## Step 3 - Gatling benchmark
 

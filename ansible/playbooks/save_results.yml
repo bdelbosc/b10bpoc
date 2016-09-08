@@ -1,5 +1,5 @@
 ---
-- hosts: nuxeo:mongodb:elastic
+- hosts: nuxeo:mongodb:elastic:gatling
   gather_facts: no
   user: ubuntu
   sudo: yes
