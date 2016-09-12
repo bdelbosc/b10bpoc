@@ -80,6 +80,9 @@
 - name: Remove contrib that disable es
   file: path=/opt/nuxeo/server/templates/b10b/nxserver/config/disable-es-config.xml state=absent
 
+- name: Setup an Elasticsearch configuration
+  copy: src=elasticsearch-config.xml.nxftl dest=/opt/nuxeo/server/template/b10b/nxserver/config/elasticsearch-config.xml.nxftl  owner=nuxeo
+
 - name: Install Redis
   apt: name=redis-server state=latest
   sudo: yes

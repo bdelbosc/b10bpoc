@@ -1,0 +1,240 @@
+<#escape x as x?xml>
+<?xml version="1.0"?>
+<component name="org.nuxeo.elasticsearch.b10bConfig">
+  <require>org.nuxeo.elasticsearch.defaultConfig</require>
+
+<#if "${elasticsearch.addressList}" == "">
+  <extension target="org.nuxeo.elasticsearch.ElasticSearchComponent"
+    point="elasticSearchLocal">
+    <elasticSearchLocal
+      clusterName="${elasticsearch.clusterName}"
+      nodeName="${elasticsearch.nodeName}"
+      pathData="${nuxeo.data.dir}/elasticsearch"
+      pathLogs="${nuxeo.log.dir}/elasticsearch"
+      httpEnabled="${elasticsearch.httpEnabled}"
+      networkHost="${elasticsearch.networkHost}" />
+  </extension>
+<#else>
+  <extension target="org.nuxeo.elasticsearch.ElasticSearchComponent"
+    point="elasticSearchRemote">
+    <elasticSearchRemote
+      clusterName="${elasticsearch.clusterName}"
+      addressList="${elasticsearch.addressList}"
+      clientTransportSniff="false"
+      clientTransportIgnoreClusterName="false"
+      clientTransportPingTimeout="5s"
+      clientTransportNodesSamplerInterval="5s" />
+  </extension>
+</#if>
+
+  <extension target="org.nuxeo.elasticsearch.ElasticSearchComponent"
+    point="elasticSearchIndex">
+    <elasticSearchIndex name="${elasticsearch.indexName}" type="doc" repository="default">
+      <fetchFromSource>
+        <include>ecm:*</include>
+        <include>dc:*</include>
+        <exclude>ecm:binarytext</exclude>
+      </fetchFromSource>
+
+      <settings>
+{
+<#if "${elasticsearch.addressList}" != "">
+   "number_of_shards" : "${elasticsearch.indexNumberOfShards}",
+   "number_of_replicas" : "${elasticsearch.indexNumberOfReplicas}",
+</#if>
+   "analysis" : {
+      "filter" : {
+         "truncate_filter" : {
+            "length" : 127,
+            "type" : "truncate"
+         },
+         "en_stem_filter" : {
+            "name" : "minimal_english",
+            "type" : "stemmer"
+         },
+         "en_stop_filter" : {
+            "stopwords" : [
+               "_english_"
+            ],
+            "type" : "stop"
+         }
+      },
+      "tokenizer" : {
+         "path_tokenizer" : {
+            "delimiter" : "/",
+            "type" : "path_hierarchy"
+         }
+      },
+      "analyzer" : {
+         "en_analyzer" : {
+            "alias" : "fulltext",
+            "filter" : [
+               "lowercase",
+               "en_stop_filter",
+               "en_stem_filter"
+            ],
+            "type" : "custom",
+            "tokenizer" : "standard"
+         },
+         "path_analyzer" : {
+            "type" : "custom",
+            "tokenizer" : "path_tokenizer"
+         },
+         "lowercase_analyzer" : {
+            "type" : "custom",
+            "filter" : [ "truncate_filter", "lowercase", "asciifolding" ],
+            "tokenizer" : "keyword"
+         },
+         "default" : {
+            "type" : "custom",
+            "filter" : [ "truncate_filter" ],
+            "tokenizer" : "keyword"
+         }
+      }
+   }
+}
+      </settings>
+      <mapping>
+{
+   "_all" : {
+      "analyzer" : "fulltext"
+   },
+   "dynamic": "strict",
+   "properties" : {
+          "dc:contributors" : {
+            "type" : "string"
+          },
+          "dc:coverage" : {
+            "type" : "string"
+          },
+          "dc:created" : {
+            "type" : "date",
+            "format" : "dateOptionalTime"
+          },
+          "dc:creator" : {
+            "type" : "string"
+          },
+          "dc:description" : {
+            "type" : "string",
+            "index" : "no",
+            "include_in_all" : true
+          },
+          "dc:language" : {
+            "type" : "string"
+          },
+          "dc:lastContributor" : {
+            "type" : "string"
+          },
+          "dc:modified" : {
+            "type" : "date",
+            "format" : "dateOptionalTime"
+          },
+          "dc:nature" : {
+            "type" : "string"
+          },
+          "dc:rights" : {
+            "type" : "string"
+          },
+          "dc:source" : {
+            "type" : "string"
+          },
+          "dc:subjects" : {
+            "type" : "string"
+          },
+          "dc:title" : {
+            "type" : "string",
+            "fields" : {
+              "fulltext" : {
+                "type" : "string",
+                "boost" : 2.0,
+                "analyzer" : "fulltext"
+              }
+            }
+          },
+          "domain:display_type" : {
+            "type" : "boolean"
+          },
+          "ecm:acl" : {
+            "type" : "string"
+          },
+          "ecm:binarytext" : {
+            "type" : "string",
+            "index" : "no",
+            "include_in_all" : true
+          },
+          "ecm:currentLifeCycleState" : {
+            "type" : "string"
+          },
+          "ecm:isCheckedIn" : {
+            "type" : "boolean"
+          },
+          "ecm:isLatestMajorVersion" : {
+            "type" : "boolean"
+          },
+          "ecm:isLatestVersion" : {
+            "type" : "boolean"
+          },
+          "ecm:isProxy" : {
+            "type" : "boolean"
+          },
+          "ecm:isVersion" : {
+            "type" : "boolean"
+          },
+          "ecm:mixinType" : {
+            "type" : "string"
+          },
+          "ecm:name" : {
+            "type" : "string"
+          },
+          "ecm:parentId" : {
+            "type" : "string"
+          },
+          "ecm:path" : {
+            "type" : "string",
+            "index" : "not_analyzed",
+            "fields" : {
+              "children" : {
+                "type" : "string",
+                "analyzer" : "path_analyzer",
+                "search_analyzer" : "keyword"
+              }
+            }
+          },
+          "ecm:pos" : {
+            "type" : "integer"
+          },
+          "ecm:primaryType" : {
+            "type" : "string"
+          },
+          "ecm:repository" : {
+            "type" : "string"
+          },
+          "ecm:title" : {
+            "type" : "string"
+          },
+          "ecm:uuid" : {
+            "type" : "string"
+          },
+          "ecm:versionLabel" : {
+            "type" : "string"
+          },
+          "note:note" : {
+            "type" : "string",
+            "index" : "no",
+            "include_in_all" : true
+          },
+          "uid:major_version" : {
+            "type" : "long"
+          },
+          "uid:minor_version" : {
+            "type" : "long"
+          }
+   }
+}
+      </mapping>
+
+    </elasticSearchIndex>
+  </extension>
+
+</component>
+</#escape>

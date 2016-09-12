@@ -146,6 +146,10 @@
   shell: cp /deploy/instance.clid /ssd2/nuxeo-data/
   when: instanceclid.stat.exists
 
+# Add b10b template
+- name: Add b10b template
+  copy: src=b10b dest=/opt/nuxeo/server/template/b10b owner=nuxeo
+
 # Add fixed paths
 - name: Config - nuxeo.data.dir
   lineinfile:
@@ -167,7 +171,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.templates\s*='
-    line: "nuxeo.templates=default,mongodb,perf"
+    line: "nuxeo.templates=default,mongodb,perf,b10b"
 # Add mongodb config
 - name: Config - nuxeo.mongodb.server
   lineinfile:
@@ -234,28 +238,6 @@
   shell: nuxeoctl mp-init
   when: not nuxeorunning
 
-
-# Add custom templates
-- name: Check for custom templates
-  stat: path=/deploy/templates
-  register: customtpl
-- name: List custom templates
-  command: ls -1 /deploy/templates
-  when: customtpl.stat.exists
-  register: tpllist
-- name: Copy custom templates
-  shell: cp -a /deploy/templates/{{item}} /opt/nuxeo/server/templates/
-  with_items: tpllist.stdout.strip().split('\n')
-  when: customtpl.stat.exists and tpllist.stdout.strip() != ''
-- name: Add custom templates to nuxeo.conf
-  lineinfile:
-    dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: 'nuxeo\.templates\s*=(.*)'
-    line: 'nuxeo.templates=\1,{{item}}'
-    backrefs: yes
-  with_items: tpllist.stdout.strip().split('\n')
-  when: customtpl.stat.exists and tpllist.stdout.strip() != ''
-
 # Add custom packages
 - name: Check for custom packages to add
   stat: path=/deploy/mp-add
@@ -276,14 +258,6 @@
 - name: Install custom packages
   shell: nuxeoctl --accept=true --relax=true mp-install $(cat /deploy/mp-list | tr '\n' ' ')
   when: installpkg.stat.exists and not nuxeorunning
-
-# Add custom config
-- name: Check for custom configuration
-  stat: path=/deploy/conf
-  register: customconf
-- name: Install custom configuration
-  shell: cat /deploy/conf >> /opt/nuxeo/conf/nuxeo.conf
-  when: customconf.stat.exists
 
 # Backup pristine bundles
 - name: Backup custom bundles
