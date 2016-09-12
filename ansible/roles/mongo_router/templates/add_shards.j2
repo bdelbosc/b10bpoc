@@ -5,3 +5,6 @@ sh.addShard( "{{ hostvars[host].private_ip }}:27019" )
 sh.enableSharding("bench")
 // sh.shardCollection("bench.default", { "ecm:id": "hashed" } )
 sh.shardCollection("bench.default", { "_id": "hashed" } )
+
+// assume that hash on sequence is good enough to balance chunk
+sh.stopBalancer()

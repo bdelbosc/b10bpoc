@@ -4,7 +4,7 @@
   register: now_tag
 
 - name: Start nuxeo
-  shell: nuxeoctl start
+  shell: nuxeoctl start --strict
 
 - name: Wait for Nuxeo to open 8080
   wait_for: host=localhost port=8080 timeout=300

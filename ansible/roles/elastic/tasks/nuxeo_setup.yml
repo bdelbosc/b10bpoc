@@ -66,6 +66,16 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo.redis.host\s*(.*)'
     line: "nuxeo.redis.host=nuxeo1"
+- name: Calculate heap size 50%, let more memory to redis
+  shell: echo $(( $(grep MemTotal /proc/meminfo | awk '{print $2}') / 2 / 1024 ))
+  register: heapsize
+- name: Config - heap size
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: 'JAVA_OPTS\s*=(.*)-Xms[^m]+m(.*)-Xmx[^m]+m(.*)'
+    line: 'JAVA_OPTS=\1-Xms{{heapsize.stdout.strip()}}m\2-Xmx{{heapsize.stdout.strip()}}m\3'
+    backrefs: yes
+
 
 - name: Remove contrib that disable es
   file: path=/opt/nuxeo/server/templates/b10b/nxserver/config/disable-es-config.xml state=absent
@@ -79,6 +89,12 @@
     dest: /etc/redis/redis.conf
     regexp: '^#?bind\s*(.*)'
     line: "bind {{ private_ip }}"
+
+- name: Redis in memory
+  lineinfile:
+    dest: /etc/redis/redis.conf
+    regexp: '^save(.*)'
+    line: "#save"
 
 - name: Restart Redis
   service: name=redis-server state=restarted
