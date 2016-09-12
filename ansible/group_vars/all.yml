@@ -12,9 +12,9 @@ types:
 
 # Number of nodes
 counts:
-  mongodb: 3
+  mongodb: 4
   nuxeo: 2
-  elastic: 4
+  elastic: 6
   gatling: 1
 
 # An s3 bucket used to save bench results
