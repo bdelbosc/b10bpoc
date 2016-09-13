@@ -5,8 +5,8 @@
   gather_facts: no
   sudo: no
   tasks:
-    - name: Get a bench tag
-      shell: echo "$(date +%y%m%d-%H%M)_{{counts.mongodb}}mongo-as-{{types.mongodb}}_{{counts.nuxeo}}nuxeo-as-{{types.nuxeo}}"
+    - name: Get the bench tag
+      shell: echo "{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
       register: stamp_tag
 
 - hosts: localhost

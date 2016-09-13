@@ -4,8 +4,8 @@
   gather_facts: no
   sudo: no
   tasks:
-    - name: Get a bench tag
-      shell: echo "$(date +%y%m%d-%H%M)_{{counts.mongodb}}mongo-as-{{types.mongodb}}_{{counts.nuxeo}}nuxeo-as-{{types.nuxeo}}"
+    - name: Generate a bench tag
+      shell: echo "$(date +%y%m%d-%H%M)_{{counts.nuxeo}}nuxeo-{{types.nuxeo}}_{{counts.mongodb}}mongo-{{types.mongodb}}_{{counts.elastic}}es-{{types.elastic}}"
       register: stamp_tag
 
 - hosts: localhost
