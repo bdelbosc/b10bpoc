@@ -105,9 +105,9 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
             nuxeo: c3.4xlarge
             elastic: m3.2xlarge
         counts:
-            mongodb: 3
+            mongodb: 4
             nuxeo: 2
-            elastic: 3
+            elastic: 8
 
 ## Step 1 - Import
 
@@ -128,14 +128,21 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
         ./start_elastic.sh
 
 
-2. Run a reindexing process
+2. Run a reindexing process from a Nuxeo instance
 
         curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.Index
         time curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{"timeoutSecond": "172800", "refresh": "true"},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.WaitForIndexing
 
 ## Step 3 - Gatling benchmark
 
-TODO
+1. Create a Gatling server with a pound load balancer
+
+         ./start_gatling.sh
+         
+2. Run the benchmark from the Gatling host, note that Nuxeo is expected to be up and running
+
+         ./run_bench.sh
+         
 
 ## Capture monitoring and restuls
 

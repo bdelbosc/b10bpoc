@@ -26,5 +26,8 @@
 - name: Update /etc/hostname
   shell: echo -n {{ hname }} > /etc/hostname
 
+- name: Backup hosts
+  shell: cp /etc/hosts /etc/hosts.bak
+
 - name: Set /etc/hosts
   template: src=hosts.j2 dest=/etc/hosts

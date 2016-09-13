@@ -57,10 +57,10 @@
 
 # Setup bench script
 - name: Setup the bench script
-  copy: src=run_bench.sh dest=/home/ubuntu/run_bench.sh mode=0755 owner=ubuntu force=no
+  template: src=run_bench.sh dest=/home/ubuntu/run_bench.sh mode=0755 owner=ubuntu force=yes
 
 - name: Add moustache
-  copy: src=data.mustache dest=/home/ubuntu/data.mustache owner=ubuntu force=no
+  copy: src=data.mustache dest=/home/ubuntu/data.mustache owner=ubuntu force=yes
 
 - name: Add screen conf
   copy: src=screenrc dest=/home/ubuntu/.screenrc owner=ubuntu force=no

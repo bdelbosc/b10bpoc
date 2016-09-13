@@ -81,7 +81,7 @@
   file: path=/opt/nuxeo/server/templates/b10b/nxserver/config/disable-es-config.xml state=absent
 
 - name: Setup an Elasticsearch configuration
-  copy: src=elasticsearch-config.xml.nxftl dest=/opt/nuxeo/server/template/b10b/nxserver/config/elasticsearch-config.xml.nxftl  owner=nuxeo
+  copy: src=elasticsearch-b10b-config.xml.nxftl dest=/opt/nuxeo/server/templates/b10b/nxserver/config/elasticsearch-b10b-config.xml.nxftl owner=nuxeo
 
 - name: Install Redis
   apt: name=redis-server state=latest
@@ -96,8 +96,8 @@
 - name: Redis in memory
   lineinfile:
     dest: /etc/redis/redis.conf
-    regexp: '^save(.*)'
-    line: "#save"
+    regexp: '^save\s(.*)'
+    line: "#save \1"
 
 - name: Restart Redis
   service: name=redis-server state=restarted

@@ -7,7 +7,7 @@ keypair: bdelbosc
 types:
   mongodb: m3.2xlarge
   nuxeo: c3.4xlarge
-  elastic: m3.2xlarge
+  elastic: i2.2xlarge
   gatling: c3.2xlarge
 
 # Number of nodes

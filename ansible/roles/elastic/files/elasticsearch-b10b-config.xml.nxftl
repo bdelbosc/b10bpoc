@@ -99,7 +99,7 @@
    "_all" : {
       "analyzer" : "fulltext"
    },
-   "dynamic": "strict",
+   "dynamic": "false",
    "properties" : {
           "dc:contributors" : {
             "type" : "string"
