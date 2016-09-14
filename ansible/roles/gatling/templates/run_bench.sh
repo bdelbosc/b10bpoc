@@ -160,22 +160,22 @@ function build_stat() {
     $REPORT_PATH/sim50bench/detail/simulation.log.gz \
     $REPORT_PATH/sim50crud/detail/simulation.log.gz \
     $REPORT_PATH/sim55waitforasync/detail/simulation.log.gz
-  echo "s3result: {{stamp_tag.stdout}}" >> $REPORT_PATH/data.yml
+  echo "s3result: \"{{stamp_tag.stdout}}\"" >> $REPORT_PATH/data.yml
   echo "nuxeonodes: {{counts.nuxeo}}" >> $REPORT_PATH/data.yml
   echo "dbnodes: {{counts.mongo}}" >> $REPORT_PATH/data.yml
   echo "esnodes: {{counts.elastic}}" >> $REPORT_PATH/data.yml
-  echo "nuxeotype: {{types.nuxeo}}" >> $REPORT_PATH/data.yml
-  echo "dbtype: {{types.mongo}}" >> $REPORT_PATH/data.yml
-  echo "estype: {{types.elastic}}" >> $REPORT_PATH/data.yml
+  echo "nuxeotype: \"{{types.nuxeo}}\"" >> $REPORT_PATH/data.yml
+  echo "dbtype: \"{{types.mongo}}\"" >> $REPORT_PATH/data.yml
+  echo "estype: \"{{types.elastic}}\"" >> $REPORT_PATH/data.yml
+  echo "distribution: \"{{nuxeo_distribution}}\"" >> $REPORT_PATH/data.yml
+  echo "bench_suite: \"{{bench}}\"" >> $REPORT_PATH/data.yml
+  echo "classifier: \"{{bench_tag}}\"" >> $REPORT_PATH/data.yml
+  echo "default_category: \"misc\"" >> $REPORT_PATH/data.yml
   echo "" >> $REPORT_PATH/data.yml
   echo "build_number: $BUILD_NUMBER" >> $REPORT_PATH/data.yml
   echo "build_url: \"$BUILD_URL\"" >> $REPORT_PATH/data.yml
   echo "job_name: \"$JOB_NAME\"" >> $REPORT_PATH/data.yml
   echo "dbprofile: \"$dbprofile\"" >> $REPORT_PATH/data.yml
-  echo "bench_suite: \"$benchsuite\"" >> $REPORT_PATH/data.yml
-  echo "classifier: \"$classifier\"" >> $REPORT_PATH/data.yml
-  echo "distribution: \"$distribution\"" >> $REPORT_PATH/data.yml
-  echo "default_category: \"$category\"" >> $REPORT_PATH/data.yml
   echo "" >> $REPORT_PATH/data.yml
   set +x
 }

@@ -27,6 +27,17 @@
   add_host: hostname={{item.private_ip if keypair == "Jenkins" else item.public_ip}} groupname={{type}}
   with_items: started_instances.instances
 
+
+- name: Get the bench tag
+  shell: echo "{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
+  register: stamp_tag
+  when: (groups['nuxeo'][0] is defined)
+
+- name: Create a bench tag
+  shell: echo "$(date +%y%m%d-%H%M)_{{counts.nuxeo}}nuxeo-{{types.nuxeo}}_{{counts.mongodb}}mongo-{{types.mongodb}}_{{counts.elastic}}es-{{types.elastic}}"
+  register: stamp_tag
+  when: (groups['nuxeo'][0] is undefined)
+
 - name: Create/destroy instances
   ec2:
     region: "{{aws_region}}"

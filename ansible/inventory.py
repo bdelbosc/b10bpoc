@@ -32,17 +32,19 @@ dbreservations = ec2.get_all_instances(filters={"tag:bench_role": "db", "tag:dbp
 dbinstances = [i for r in dbreservations for i in r.instances]
 mongodbreservations = ec2.get_all_instances(filters={"tag:bench_role": "db", "tag:dbprofile": "*mongodb*"})
 mongodbinstances = [i for r in mongodbreservations for i in r.instances]
-mgmtreservations = ec2.get_all_instances(filters={"tag:bench_role": "mgmt"})
-mgmtinstances = [i for r in mgmtreservations for i in r.instances]
 elasticreservations = ec2.get_all_instances(filters={"tag:bench_role": "elastic"})
 elasticinstances = [i for r in elasticreservations for i in r.instances]
+monitorreservations = ec2.get_all_instances(filters={"tag:bench_role": "monitor"})
+monitorinstances = [i for r in monitorreservations for i in r.instances]
+gatlingreservations = ec2.get_all_instances(filters={"tag:bench_role": "gatling"})
+gatlinginstances = [i for r in gatlingreservations for i in r.instances]
 
 hostvars = {}
 groups = {}
 
 allinstances = []
 allids = []
-for i in instances + dbinstances + mongodbinstances + mgmtinstances + elasticinstances:
+for i in instances + dbinstances + mongodbinstances + elasticinstances + monitorinstances + gatlinginstances:
     if i.id not in allids:
         allinstances.append(i)
         allids.append(i.id)
@@ -87,9 +89,11 @@ if "elastic" not in inventory:
     inventory["elastic"] = {}
 if "gatling" not in inventory:
     inventory["gatling"] = {}
-inventory["nuxeo"]["vars"] = {"db_hosts": [], "elastic_hosts": [], "mongodb_hosts": [], "mgmt_hosts": []}
-inventory["elastic"]["vars"] = {"mgmt_hosts": []}
-inventory["gatling"]["vars"] = {"mgmt_hosts": []}
+if "monitor" not in inventory:
+    inventory["monitor"] = {}
+inventory["nuxeo"]["vars"] = {"db_hosts": [], "elastic_hosts": [], "mongodb_hosts": [], "monitor_hosts": []}
+inventory["elastic"]["vars"] = {"monitor_hosts": []}
+inventory["gatling"]["vars"] = {"monitor_hosts": []}
 if "db" in groups:
     for i in groups["db"]["hosts"]:
         inventory["nuxeo"]["vars"]["db_hosts"].append(hostvars[i]["private_ip"])
@@ -99,10 +103,10 @@ if "elastic" in groups:
 if "mongodb" in groups:
     for i in groups["mongodb"]["hosts"]:
         inventory["nuxeo"]["vars"]["mongodb_hosts"].append(hostvars[i]["private_ip"])
-if "mgmt" in groups:
-    for i in groups["mgmt"]["hosts"]:
-        inventory["nuxeo"]["vars"]["mgmt_hosts"].append(hostvars[i]["private_ip"])
-        inventory["elastic"]["vars"]["mgmt_hosts"].append(hostvars[i]["private_ip"])
+if "monitor" in groups:
+    for i in groups["monitor"]["hosts"]:
+        inventory["nuxeo"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
+        inventory["elastic"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
 
 #print inventory
 

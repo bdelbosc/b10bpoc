@@ -10,10 +10,6 @@
 - hosts: localhost
   gather_facts: no
   sudo: no
-  pre_tasks:
-    - name: Get the bench tag
-      shell: echo "{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
-      register: stamp_tag
   roles:
   - {role: ec2, type: nuxeo}
   - {role: ec2, type: elastic}

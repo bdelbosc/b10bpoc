@@ -3,10 +3,6 @@
 - hosts: localhost
   gather_facts: no
   sudo: no
-  pre_tasks:
-    - name: Generate a bench tag
-      shell: echo "$(date +%y%m%d-%H%M)_{{counts.nuxeo}}nuxeo-{{types.nuxeo}}_{{counts.mongodb}}mongo-{{types.mongodb}}_{{counts.elastic}}es-{{types.elastic}}"
-      register: stamp_tag
   roles:
   - {role: ec2, type: mongodb}
   - {role: ec2, type: nuxeo}

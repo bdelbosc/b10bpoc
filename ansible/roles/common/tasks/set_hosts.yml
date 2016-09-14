@@ -20,6 +20,11 @@
     hname: gatling{{ groups.gatling.index(inventory_hostname) + 1 }}
   when: "'gatling' in group_names"
 
+- name: Find monitor hostname
+  set_fact:
+    hname: monitor{{ groups.monitor.index(inventory_hostname) + 1 }}
+  when: "'monitor' in group_names"
+
 - name: Set hostname
   shell: hostname {{ hname }}
 

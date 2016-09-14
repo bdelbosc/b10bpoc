@@ -1,15 +1,15 @@
 ---
-# init the gatling server
+# init the monitoring server
 
 - hosts: localhost
   gather_facts: no
   sudo: no
   roles:
-  - {role: ec2, type: gatling}
+  - {role: ec2, type: monitor}
 
-- hosts: gatling
+- hosts: monitor
   gather_facts: no
   sudo: yes
   roles:
   - role: common
-  - role: gatling
+  - role: monitor

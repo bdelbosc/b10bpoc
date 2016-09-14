@@ -1,0 +1,12 @@
+graphite:
+   build: graphite
+   ports:
+   - "8080:80"
+   - "2030:2003"
+
+grafana:
+   image: grafana/grafana
+   ports:
+   - "80:3000"
+   links:
+   - graphite
