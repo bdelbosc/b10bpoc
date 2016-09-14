@@ -130,8 +130,8 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 2. Run a reindexing process from a Nuxeo instance
 
-        curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.Index
-        time curl -X POST -H "Content-Type: application/json+nxrequest" -u Administrator:Administrator -d '{"params":{"timeoutSecond": "172800", "refresh": "true"},"context":{}}' http://localhost:8080/nuxeo/site/automation/Elasticsearch.WaitForIndexing
+        ./run_indexing.sh
+
 
 ## Step 3 - Gatling benchmark
 
@@ -139,7 +139,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
          ./start_gatling.sh
          
-2. Run the benchmark from the Gatling host, note that Nuxeo is expected to be up and running
+2. Log into the gatling host and run the bench, note that Nuxeo is expected to be up and running
 
          ./run_bench.sh
          

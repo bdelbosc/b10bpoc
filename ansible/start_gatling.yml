@@ -4,21 +4,16 @@
 - hosts: localhost
   gather_facts: no
   sudo: no
-  tasks:
+  pre_tasks:
     - name: Get the bench tag
       shell: echo "{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
       register: stamp_tag
-
-- hosts: localhost
-  gather_facts: no
-  sudo: no
   roles:
   - {role: ec2, type: gatling}
 
 - hosts: gatling
   gather_facts: no
-  user: ubuntu
-  become: yes
+  sudo: yes
   roles:
   - role: common
   - role: gatling

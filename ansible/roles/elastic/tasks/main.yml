@@ -1,4 +1,6 @@
 ---
+- include: disk_layout.yml
+
 # install java 8
 - name: Install add-apt-repostory
   become: yes
@@ -67,4 +69,4 @@
   template: src=elasticsearch.j2 dest=/etc/default/elasticsearch
   when: not stes.stat.exists
 
-
+- include: start.yml

@@ -1,55 +1,32 @@
 ---
-# init the benchmark instances needed to run the import phase
+# init the benchmark instances needed to run the import phase: only nuxeo and mongo servers are required
 - hosts: localhost
   gather_facts: no
   sudo: no
-  tasks:
+  pre_tasks:
     - name: Generate a bench tag
       shell: echo "$(date +%y%m%d-%H%M)_{{counts.nuxeo}}nuxeo-{{types.nuxeo}}_{{counts.mongodb}}mongo-{{types.mongodb}}_{{counts.elastic}}es-{{types.elastic}}"
       register: stamp_tag
-
-- hosts: localhost
-  gather_facts: no
-  sudo: no
   roles:
   - {role: ec2, type: mongodb}
   - {role: ec2, type: nuxeo}
 
 - hosts: mongodb:nuxeo
   gather_facts: no
-  user: ubuntu
-  become: yes
+  sudo: yes
   roles:
   - role: common
-
-- hosts: mongodb:nuxeo
-  gather_facts: no
-  user: ubuntu
-  become: yes
-  roles:
   - role: mongo_common
 
 - hosts: mongodb
   gather_facts: no
   sudo: yes
-  tasks:
+  pre_tasks:
   - include: ./roles/mongo_common/tasks/disk_layout.yml
-
-- hosts: mongodb
-  gather_facts: no
-  user: ubuntu
-  become: yes
   roles:
   - role: mongo_config_server
-
-- hosts: mongodb
-  gather_facts: no
-  user: ubuntu
-  become: yes
-  roles:
   - role: mongo_db
 #  - role: mongo_router
-
 
 - hosts: nuxeo
   gather_facts: no

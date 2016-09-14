@@ -88,18 +88,21 @@
   sudo: yes
 
 - name: Redis bind
+  sudo: yes
   lineinfile:
     dest: /etc/redis/redis.conf
     regexp: '^#?bind\s*(.*)'
     line: "bind {{ private_ip }}"
 
 - name: Redis in memory
+  sudo: yes
   lineinfile:
     dest: /etc/redis/redis.conf
-    regexp: '^save\s(.*)'
-    line: "#save \1"
+    regexp: '^save'
+    state: absent
 
 - name: Restart Redis
+  sudo: yes
   service: name=redis-server state=restarted
 
 - name: Restore pristine bundles

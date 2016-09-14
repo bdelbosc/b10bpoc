@@ -3,6 +3,7 @@
 - name: Add screen conf
   copy: src=screenrc dest=/home/ubuntu/.screenrc owner=ubuntu force=no
 
+
 # Ensure instance is clean
 - name: Init nuxeorunning
   set_fact:
@@ -276,3 +277,6 @@
   shell: cp -a /deploy/bundles/* /opt/nuxeo/server/nxserver/bundles/
   when: custombundles.stat.exists
   failed_when: False
+
+- name: Add history
+  copy: src=bash_history dest=/home/nuxeo/.bash_history owner=nuxeo force=no
