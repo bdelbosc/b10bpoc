@@ -5,7 +5,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 # Goal
 
   Deploy minimum and tuned nodes for each benchmark step.
-  
+
   The steps are:
   - mass import
   - elasticsearch indexing
@@ -21,22 +21,34 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
   - c3.*
   - m3.*
-  
-## Binaries
+  - i2.*
 
-  The attached file per document is a null file so we don't need binary storage.
+## No binaries for mass import
+
+  Importing with attached file is a bottleneck per se. It requires lots of network and storage resources.
+
+  In real life for large import this should be done separately as the Nuxeo document import,
+  by using an existing s3 bucket and/or creating an ad'hoc binarystore so data don't have to be moved.
+  This way Nuxeo has just to import a reference to a binary.
+
+  For this bench the attached file per document is a null file so we don't need to define a binary storage.
+
+## Sequence for document identifier
+
+   Generating random uid is an expensive operation, also the 1b of UUID is 36g of data.
+   Using a long sequence instead of a UUID is necessary.
 
 # Steps
 
-## Import
+## Step 1: Import
 
   ES Indexing and audit is disabled. Only Nuxeo and Mongo nodes are running.
 
-## ES Indexation
+## Step 2: ES Indexation
 
   Add an ES cluster, add a Redis server for the workmanager, reconfigure Nuxeo to use it
 
-## Gatling simulations
+## Step 3: Gatling simulations
 
   Add a Gatling node to deploy and run Gatling simulation over the imported content.
 
@@ -53,20 +65,25 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - Huge pages disabled
   - Open file limits increased
 
+  Also because the shard key is an hash of the document id which is a sequence, we rely
+  on the hash to distribute the data on the cluster and therefor we can deactivate the
+  chunk balancing.
+
 ## Elasticsearch
 
   We follow the Elasticsearch best practices:
-   
+
   - Use ext4 filestystem, atime and diratime disabled
   - use multiple drives to stripe data across them via multiple path.data directories
   - Disable merge throttling entirely
   - Set index.refresh_interval to 10s
   - Disable replicas
-  
-  - Set bulk size of 500 documents, may be too small (500KB instead of 5-15MB) but gives better results
-    with 24 threads concurrency
-  ...
-  
+
+  - Use 3 shard per nodes, and no replication
+  - Use a static mapping for Nuxeo
+  - Use simple version of fulltext analyzer (no html sanitizing)
+
+
 ## Nuxeo
 
   Import:
@@ -75,23 +92,23 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - No audit
   - Elasticsearch disabled
   - Use jar from branch: test-NXBT-1103-import-tuning-1b, they must be present on ./custom/bundles
-   
+
     - nuxeo-core-8.4-SNAPSHOT.jar
     - nuxeo-core-storage-dbs-8.4-SNAPSHOT.jar
     - nuxeo-core-storage-mongodb-8.4-SNAPSHOT.jar
     - nuxeo-importer-core-8.4-SNAPSHOT.jar
-    
-    
+
+
   Elasticsearch indexing:
-  
-  - restore pristine jars  
-  
+
+  - restore pristine jars
+
 
 # Run
 
 ## Configure access and nodes
 
-1. Edit your `~/.ssh/config` to use your keypair when accessing AWS, for `eu-west-1` 
+1. Edit your `~/.ssh/config` to use your keypair when accessing AWS, for `eu-west-1`
 
         Host 52.*
             User ubuntu
@@ -99,7 +116,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 
 2. Edit `ansible/group_vars/all.yml` to set your keypair and the ec2 type target for 1b can be:
-   
+
         types:
             mongodb: m3.2xlarge
             nuxeo: c3.4xlarge
@@ -114,13 +131,13 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 1. Create Mongo cluster and setup Nuxeo using latest 8.4 snapshot
 
         ./start_infra.sh -c /opt/build/hudson/instance.clid
-      
-      
+
+
 2. Start Nuxeo and run the importer on each Nuxeo nodes:
 
         ./run_import.sh
-       
-       
+
+
 ## Step 2 - Indexing
 
 1. Create an Elasticsearch cluster and reconfigure Nuxeo to use it
@@ -138,17 +155,17 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 1. Create a Gatling server with a pound load balancer
 
          ./start_gatling.sh
-         
+
 2. Log into the gatling host and run the bench, note that Nuxeo is expected to be up and running
 
          ./run_bench.sh
-         
+
 
 ## Capture monitoring and restuls
 
 
         ./save_results.sh
-        
+
 ## Shutdown all resources
 
        ./terminate_infra.sh
