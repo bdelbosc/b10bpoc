@@ -279,4 +279,4 @@
   failed_when: False
 
 - name: Add history
-  copy: src=bash_history dest=/home/nuxeo/.bash_history owner=nuxeo force=no
+  copy: src=bash_history dest=/opt/nuxeo/.bash_history owner=nuxeo force=no

@@ -30,13 +30,16 @@
 
 - name: Get the bench tag
   shell: echo "{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
-  register: stamp_tag
+  register: existing_tag
   when: (groups['nuxeo'][0] is defined)
 
 - name: Create a bench tag
   shell: echo "$(date +%y%m%d-%H%M)_{{counts.nuxeo}}nuxeo-{{types.nuxeo}}_{{counts.mongodb}}mongo-{{types.mongodb}}_{{counts.elastic}}es-{{types.elastic}}"
-  register: stamp_tag
-  when: (groups['nuxeo'][0] is undefined)
+  register: new_tag
+
+# this is a big hack because skipped task still register variable
+- name: Take the existing tag else a new one
+  set_fact: stamp_tag="{{existing_tag.stdout if (groups['nuxeo'][0] is defined) else new_tag.stdout}}"
 
 - name: Create/destroy instances
   ec2:
@@ -55,7 +58,7 @@
       bench_role: "{{type}}"
       billing-category: build
       billing-subcategory: bench
-      bench_tag: "{{stamp_tag.stdout}}"
+      bench_tag: "{{stamp_tag}}"
     exact_count: "{{counts[type]}}"
     count_tag:
       bench: "{{bench}}"

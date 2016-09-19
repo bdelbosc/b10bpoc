@@ -13,3 +13,17 @@
   roles:
   - role: common
   - role: monitor
+
+- hosts: nuxeo:mongodb:elastic:gatling:monitor
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/monitor/tasks/diamond.yml
+
+
+- hosts: nuxeo
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - include: ./roles/nuxeo/tasks/config_graphite.yml
+

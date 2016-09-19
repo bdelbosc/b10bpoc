@@ -21,7 +21,12 @@
 
 # apt
 - name: Update apt cache
-  apt: update_cache=yes cache_valid_time=7200
+  shell: apt-get update
+  when: not hostdone.stat.exists
+
+- name: Upgrade dist
+  apt: upgrade=dist
+  when: not hostdone.stat.exists
 
 - name: Upgrade/install tools
   apt: state=latest name={{item}}
@@ -32,6 +37,8 @@
   - sysstat
   - xfsprogs
   - awscli
+  - screen
+  when: not hostdone.stat.exists
 
 - name: Activate sysstat
   lineinfile:

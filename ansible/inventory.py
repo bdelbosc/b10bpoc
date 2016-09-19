@@ -87,13 +87,18 @@ if "nuxeo" not in inventory:
     inventory["nuxeo"] = {}
 if "elastic" not in inventory:
     inventory["elastic"] = {}
+if "mongodb" not in inventory:
+    inventory["mongodb"] = {}
 if "gatling" not in inventory:
     inventory["gatling"] = {}
 if "monitor" not in inventory:
     inventory["monitor"] = {}
 inventory["nuxeo"]["vars"] = {"db_hosts": [], "elastic_hosts": [], "mongodb_hosts": [], "monitor_hosts": []}
 inventory["elastic"]["vars"] = {"monitor_hosts": []}
+inventory["mongodb"]["vars"] = {"monitor_hosts": []}
+inventory["monitor"]["vars"] = {"monitor_hosts": []}
 inventory["gatling"]["vars"] = {"monitor_hosts": []}
+
 if "db" in groups:
     for i in groups["db"]["hosts"]:
         inventory["nuxeo"]["vars"]["db_hosts"].append(hostvars[i]["private_ip"])
@@ -107,6 +112,9 @@ if "monitor" in groups:
     for i in groups["monitor"]["hosts"]:
         inventory["nuxeo"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["elastic"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
+        inventory["mongodb"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
+        inventory["monitor"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
+        inventory["gatling"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
 
 #print inventory
 

@@ -19,6 +19,11 @@
 {{ hostvars[host].private_ip }} gatling{{loop.index}}
 {% endfor %}
 {% endif %}
+{% if groups['monitor'] is defined %}
+{% for host in groups['monitor'] %}
+{{ hostvars[host].private_ip }} monitor{{loop.index}}
+{% endfor %}
+{% endif %}
 
 # The following lines are desirable for IPv6 capable hosts
 

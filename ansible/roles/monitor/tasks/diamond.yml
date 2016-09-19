@@ -1,0 +1,32 @@
+---
+
+- name: Check if diamond is setup
+  stat:
+    path: /etc/diamond/diamond.conf
+  register: diamond_exists
+
+- name: Get diamond deb package
+  copy: src=diamond_4.0.468_all.deb dest=/tmp/diamond_4.0.468_all.deb force=no
+  when: not diamond_exists.stat.exists
+
+- name: Install diamond dep
+  apt: name={{item}} state=latest
+  with_items:
+    - python-support
+    - python-pymongo
+
+- name: Install package
+  shell: dpkg -i /tmp/diamond_4.0.468_all.deb
+  when: not diamond_exists.stat.exists
+
+- name: Get hostname
+  shell: hostname
+  register: hostname
+
+- name: Configure diamond
+  template: src=diamond.conf.j2 dest=/etc/diamond/diamond.conf
+  #when: not diamond_exists.stat.exists
+
+- name: Start Diamond
+  shell: service diamond restart
+  when: not diamond_exists.stat.exists
