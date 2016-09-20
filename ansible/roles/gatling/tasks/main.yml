@@ -51,6 +51,9 @@
 - name: Restart pound
   shell: service pound restart
 
+- name: Get the bench tag
+  set_fact: stamp_tag="{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
+
 # Setup bench script
 - name: Setup the bench script
   template: src=run_bench.sh dest=/home/ubuntu/run_bench.sh mode=0755 owner=ubuntu force=yes

@@ -10,7 +10,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?metrics\.graphite\.host\s*='
-    line: "metrics.graphite.host={{monitor_hosts[0]}}"
+    line: "metrics.graphite.host={{hostvars[groups['monitor'][0]].private_ip}}"
 - name: Config - metrics.graphite.port
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -20,7 +20,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?metrics\.graphite\.period\s*='
-    line: "metrics.graphite.period=20"
+    line: "metrics.graphite.period=15"
 - name: Config - metrics.tomcat.enabled
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf

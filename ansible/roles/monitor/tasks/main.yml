@@ -21,3 +21,15 @@
   args:
     chdir: /ssd1/monitor
 
+- name: Wait for Graphite to be available
+  wait_for: host={{groups["monitor"][0]}} port=80 delay=10 timeout=320 state=started
+
+- name: Add screen conf
+  copy: src=dashboard/yml/nuxeo-bench dest=/tmp/nuxeo-bench
+
+- name: Install Graphite dashboard client
+  shell: pip install graphite-dashboardcli
+
+- name: Upload the benchmark dashboard
+  shell: graphite-dashboardcli copy nuxeo-bench /tmp http://{{groups["monitor"][0]}}
+

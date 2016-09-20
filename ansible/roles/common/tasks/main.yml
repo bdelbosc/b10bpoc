@@ -22,11 +22,11 @@
 # apt
 - name: Update apt cache
   shell: apt-get update
-  when: not hostdone.stat.exists
+  when: dist_upgrade and not hostdone.stat.exists
 
 - name: Upgrade dist
   apt: upgrade=dist
-  when: not hostdone.stat.exists
+  when: dist_upgrade and not hostdone.stat.exists
 
 - name: Upgrade/install tools
   apt: state=latest name={{item}}

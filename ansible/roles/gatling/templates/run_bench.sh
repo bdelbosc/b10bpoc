@@ -162,10 +162,10 @@ function build_stat() {
     $REPORT_PATH/sim55waitforasync/detail/simulation.log.gz
   echo "s3result: \"{{stamp_tag.stdout}}\"" >> $REPORT_PATH/data.yml
   echo "nuxeonodes: {{counts.nuxeo}}" >> $REPORT_PATH/data.yml
-  echo "dbnodes: {{counts.mongo}}" >> $REPORT_PATH/data.yml
+  echo "dbnodes: {{counts.mongodb}}" >> $REPORT_PATH/data.yml
   echo "esnodes: {{counts.elastic}}" >> $REPORT_PATH/data.yml
   echo "nuxeotype: \"{{types.nuxeo}}\"" >> $REPORT_PATH/data.yml
-  echo "dbtype: \"{{types.mongo}}\"" >> $REPORT_PATH/data.yml
+  echo "dbtype: \"{{types.mongodb}}\"" >> $REPORT_PATH/data.yml
   echo "estype: \"{{types.elastic}}\"" >> $REPORT_PATH/data.yml
   echo "distribution: \"{{nuxeo_distribution}}\"" >> $REPORT_PATH/data.yml
   echo "bench_suite: \"{{bench}}\"" >> $REPORT_PATH/data.yml

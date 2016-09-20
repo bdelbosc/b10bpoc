@@ -50,7 +50,8 @@ instance_profile: JenkinsRole
 dbprofile: mongodb
 amis:
   nuxeo: ami-910fa9e2
-  mongodb: ami-1e4cd86d
-  elastic: ami-1e4cd86d
-  gatling: ami-1e4cd86d
-  monitor: ami-1e4cd86d
+  mongodb: ami-55452e26
+  elastic: ami-55452e26
+  gatling: ami-55452e26
+  monitor: ami-55452e26
+dist_upgrade: false

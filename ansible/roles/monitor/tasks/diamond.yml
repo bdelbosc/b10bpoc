@@ -14,6 +14,7 @@
   with_items:
     - python-support
     - python-pymongo
+    - python-redis
 
 - name: Install package
   shell: dpkg -i /tmp/diamond_4.0.468_all.deb
