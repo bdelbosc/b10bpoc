@@ -27,19 +27,18 @@
   add_host: hostname={{item.private_ip if keypair == "Jenkins" else item.public_ip}} groupname={{type}}
   with_items: started_instances.instances
 
-
-- name: Get the bench tag
+- name: Get an existing bench tag
   shell: echo "{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
   register: existing_tag
-  when: (groups['nuxeo'][0] is defined)
+  when: (stamp_tag is not defined) and (groups['nuxeo'][0] is defined)
 
-- name: Create a bench tag
+- name: Create a default bench tag
   shell: echo "$(date +%y%m%d-%H%M)_{{counts.nuxeo}}nuxeo-{{types.nuxeo}}_{{counts.mongodb}}mongo-{{types.mongodb}}_{{counts.elastic}}es-{{types.elastic}}"
   register: new_tag
 
 # this is a big hack because skipped task still register variable
-- name: Take the existing tag else a new one
-  set_fact: stamp_tag="{{existing_tag.stdout if (groups['nuxeo'][0] is defined) else new_tag.stdout}}"
+- name: Find the bench tag to use
+  set_fact: stamp_tag="{{stamp_tag if (stamp_tag is defined) else existing_tag.stdout if (groups['nuxeo'][0] is defined) else new_tag.stdout}}"
 
 - name: Create/destroy instances
   ec2:

@@ -24,7 +24,6 @@
     nuxeorunning: true
   when: nuxeorunningstatus is defined and nuxeorunningstatus.output != ""
 
-
 - name: Upload distribution and settings
   synchronize:
     src: ../deploy
@@ -147,7 +146,6 @@
   shell: cp /deploy/instance.clid /ssd2/nuxeo-data/
   when: instanceclid.stat.exists
 
-# Add b10b template
 - name: Add b10b template
   copy: src=b10b dest=/opt/nuxeo/server/templates/ owner=nuxeo
 

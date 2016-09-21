@@ -26,8 +26,4 @@
 
 - name: Configure diamond
   template: src=diamond.conf.j2 dest=/etc/diamond/diamond.conf
-  #when: not diamond_exists.stat.exists
-
-- name: Start Diamond
-  shell: service diamond restart
-  when: not diamond_exists.stat.exists
+  notify: Restart diamond

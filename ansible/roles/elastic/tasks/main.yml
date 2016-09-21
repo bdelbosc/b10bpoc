@@ -64,9 +64,10 @@
 - name: Setup elastic configuration
   template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
   when: not stes.stat.exists
+  notify: Restart elasticsearch
 
 - name: Setup elastic default configuration
   template: src=elasticsearch.j2 dest=/etc/default/elasticsearch
   when: not stes.stat.exists
+  notify: Restart elasticsearch
 
-- include: start.yml

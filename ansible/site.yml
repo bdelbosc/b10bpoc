@@ -4,15 +4,23 @@
   gather_facts: no
   sudo: no
   roles:
+  - {role: ec2, type: monitor}
   - {role: ec2, type: mongodb}
   - {role: ec2, type: nuxeo}
 
-- hosts: mongodb:nuxeo
+
+- hosts: mongodb:nuxeo:monitor
   gather_facts: no
   sudo: yes
   roles:
   - role: common
-  - role: mongo_common
+
+- hosts: monitor
+  gather_facts: no
+  sudo: yes
+  roles:
+  - role: monitor
+  - role: diamond
 
 - hosts: mongodb
   gather_facts: no
@@ -20,14 +28,25 @@
   pre_tasks:
   - include: ./roles/mongo_common/tasks/disk_layout.yml
   roles:
+  - role: mongo_common
   - role: mongo_config_server
   - role: mongo_db
-#  - role: mongo_router
+  - role: diamond
 
 - hosts: nuxeo
   gather_facts: no
   user: ubuntu
-  become: yes
+  sudo: yes
   roles:
-  - role: nuxeo
+  - role: mongo_common
   - role: mongo_router
+  - role: nuxeo
+  - role: diamond
+  tasks:
+  - include: ./roles/nuxeo/tasks/config_graphite.yml
+
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: Summary
+    debug: msg="Monitoring {{groups.monitor.0}}   Nuxeo {{groups.nuxeo}}   Mongo {{groups.mongodb}}"

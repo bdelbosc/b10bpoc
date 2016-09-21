@@ -14,7 +14,7 @@ REDIS_DB=7
 REPORT_PATH="./reports"
 GAT_REPORT_VERSION=1.0-SNAPSHOT
 GAT_REPORT_JAR=~/.m2/repository/org/nuxeo/tools/gatling-report/$GAT_REPORT_VERSION/gatling-report-$GAT_REPORT_VERSION-capsule-fat.jar
-GRAPHITE_DASH=http://bench-mgmt.nuxeo.org/dashboard/#nuxeo-bench
+GRAPHITE_DASH=http://monitor1/dashboard/#nuxeo-bench
 MUSTACHE_TEMPLATE=./data.mustache
 CONCURRENT_USERS=`echo $(({{counts.nuxeo}}*44))`
 # fail on any command error
@@ -90,24 +90,37 @@ function run_simulations() {
   pushd $SCRIPT_PATH || exit 2
   mvn -nsu clean
   # init the users/group on all instance so we don't need to share a directory db
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling setup", "tags":"phases gatling"}'
 {% for host in groups['nuxeo'] %}
   mvn -nsu test gatling:execute -Pbench -Durl=http://{{hostvars[host].private_ip}}:8080/nuxeo -Dgatling.simulationClass=org.nuxeo.cap.bench.Sim00Setup
 {% endfor %}
   # init user ws and give some chance to graphite to init all metrics before mass import
   gatling "org.nuxeo.cap.bench.Sim25WarmUsersJsf"
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling import", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim10MassImport" -DnbNodes=100000
   #gatling "org.nuxeo.cap.bench.Sim10MassImport" -DnbNodes=1000000 -Dusers=$CONCURRENT_USERS
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling create folders", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim10CreateFolders"
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling create documents", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim20CreateDocuments" -Dusers=$CONCURRENT_USERS
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling create documents async", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim25WaitForAsync"
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling update documents", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim30UpdateDocuments" -Dusers=$CONCURRENT_USERS -Dduration=180
   #gatling "org.nuxeo.cap.bench.Sim30UpdateDocuments" -Dusers=$CONCURRENT_USERS -Dduration=400
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling update documents async", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim35WaitForAsync"
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling navigation", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim30Navigation" -Dusers=$CONCURRENT_USERS -Dduration=180
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling search", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim30Search" -Dusers=$CONCURRENT_USERS -Dduration=180
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling navigation jsf", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim30NavigationJsf" -Dduration=180
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling bench", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim50Bench" -Dnav.users=80 -Dnavjsf=5 -Dupd.user=15 -Dnavjsf.pause_ms=1000 -Dduration=180
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling CRUD", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim50CRUD" -Dusers=$CONCURRENT_USERS -Dduration=120
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling CRUD async", "tags":"phases gatling"}'
   gatling "org.nuxeo.cap.bench.Sim55WaitForAsync"
   # gatling "org.nuxeo.cap.bench.Sim80ReindexAll"
   # gatling "org.nuxeo.cap.bench.Sim30Navigation" -Dusers=100 -Dduration=120 -Dramp=50
@@ -127,7 +140,7 @@ function build_report() {
   fi
   mkdir $report_root || true
   mv $1 $report_root/detail
-  java -jar $GAT_REPORT_JAR -o $report_root/overview $report_root/detail/simulation.log
+  java -jar $GAT_REPORT_JAR -o $report_root/overview -g $GRAPHITE_DASH $report_root/detail/simulation.log
   find $report_root -name simulation.log -exec gzip {} \;
 }
 
@@ -160,7 +173,6 @@ function build_stat() {
     $REPORT_PATH/sim50bench/detail/simulation.log.gz \
     $REPORT_PATH/sim50crud/detail/simulation.log.gz \
     $REPORT_PATH/sim55waitforasync/detail/simulation.log.gz
-  echo "s3result: \"{{stamp_tag.stdout}}\"" >> $REPORT_PATH/data.yml
   echo "nuxeonodes: {{counts.nuxeo}}" >> $REPORT_PATH/data.yml
   echo "dbnodes: {{counts.mongodb}}" >> $REPORT_PATH/data.yml
   echo "esnodes: {{counts.elastic}}" >> $REPORT_PATH/data.yml
@@ -169,7 +181,7 @@ function build_stat() {
   echo "estype: \"{{types.elastic}}\"" >> $REPORT_PATH/data.yml
   echo "distribution: \"{{nuxeo_distribution}}\"" >> $REPORT_PATH/data.yml
   echo "bench_suite: \"{{bench}}\"" >> $REPORT_PATH/data.yml
-  echo "classifier: \"{{bench_tag}}\"" >> $REPORT_PATH/data.yml
+  echo "classifier: \"{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}\"" >> $REPORT_PATH/data.yml
   echo "default_category: \"misc\"" >> $REPORT_PATH/data.yml
   echo "" >> $REPORT_PATH/data.yml
   echo "build_number: $BUILD_NUMBER" >> $REPORT_PATH/data.yml

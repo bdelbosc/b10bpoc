@@ -1,0 +1,7 @@
+---
+
+- name: Restart sysstat
+  service: name=sysstat state=restarted
+
+- name: Restart atop
+  service: name=atop state=restarted

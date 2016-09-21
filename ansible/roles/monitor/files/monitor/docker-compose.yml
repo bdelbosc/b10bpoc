@@ -3,6 +3,7 @@ graphite:
    ports:
    - "80:80"
    - "2030:2003"
+   - "8000:8000"
 
 grafana:
    image: grafana/grafana

@@ -54,4 +54,6 @@ amis:
   elastic: ami-55452e26
   gatling: ami-55452e26
   monitor: ami-55452e26
+
+# should we apt-get update && apt-get distupgrade ?
 dist_upgrade: false

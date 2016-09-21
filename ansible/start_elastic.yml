@@ -11,7 +11,6 @@
   gather_facts: no
   sudo: no
   roles:
-  - {role: ec2, type: nuxeo}
   - {role: ec2, type: elastic}
 
 - hosts: elastic
@@ -20,6 +19,7 @@
   roles:
   - role: common
   - role: elastic
+  - role: diamond
 
 - hosts: nuxeo
   gather_facts: no
@@ -28,3 +28,10 @@
   tasks:
   - include: ./roles/nuxeo/tasks/config_elastic.yml
   - include: ./roles/nuxeo/tasks/start.yml
+
+# reconfigure diamond to monitor elastic and redis
+- hosts: monitor
+  gather_facts: no
+  sudo: yes
+  roles:
+  - role: diamond

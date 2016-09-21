@@ -13,3 +13,5 @@
   roles:
   - role: common
   - role: gatling
+  - role: diamond
+
