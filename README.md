@@ -80,9 +80,11 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - No fulltext extraction
   - No audit
   - Elasticsearch disabled
-  - Use Nuxeo patchs to make sure that Nuxeo limit the MongoDB `find` to a minimum and mainly work on bulk `insert`
-     The patch are part of the branch: test-NXBT-1103-import-tuning-1b, they must be present on `./custom/bundles`
-     it includes:
+  - Use Nuxeo patches to make sure that Nuxeo limits the number of MongoDB `find` operations that
+    requires lots of `mongos` resource and prevent write scaling. 
+    
+    The patch are part of the branch: [`test-NXBT-1103-import-tuning-1b`](https://github.com/nuxeo/nuxeo/compare/test-NXBT-1103-import-tuning-1b?expand=1), 
+    the following jars must be present on `./custom/bundles`
 
     - nuxeo-core-8.4-SNAPSHOT.jar
     - nuxeo-core-storage-dbs-8.4-SNAPSHOT.jar
@@ -90,7 +92,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
     - nuxeo-importer-core-8.4-SNAPSHOT.jar
 
 
-  Elasticsearch indexing:
+Elasticsearch indexing:
 
   - Use pristine jars (no more patch)
   - The Elasticsearch mapping is static and fulltext does not escape html.
