@@ -124,6 +124,7 @@ function run_simulations() {
   gatling "org.nuxeo.cap.bench.Sim55WaitForAsync"
   # gatling "org.nuxeo.cap.bench.Sim80ReindexAll"
   # gatling "org.nuxeo.cap.bench.Sim30Navigation" -Dusers=100 -Dduration=120 -Dramp=50
+  curl -XPOST http://monitor1/events/  -d '{"what": "Gatling terminated", "tags":"phases gatling"}'
   popd
 }
 

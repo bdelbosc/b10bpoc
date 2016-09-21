@@ -2,6 +2,10 @@
 - name: Gather ec2 facts
   action: ec2_facts
 
+- name: notify event on monitoring
+  shell: 'curl -XPOST http://monitor1/events/  -d ''{"what": "Saving results", "tags":"phases save", "data": "{{bench_tag}}"}'''
+  when: "'monitor' in group_names"
+
 - name: copy csv import files
   shell: /bin/cp /opt/nuxeo/server/nxserver/*.csv /opt/nuxeo/logs/
   when: "'nuxeo' in group_names"
