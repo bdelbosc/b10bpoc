@@ -8,3 +8,7 @@ sh.shardCollection("bench.default", { "_id": "hashed" } )
 
 // assume that hash on sequence is good enough to balance chunk
 sh.stopBalancer()
+
+// Increase the chunk size to reduce split operation, default is 64MB
+// use config
+// db.settings.save( { _id:"chunksize", value: 256 } )

@@ -4,25 +4,25 @@
 keypair: bdelbosc
 
 # Type of ec2 to use for 1b
-#types:
-#  mongodb: m3.2xlarge
-#  nuxeo: c3.4xlarge
-#  elastic: i2.2xlarge
-#  gatling: c3.2xlarge
-#  monitor: c3.xlarge
-
-# Type of ec2 to use for testing
 types:
   mongodb: m3.xlarge
-  nuxeo: c3.2xlarge
-  elastic: c3.2xlarge
+  nuxeo: c3.4xlarge
+  elastic: i2.2xlarge
   gatling: c3.2xlarge
   monitor: c3.xlarge
+
+# Type of ec2 to use for testing
+#types:
+#  mongodb: m3.xlarge
+#  nuxeo: c3.2xlarge
+#  elastic: c3.2xlarge
+#  gatling: c3.2xlarge
+#  monitor: c3.xlarge
 
 
 # Number of nodes
 counts:
-  mongodb: 3
+  mongodb: 7
   nuxeo: 2
   elastic: 3
   gatling: 1
