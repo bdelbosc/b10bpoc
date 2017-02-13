@@ -9,5 +9,6 @@ bench-scripts/
 reports/
 bench-site/public
 bin/.build
-custom/bundles*
+custom/
+results/
 tmp

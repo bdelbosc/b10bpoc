@@ -44,14 +44,14 @@
 
 # Upgrade pip with pip to fix angstwad/docker.ubuntu/pull/35 and docker-py/issues/525
 # Install latest version when no specific release is set.
-- name: Upgrade latest pip, setuptools, docker-py and docker-compose with pip
+- name: Upgrade latest pip, setuptools, docker and docker-compose with pip
   pip:
     name: "{{ item.name }}"
     state: latest
   with_items:
     - { name: pip }
     - { name: setuptools }
-    - { name: docker-py }
+    - { name: docker }
     - { name: docker-compose }
   ignore_errors: yes
 
@@ -85,7 +85,8 @@
   lineinfile:
     dest: /etc/default/docker
     regexp: "^#?DOCKER_OPTS="
-    line: "DOCKER_OPTS=\"-dns 8.8.8.8 -dns 8.8.4.4 -g /ssd1/docker\""
+    line: "DOCKER_OPTS=\"-g /ssd1/docker\""
+    #line: "DOCKER_OPTS=\"-dns 8.8.8.8 -dns 8.8.4.4 -g /ssd1/docker\""
   when: ufw_default_exists.stat.exists
 
 - name: Stop docker

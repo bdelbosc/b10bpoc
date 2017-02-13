@@ -2,7 +2,8 @@
 # Start the required infra to run a bench
 cd $(dirname $0)
 HERE=`readlink -e .`
-distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip"
+#distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip"
+distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.1-SNAPSHOT.zip"
 clid=/opt/build/hudson/instance.clid
 set -e
 
@@ -42,8 +43,10 @@ function prepare_deploy_directory() {
   fi
   mkdir $HERE/deploy
   cp $clid $HERE/deploy/ || /bin/true
-  echo "nuxeo-platform-importer" > $HERE/deploy/mp-list
+  echo "nuxeo-web-ui" > $HERE/deploy/mp-list
+  echo "/deploy/marketplace/marketplace-mqueues-1.0.0-SNAPSHOT.zip" >> $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
+  cp -r ./custom/marketplace $HERE/deploy/ || /bin/true
 }
 
 function get_nuxeo_distribution() {

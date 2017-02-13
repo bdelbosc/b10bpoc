@@ -4,43 +4,48 @@
 keypair: bdelbosc
 
 # Type of ec2 to use for 1b
-types:
-  mongodb: m3.xlarge
-  nuxeo: c3.4xlarge
-  elastic: i2.2xlarge
-  gatling: c3.2xlarge
-  monitor: c3.xlarge
-
-# Type of ec2 to use for testing
 #types:
-#  mongodb: m3.xlarge
-#  nuxeo: c3.2xlarge
-#  elastic: c3.2xlarge
+#  mongodb: m3.2xlarge
+#  nuxeo: c3.4xlarge
+#  elastic: c3.4xlarge
 #  gatling: c3.2xlarge
 #  monitor: c3.xlarge
+
+# Type of ec2 to use for testing
+types:
+  mongodb: m3.xlarge
+  nuxeo: c3.2xlarge
+  elastic: c3.2xlarge
+  gatling: c3.2xlarge
+  monitor: c3.xlarge
 
 
 # Number of nodes
 counts:
-  mongodb: 7
+  mongodb: 4
   nuxeo: 2
   elastic: 3
   gatling: 1
   monitor: 1
 
-# An s3 bucket used to save bench results
-bucket_results: nuxeo-b10b-results
-
 # Tag used to flag ec2 used for the bench
 bench: b10b
 
+# An s3 bucket for the binarystore
+bucket: nuxeo-{{bench}}
+
+# An s3 bucket used to save bench results
+bucket_results: nuxeo-b10b-results
+
+
 # The default Nuxeo distribution to use
-nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
+#nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
+nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.1-SNAPSHOT.zip
 
 # Mass Import configuration
 impnbThreads: 90
 impbatchSize: 100
-impnbNodes: 500000000
+impnbNodes: 1500000000
 
 # AWS config
 aws_region: eu-west-1

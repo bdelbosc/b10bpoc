@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="b10b-htmlsanitizer-config">
+  <require>org.nuxeo.ecm.platform.htmlsanitizer.HtmlSanitizerService</require>
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="htmlsanitizerlistener" enabled="false" />
+  </extension>
+</component>
