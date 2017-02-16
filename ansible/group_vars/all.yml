@@ -3,30 +3,57 @@
 #keypair: Jenkins
 keypair: bdelbosc
 
-# Type of ec2 to use for 1b
-#types:
-#  mongodb: m3.2xlarge
-#  nuxeo: c3.4xlarge
-#  elastic: c3.4xlarge
-#  gatling: c3.2xlarge
-#  monitor: c3.xlarge
+# --------------------------------------------------
+# 1B target
 
-# Type of ec2 to use for testing
+# Type of ec2
 types:
   mongodb: m3.xlarge
-  nuxeo: c3.2xlarge
-  elastic: c3.2xlarge
+  nuxeo: c3.4xlarge
+  elastic: c3.4xlarge
   gatling: c3.2xlarge
   monitor: c3.xlarge
 
-
-# Number of nodes
 counts:
-  mongodb: 4
+  mongodb: 7
   nuxeo: 2
-  elastic: 3
+  elastic: 4
   gatling: 1
   monitor: 1
+# Mass Import configuration with nuxeo-platform-importer
+impnbThreads: 90
+impbatchSize: 100
+impnbNodes:  1000000000
+impnbBlobs:    10000000
+impBlobsSizeKB: 1
+
+
+# --------------------------------------------------
+# 100m target testing
+
+# Type of ec2 to use for testing
+#types:
+#  mongodb: m3.xlarge
+#  nuxeo: c3.2xlarge
+#  elastic: c3.2xlarge
+#  gatling: c3.2xlarge
+#  monitor: c3.xlarge
+
+# Number of nodes
+#counts:
+#  mongodb: 4
+#  nuxeo: 2
+#  elastic: 3
+#  gatling: 1
+#  monitor: 1
+
+# Mass Import configuration with nuxeo-platform-importer
+#impnbThreads: 90
+#impbatchSize: 100
+#impnbNodes:  100000000
+#impnbBlobs:    1000000
+#impBlobsSizeKB: 1
+
 
 # Tag used to flag ec2 used for the bench
 bench: b10b
@@ -41,14 +68,6 @@ bucket_results: nuxeo-b10b-results
 # The default Nuxeo distribution to use
 #nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
 nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.1-SNAPSHOT.zip
-
-# Mass Import configuration with nuxeo-platform-importer
-impnbThreads: 90
-impbatchSize: 100
-impnbNodes:  100000000
-impnbBlobs:    1000000
-impBlobsSizeKB: 1
-
 
 # AWS config
 aws_region: eu-west-1
