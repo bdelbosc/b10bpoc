@@ -4,4 +4,4 @@
   user: ubuntu
   sudo: yes
   tasks:
-  - include: ../roles/nuxeo/tasks/import.yml
+  - include: ../roles/nuxeo/tasks/import_mqueues.yml

@@ -42,10 +42,13 @@ bucket_results: nuxeo-b10b-results
 #nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
 nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.1-SNAPSHOT.zip
 
-# Mass Import configuration
+# Mass Import configuration with nuxeo-platform-importer
 impnbThreads: 90
 impbatchSize: 100
-impnbNodes: 1500000000
+impnbNodes:  100000000
+impnbBlobs:    1000000
+impBlobsSizeKB: 1
+
 
 # AWS config
 aws_region: eu-west-1
