@@ -18,5 +18,5 @@ function run_import() {
 
 # ------------------------------
 # main
-#nuxeo_start
+nuxeo_start
 run_import

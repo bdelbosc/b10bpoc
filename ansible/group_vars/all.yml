@@ -6,55 +6,72 @@ keypair: bdelbosc
 # --------------------------------------------------
 # 1B target
 
-# Type of ec2
-types:
-  mongodb: m3.xlarge
-  nuxeo: c3.4xlarge
-  elastic: c3.4xlarge
-  gatling: c3.2xlarge
-  monitor: c3.xlarge
-
-counts:
-  mongodb: 7
-  nuxeo: 2
-  elastic: 4
-  gatling: 1
-  monitor: 1
-# Mass Import configuration with nuxeo-platform-importer
-impnbThreads: 90
-impbatchSize: 100
-impnbNodes:  1000000000
-impnbBlobs:    10000000
-impBlobsSizeKB: 1
+## Type of ec2
+#types:
+#  mongodb: m3.xlarge
+#  nuxeo: c3.4xlarge
+#  elastic: c3.4xlarge
+#  gatling: c3.2xlarge
+#  monitor: c3.xlarge
+#
+#counts:
+#  mongodb: 8
+#  nuxeo: 2
+#  elastic: 4
+#  gatling: 1
+#  monitor: 1
+#
+## additional ebs volume
+#volsizes:
+#  mongodb: 1
+#  nuxeo: 500 # this is for mqueues 1b docs = 800g (400g per node for 2 nodes)
+#  elastic: 1
+#  gatling: 1
+#  monitor: 1
+#
+## Mass Import configuration
+#impnbThreads: 90
+#impbatchSize: 200
+#impnbNodes:  1000000000
+#impnbBlobs:    10000000
+#impBlobsSizeKB: 1
 
 
 # --------------------------------------------------
 # 100m target testing
 
 # Type of ec2 to use for testing
-#types:
-#  mongodb: m3.xlarge
-#  nuxeo: c3.2xlarge
-#  elastic: c3.2xlarge
-#  gatling: c3.2xlarge
-#  monitor: c3.xlarge
+types:
+  mongodb: m3.xlarge
+  nuxeo: c3.2xlarge
+  elastic: c3.2xlarge
+  gatling: c3.2xlarge
+  monitor: c3.xlarge
 
 # Number of nodes
-#counts:
-#  mongodb: 4
-#  nuxeo: 2
-#  elastic: 3
-#  gatling: 1
-#  monitor: 1
+counts:
+  mongodb: 4
+  nuxeo: 2
+  elastic: 3
+  gatling: 1
+  monitor: 1
+
+# additional ebs volume
+volsizes:
+  mongodb: 70
+  nuxeo: 200 # this is for mqueues 1b docs = 800g (400g per node for 2 nodes)
+  elastic: 1
+  gatling: 1
+  monitor: 1
 
 # Mass Import configuration with nuxeo-platform-importer
-#impnbThreads: 90
-#impbatchSize: 100
-#impnbNodes:  100000000
-#impnbBlobs:    1000000
-#impBlobsSizeKB: 1
+impnbThreads: 90
+impbatchSize: 200
+impnbNodes:  100000000
+impnbBlobs:    1000000
+impBlobsSizeKB: 1
 
-
+# --------------------------------------------------
 # Tag used to flag ec2 used for the bench
 bench: b10b
 

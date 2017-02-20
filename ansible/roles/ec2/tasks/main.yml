@@ -50,7 +50,7 @@
     group: "{{security_group}}"
     instance_profile_name: "{{instance_profile}}"
     assign_public_ip: yes
-    # ebs_optimized: true  useless when using instance storage
+    ebs_optimized: true
     instance_tags:
       Name: bench-{{bench}}-{{type}}
       bench: "{{bench}}"
@@ -62,7 +62,14 @@
     count_tag:
       bench: "{{bench}}"
       bench_role: "{{type}}"
+    volumes:
+    - device_name: /dev/xvdf
+      device_type: gp2
+      volume_type: gp2
+      volume_size: "{{volsizes[type]}}"
+      delete_on_termination: true
     wait: yes
+
   register: created_instances
 
 - name: Add new instances to group

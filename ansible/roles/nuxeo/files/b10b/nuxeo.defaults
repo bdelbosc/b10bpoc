@@ -1,4 +1,9 @@
 b10b.target=.
 
-#nuxeo.core.binarymanager=org.nuxeo.ecm.core.blob.binary.FakeBinaryManager
+nuxeo.dbs.cache.enabled=true
+nuxeo.dbs.cache.concurrencyLevel=100
+nuxeo.dbs.cache.maxSize=10000
+# one hour
+nuxeo.dbs.cache.ttl=60
+
 

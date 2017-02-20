@@ -89,6 +89,18 @@
   mount: name=/ssd2 fstype=ext4 src=/dev/xvdc opts=noatime,nodiratime state=mounted
   when: mounted.stdout == ""
 
+# Prepare EBS volume
+- name: Check if EBS volume is mounted
+  shell: cat /proc/mounts | grep /dev/xvdf
+  changed_when: False
+  failed_when: False
+  register: mounted
+- name: Format EBS volume
+  shell: mkfs.ext4 /dev/xvdf
+  when: mounted.stdout == ""
+- name: Mount EBS volume
+  mount: name=/ebs1 fstype=ext4 src=/dev/xvdf opts=noatime,nodiratime state=mounted
+
 # Extract distribution and setup dirs
 - name: nuxeo user
   user:
@@ -220,6 +232,11 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?JAVA_OPTS\s*(.*)SoftRefLRUPolicyMSPerMB'
     line: "JAVA_OPTS=$JAVA_OPTS -XX:SoftRefLRUPolicyMSPerMB=1"
+- name: Config - enable flame graph
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?JAVA_OPTS\s*(.*)PreserveFramePointer'
+    line: "JAVA_OPTS=$JAVA_OPTS -XX:+PreserveFramePointer"
 - name: Config - Disable fulltext
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf

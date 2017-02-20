@@ -9,7 +9,7 @@ sharding:
 {% set mshosts = mshosts + hostvars[host].private_ip + ':27018,'  %}
 {% endif %}
 {% endfor %}
-  chunkSize: 64
+  chunkSize: 512
 systemLog:
   destination: file
   logAppend: true
