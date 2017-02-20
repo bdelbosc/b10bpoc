@@ -112,37 +112,37 @@ graphs:
         vtitle: '% System'
     - /render?width=500&from=-1hours&until=now&height=400&title=sys%2FCPU%20System&target=aliasByNode(servers.*.cpu.total.system%2C1)&lineMode=connected&vtitle=%25%20System&_uniq=0.5710997245834699
 -
-    -   - alias(sumSeries(servers.mongo*.iostat.xvdb.util_percentage),"mongo")
-        - alias(sumSeries(servers.elastic*.iostat.xvdb.util_percentage),"elastic")
-        - alias(sumSeries(servers.nuxeo*.iostat.xvdb.util_percentage),"nuxeo")
-        - alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdb.util_percentage),"others")
+    -   - alias(sumSeries(servers.mongo*.iostat.md0.util_percentage),"mongo")
+        - alias(sumSeries(servers.elastic*.iostat.md0.util_percentage),"elastic")
+        - alias(sumSeries(servers.nuxeo*.iostat.md0.util_percentage),"nuxeo")
+        - alias(sumSeries(servers.{monitor|gatling}*.iostat.md0.util_percentage),"others")
     -   from: -1hours
         lineMode: connected
         target:
-        - alias(sumSeries(servers.mongo*.iostat.xvdb.util_percentage),"mongo")
-        - alias(sumSeries(servers.elastic*.iostat.xvdb.util_percentage),"elastic")
-        - alias(sumSeries(servers.nuxeo*.iostat.xvdb.util_percentage),"nuxeo")
-        - alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdb.util_percentage),"others")
-        title: sys/Disk Usage ssd1
+        - alias(sumSeries(servers.mongo*.iostat.md0.util_percentage),"mongo")
+        - alias(sumSeries(servers.elastic*.iostat.md0.util_percentage),"elastic")
+        - alias(sumSeries(servers.nuxeo*.iostat.md0.util_percentage),"nuxeo")
+        - alias(sumSeries(servers.{monitor|gatling}*.iostat.md0.util_percentage),"others")
+        title: sys/Disk Usage ssd
         until: now
         vtitle: '% usage'
-    - /render?width=500&from=-1hours&until=now&height=400&title=sys%2FDisk%20Usage%20ssd1&target=alias(sumSeries(servers.mongo*.iostat.xvdb.util_percentage)%2C%22mongo%22)&target=alias(sumSeries(servers.elastic*.iostat.xvdb.util_percentage)%2C%22elastic%22)&target=alias(sumSeries(servers.nuxeo*.iostat.xvdb.util_percentage)%2C%22nuxeo%22)&target=alias(sumSeries(servers.%7Bmonitor%7Cgatling%7D*.iostat.xvdb.util_percentage)%2C%22others%22)&lineMode=connected&vtitle=%25%20usage&_uniq=0.6150981879841569
+    - /render?width=500&from=-1hours&until=now&height=400&title=sys%2FDisk%20Usage%20ssd&target=alias(sumSeries(servers.mongo*.iostat.md0.util_percentage)%2C%22mongo%22)&target=alias(sumSeries(servers.elastic*.iostat.md0.util_percentage)%2C%22elastic%22)&target=alias(sumSeries(servers.nuxeo*.iostat.md0.util_percentage)%2C%22nuxeo%22)&target=alias(sumSeries(servers.%7Bmonitor%7Cgatling%7D*.iostat.md0.util_percentage)%2C%22others%22)&lineMode=connected&vtitle=%25%20usage&_uniq=0.6150981879841569
 -
-    -   - alias(sumSeries(servers.mongo*.iostat.xvdc.util_percentage),"mongo")
-        - alias(sumSeries(servers.elastic*.iostat.xvdc.util_percentage),"elastic")
-        - alias(sumSeries(servers.nuxeo*.iostat.xvdc.util_percentage),"nuxeo")
-        - alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdc.util_percentage),"others")
+    -   - alias(sumSeries(servers.mongo*.iostat.xvdf.util_percentage),"mongo")
+        - alias(sumSeries(servers.elastic*.iostat.xvdf.util_percentage),"elastic")
+        - alias(sumSeries(servers.nuxeo*.iostat.xvdf.util_percentage),"nuxeo")
+        - alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdf.util_percentage),"others")
     -   from: -1hours
         lineMode: connected
         target:
-        - alias(sumSeries(servers.mongo*.iostat.xvdc.util_percentage),"mongo")
-        - alias(sumSeries(servers.elastic*.iostat.xvdc.util_percentage),"elastic")
-        - alias(sumSeries(servers.nuxeo*.iostat.xvdc.util_percentage),"nuxeo")
-        - alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdc.util_percentage),"others")
-        title: sys/Disk Usage ssd2
+        - alias(sumSeries(servers.mongo*.iostat.xvdf.util_percentage),"mongo")
+        - alias(sumSeries(servers.elastic*.iostat.xvdf.util_percentage),"elastic")
+        - alias(sumSeries(servers.nuxeo*.iostat.xvdf.util_percentage),"nuxeo")
+        - alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdf.util_percentage),"others")
+        title: sys/Disk Usage ebs
         until: now
         vtitle: '% usage'
-    - /render?width=500&from=-1hours&until=now&height=400&title=sys%2FDisk%20Usage%20ssd2&target=alias(sumSeries(servers.mongo*.iostat.xvdc.util_percentage)%2C%22mongo%22)&target=alias(sumSeries(servers.elastic*.iostat.xvdc.util_percentage)%2C%22elastic%22)&target=alias(sumSeries(servers.nuxeo*.iostat.xvdc.util_percentage)%2C%22nuxeo%22)&target=alias(sumSeries(servers.%7Bmonitor%7Cgatling%7D*.iostat.xvdc.util_percentage)%2C%22others%22)&lineMode=connected&vtitle=%25%20usage&_uniq=0.33557177140518746
+    - /render?width=500&from=-1hours&until=now&height=400&title=sys%2FDisk%20Usage%20ebs&target=alias(sumSeries(servers.mongo*.iostat.xvdf.util_percentage)%2C%22mongo%22)&target=alias(sumSeries(servers.elastic*.iostat.xvdf.util_percentage)%2C%22elastic%22)&target=alias(sumSeries(servers.nuxeo*.iostat.xvdf.util_percentage)%2C%22nuxeo%22)&target=alias(sumSeries(servers.%7Bmonitor%7Cgatling%7D*.iostat.xvdf.util_percentage)%2C%22others%22)&lineMode=connected&vtitle=%25%20usage&_uniq=0.33557177140518746
 -
     -   - alias(secondYAxis(sumSeries(servers.mongo*.memory.Dirty)),"dirty")
         - alias(sumSeries(servers.mongo*.memory.MemTotal),"total")

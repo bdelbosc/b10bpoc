@@ -14,4 +14,4 @@
   command: rm -f /etc/init/mongocs.conf /etc/init/mongos.conf /etc/mongocs.conf
 
 - name: "Remove data"
-  command: rm -rf /ssd1/mongod-data/ /ssd1/mongocs/ /ssd2/mongod-index /ssd2/mongo-log
+  command: rm -rf /ebs/mongod-data/ /ebs/mongocs/ /ssd/mongod-index /ebs/mongo-log

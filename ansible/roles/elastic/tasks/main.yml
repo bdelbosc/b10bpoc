@@ -1,5 +1,4 @@
 ---
-- include: disk_layout.yml
 
 # install java 8
 - name: Install add-apt-repostory
@@ -48,12 +47,8 @@
   - elasticsearch
   sudo: yes
 
-- name: Create elastic dir on ssd1
-  file: path=/ssd1/elasticsearch state=directory owner=elasticsearch group=elasticsearch
-  when: not stes.stat.exists
-
-- name: Create elastic dir on ssd2
-  file: path=/ssd2/elasticsearch state=directory owner=elasticsearch group=elasticsearch
+- name: Create elastic dir on ssd
+  file: path=/ssd/elasticsearch state=directory owner=elasticsearch group=elasticsearch
   when: not stes.stat.exists
 
 - name: Get heap size

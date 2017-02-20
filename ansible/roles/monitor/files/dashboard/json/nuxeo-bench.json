@@ -76,23 +76,23 @@
     "vtitle": "% System"
   },
   {
-    "title": "sys/Disk Usage ssd1",
+    "title": "sys/Disk Usage ssd",
     "target": [
-      "alias(sumSeries(servers.mongo*.iostat.xvdb.util_percentage),\"mongo\")",
-      "alias(sumSeries(servers.elastic*.iostat.xvdb.util_percentage),\"elastic\")",
-      "alias(sumSeries(servers.nuxeo*.iostat.xvdb.util_percentage),\"nuxeo\")",
-      "alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdb.util_percentage),\"others\")"
+      "alias(sumSeries(servers.mongo*.iostat.md0.util_percentage),\"mongo\")",
+      "alias(sumSeries(servers.elastic*.iostat.md0.util_percentage),\"elastic\")",
+      "alias(sumSeries(servers.nuxeo*.iostat.md0.util_percentage),\"nuxeo\")",
+      "alias(sumSeries(servers.{monitor|gatling}*.iostat.md0.util_percentage),\"others\")"
     ],
     "lineMode": "connected",
     "vtitle": "% usage"
   },
   {
-    "title": "sys/Disk Usage ssd2",
+    "title": "sys/Disk Usage ebs",
     "target": [
-      "alias(sumSeries(servers.mongo*.iostat.xvdc.util_percentage),\"mongo\")",
-      "alias(sumSeries(servers.elastic*.iostat.xvdc.util_percentage),\"elastic\")",
-      "alias(sumSeries(servers.nuxeo*.iostat.xvdc.util_percentage),\"nuxeo\")",
-      "alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdc.util_percentage),\"others\")"
+      "alias(sumSeries(servers.mongo*.iostat.xvdf.util_percentage),\"mongo\")",
+      "alias(sumSeries(servers.elastic*.iostat.xvdf.util_percentage),\"elastic\")",
+      "alias(sumSeries(servers.nuxeo*.iostat.xvdf.util_percentage),\"nuxeo\")",
+      "alias(sumSeries(servers.{monitor|gatling}*.iostat.xvdf.util_percentage),\"others\")"
     ],
     "lineMode": "connected",
     "vtitle": "% usage"

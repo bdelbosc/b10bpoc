@@ -9,9 +9,9 @@ discovery.zen.ping.unicast.hosts: [ {{ ehosts }} ]
 {% set ehosts = ehosts + hostvars[host].private_ip + ',' %}
 {% endif %}
 {% endfor %}
-path.data: /ssd1/elasticsearch/data,/ssd2/elasticsearch/data
-path.work: /ssd1/elasticsearch/work
-path.logs: /ssd2/elasticsearch/log
+path.data: /ssd/elasticsearch/data
+path.work: /ssd/elasticsearch/work
+path.logs: /ssd/elasticsearch/log
 
 http.cors.enabled: true
 network.host: {{ private_ip }}

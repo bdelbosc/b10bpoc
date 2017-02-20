@@ -65,8 +65,8 @@
     dest: /etc/updatedb.conf
     state: present
     backrefs: yes
-    regexp: '^PRUNEPATHS="(/ssd1/docker )?(.*)"$'
-    line: 'PRUNEPATHS="/ssd1/docker \2"'
+    regexp: '^PRUNEPATHS="(/ssd/docker )?(.*)"$'
+    line: 'PRUNEPATHS="/ssd/docker \2"'
   when: updatedb_conf_exists.stat.exists
 
 - name: Check if /etc/default/ufw exists
@@ -85,8 +85,8 @@
   lineinfile:
     dest: /etc/default/docker
     regexp: "^#?DOCKER_OPTS="
-    line: "DOCKER_OPTS=\"-g /ssd1/docker\""
-    #line: "DOCKER_OPTS=\"-dns 8.8.8.8 -dns 8.8.4.4 -g /ssd1/docker\""
+    line: "DOCKER_OPTS=\"-g /ssd/docker\""
+    #line: "DOCKER_OPTS=\"-dns 8.8.8.8 -dns 8.8.4.4 -g /ssd/docker\""
   when: ufw_default_exists.stat.exists
 
 - name: Stop docker
@@ -95,7 +95,7 @@
     state: stopped
 
 - name: Move docker
-  shell: mv /var/lib/docker /ssd1/docker
+  shell: mv /var/lib/docker /ssd/docker
 
 - name: Start docker
   service:

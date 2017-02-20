@@ -1,7 +1,7 @@
 ---
 # mongod setup
 - name: Check if mongod is already setup
-  stat: path=/ssd2/mongo-log/mongod.log
+  stat: path=/ebs/mongo-log/mongod.log
   register: std
 
 - name: Install mongodb
@@ -13,23 +13,23 @@
   template: src=mongod.conf.j2 dest=/etc/mongod.conf
 
 - name: Create mongod data dir
-  file: path=/ssd1/mongod-data state=directory owner=mongodb group=mongodb
+  file: path=/ebs/mongod-data state=directory owner=mongodb group=mongodb
 
 - name: Create mongod index dir
-  file: path=/ssd2/mongod-index state=directory owner=mongodb group=mongodb
+  file: path=/ssd/mongod-index state=directory owner=mongodb group=mongodb
 
 - name: Create mongo log dir
-  file: path=/ssd2/mongo-log state=directory owner=mongodb group=mongodb
+  file: path=/ebs/mongo-log state=directory owner=mongodb group=mongodb
 
 - name: Link mongod index dir
-  file: path=/ssd1/mongod-data/index
-        src=/ssd2/mongod-index
+  file: path=/ebs/mongod-data/index
+        src=/ssd/mongod-index
         state=link
         force=yes
 
 - name: Link mongod log
   file: path=/var/log/mongod.log
-        src=/ssd2/mongo-log/mongod.log
+        src=/ebs/mongo-log/mongod.log
         state=link
         force=yes
 

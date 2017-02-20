@@ -24,6 +24,10 @@
   shell: apt-get update
   when: dist_upgrade and not hostdone.stat.exists
 
+- name: Fix missing apt cache
+  shell: apt-get update --fix-missing
+  when: not hostdone.stat.exists
+
 - name: Upgrade dist
   apt: upgrade=dist
   when: dist_upgrade and not hostdone.stat.exists
@@ -38,7 +42,7 @@
   - xfsprogs
   - awscli
   - screen
-
+  - mdadm
   when: not hostdone.stat.exists
 
 - name: Activate sysstat
@@ -61,3 +65,4 @@
     line: "INTERVAL=120"
   notify: Restart atop
 
+- include: disk_layout.yml

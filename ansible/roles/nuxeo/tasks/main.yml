@@ -39,67 +39,14 @@
   get_url: url={{ nuxeo_distribution }} dest=/deploy/nuxeo-distribution.zip
   when: not nuxeozip.stat.exists
 
-# disk
-- name: Check if /mnt volume is mounted
-  shell: cat /proc/mounts | grep /dev/xvdb | grep /mnt
-  changed_when: False
-  failed_when: False
-  register: mntmounted
-
-- name: Umount /mnt
-  shell: umount /mnt
-  when: mntmounted.stdout != ""
-
-# ssd1
-- name: Check if /ssd1 volume is mounted
-  shell: cat /proc/mounts | grep /dev/xvdb | grep ssd1
-  changed_when: False
-  failed_when: False
-  register: mounted
-
-- name: Format /ssd1 volume
-  shell: mkfs.ext4 /dev/xvdb
-  when: mounted.stdout == ""
-
-- name: Mount /ssd1
-  mount: name=/ssd1 fstype=ext4 src=/dev/xvdb opts=noatime,nodiratime state=mounted
-  when: mounted.stdout == ""
-
 - name: Create /opt
-  file: path=/ssd1/opt state=directory
+  file: path=/ssd/opt state=directory
 
 - name: Link opt
   file: path=/opt
-        src=/ssd1/opt
+        src=/ssd/opt
         state=link
         force=yes
-
-# ssd2
-- name: Check if ssd2 volume is mounted
-  shell: cat /proc/mounts | grep /dev/xvdc | grep ssd2
-  changed_when: False
-  failed_when: False
-  register: mounted
-
-- name: Format ssd2 volume
-  shell: mkfs.ext4 /dev/xvdc
-  when: mounted.stdout == ""
-
-- name: Mount /ssd2
-  mount: name=/ssd2 fstype=ext4 src=/dev/xvdc opts=noatime,nodiratime state=mounted
-  when: mounted.stdout == ""
-
-# Prepare EBS volume
-- name: Check if EBS volume is mounted
-  shell: cat /proc/mounts | grep /dev/xvdf
-  changed_when: False
-  failed_when: False
-  register: mounted
-- name: Format EBS volume
-  shell: mkfs.ext4 /dev/xvdf
-  when: mounted.stdout == ""
-- name: Mount EBS volume
-  mount: name=/ebs1 fstype=ext4 src=/dev/xvdf opts=noatime,nodiratime state=mounted
 
 # Extract distribution and setup dirs
 - name: nuxeo user
@@ -140,7 +87,7 @@
 - name: Create config dir
   file: path=/opt/nuxeo/conf state=directory owner=nuxeo group=nuxeo mode=0755
 - name: Create data dir
-  file: path=/ssd2/nuxeo-data state=directory owner=nuxeo group=nuxeo mode=0755
+  file: path=/ssd/nuxeo-data state=directory owner=nuxeo group=nuxeo mode=0755
 - name: Create log dir
   file: path=/opt/nuxeo/logs state=directory owner=nuxeo group=nuxeo mode=0755
 - name: Create tmp dir
@@ -155,7 +102,7 @@
   stat: path=/deploy/instance.clid
   register: instanceclid
 - name: Install instance.clid
-  shell: cp /deploy/instance.clid /ssd2/nuxeo-data/
+  shell: cp /deploy/instance.clid /ssd/nuxeo-data/
   when: instanceclid.stat.exists
 
 - name: Add b10b template
@@ -166,7 +113,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.data\.dir\s*='
-    line: "nuxeo.data.dir=/ssd2/nuxeo-data"
+    line: "nuxeo.data.dir=/ssd/nuxeo-data"
 - name: Config - nuxeo.tmp.dir
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf

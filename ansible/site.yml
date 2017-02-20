@@ -9,7 +9,6 @@
   - {role: ec2, type: mongodb}
   - {role: ec2, type: nuxeo}
 
-
 - hosts: mongodb:nuxeo:monitor
   gather_facts: no
   sudo: yes
@@ -26,8 +25,6 @@
 - hosts: mongodb
   gather_facts: no
   sudo: yes
-  pre_tasks:
-  - include: ./roles/mongo_common/tasks/disk_layout.yml
   roles:
   - role: mongo_common
   - role: mongo_config_server
@@ -43,6 +40,7 @@
   - role: mongo_router
   - role: nuxeo
   - role: diamond
+  - role: flame
   tasks:
   - include: ./roles/nuxeo/tasks/config_graphite.yml
 
