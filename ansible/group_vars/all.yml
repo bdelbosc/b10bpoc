@@ -31,7 +31,7 @@ volsizes:
 
 # Mass Import configuration
 impnbThreads: 128
-impbatchSize: 200
+impbatchSize: 64
 impnbNodes:  1000000000
 impnbBlobs:    10000000
 impBlobsSizeKB: 1

@@ -3,7 +3,7 @@
   action: ec2_facts
 
 - name: notify event on monitoring
-  shell: 'curl -XPOST http://monitor1/events/  -d ''{"what": "Saving results", "tags":"phases save", "data": "{{bench_tag}}"}'''
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Saving results", "tags":"phases save", "data": "{{bench_tag}}"}'''
   when: "'monitor' in group_names"
 
 - name: copy csv import files

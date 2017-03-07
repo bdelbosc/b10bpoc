@@ -12,6 +12,7 @@
 
 # disk
 - name: Umount /mnt
+  ignore_errors: True
   mount: name=/mnt src=/dev/xvdb fstype=ext4 state=absent
 
 # ssd is a raid0 of the 2 local instance ssd disk

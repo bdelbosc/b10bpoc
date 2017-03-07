@@ -1,0 +1,43 @@
+---
+- hosts: nuxeo
+  gather_facts: no
+  user: ubuntu
+  sudo: yes
+  tasks:
+  - name: Stop mongos
+    service: name=mongos state=stopped
+
+
+- hosts: mongodb
+  gather_facts: no
+  user: ubuntu
+  sudo: yes
+  tasks:
+  - name: Stop mongocs
+    service: name=mongocs state=stopped
+
+
+- hosts: mongodb
+  gather_facts: no
+  user: ubuntu
+  sudo: yes
+  tasks:
+  - name: Restart mongod
+    service: name=mongod state=restarted
+
+- hosts: mongodb
+  gather_facts: no
+  user: ubuntu
+  sudo: yes
+  tasks:
+  - name: Start mongocs
+    service: name=mongocs state=started
+
+- hosts: nuxeo
+  gather_facts: no
+  user: ubuntu
+  sudo: yes
+  tasks:
+  - name: Start mongos
+    service: name=mongos state=started
+

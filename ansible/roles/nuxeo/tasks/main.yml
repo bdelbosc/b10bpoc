@@ -173,17 +173,12 @@
     regexp: '^#?JAVA_OPTS\s*(.*)FlightRecorder'
     line: "JAVA_OPTS=$JAVA_OPTS -Dcom.sun.management.jmxremote.autodiscovery=true -Dcom.sun.management.jdp.name=Nuxeo -XX:+UnlockCommercialFeatures -XX:+FlightRecorder"
 
-# tuning
+# Tuning
 - name: Config - low softref
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?JAVA_OPTS\s*(.*)SoftRefLRUPolicyMSPerMB'
     line: "JAVA_OPTS=$JAVA_OPTS -XX:SoftRefLRUPolicyMSPerMB=1"
-- name: Config - enable flame graph
-  lineinfile:
-    dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?JAVA_OPTS\s*(.*)PreserveFramePointer'
-    line: "JAVA_OPTS=$JAVA_OPTS -XX:+PreserveFramePointer"
 - name: Config - Disable fulltext
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -200,6 +195,17 @@
     regexp: '^#?audit.elasticsearch.enabled=\s*(.*)'
     line: "audit.elasticsearch.enabled=false"
 
+# Monitoring
+- name: Config - enable flame graph
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?JAVA_OPTS\s*(.*)PreserveFramePointer'
+    line: "JAVA_OPTS=$JAVA_OPTS -XX:+PreserveFramePointer"
+- name: Config - enable JMX
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?JAVA_OPTS\s*(.*)Dcom.sun.management.jmxremote(.*)'
+    line: "JAVA_OPTS=$JAVA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1089 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
 
 # Add distribution packages
 - name: Add distribution packages
