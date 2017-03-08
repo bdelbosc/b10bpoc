@@ -3,7 +3,7 @@ sharding:
 replication:
   replSetName: configReplSet
 storage:
-  dbPath: /ebs/mongocs
+  dbPath: /ssd/mongocs
   journal:
     enabled: false
   engine: wiredTiger
@@ -13,4 +13,4 @@ net:
 systemLog:
   destination: file
   logAppend: true
-  path: /ebs/mongo-log/mongocs.log
+  path: /ssd/mongo-log/mongocs.log

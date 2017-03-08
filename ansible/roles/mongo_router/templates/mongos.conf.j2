@@ -13,7 +13,7 @@ sharding:
 systemLog:
   destination: file
   logAppend: true
-  path: /ebs/mongo-log/mongos.log
+  path: /ssd/mongo-log/mongos.log
 net:
   port: 27017
   bindIp: {{ private_ip }}

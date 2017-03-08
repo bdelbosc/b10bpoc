@@ -5,6 +5,7 @@ ansible/group_vars/all/custom.yml
 .idea
 *.iml
 *.swp
+*.retry
 bench-scripts/
 reports/
 bench-site/public

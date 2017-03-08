@@ -17,10 +17,10 @@
   template: src=mongocs.j2 dest=/etc/init/mongocs.conf
 
 - name: Create mongocs directory
-  file: path=/ebs/mongocs state=directory owner=mongodb group=mongodb
+  file: path=/ssd/mongocs state=directory owner=mongodb group=mongodb
 
 - name: Create mongo log dir
-  file: path=/ebs/mongo-log state=directory owner=mongodb group=mongodb
+  file: path=/ssd/mongo-log state=directory owner=mongodb group=mongodb
 
 - name: Restart mongocs
   service: name=mongocs state=restarted
@@ -36,7 +36,7 @@
 
 - name: Link mongocs log
   file: path=/var/log/mongocs.log
-        src=/ebs/mongo-log/mongocs.log
+        src=/ssd/mongo-log/mongocs.log
         state=link
         force=yes
 

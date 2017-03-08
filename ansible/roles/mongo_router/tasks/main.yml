@@ -14,7 +14,7 @@
 - user: name=mongodb
 
 - name: Create mongo log dir
-  file: path=/ebs/mongo-log state=directory owner=mongodb
+  file: path=/ssd/mongo-log state=directory owner=mongodb
 
 - name: Set mongos configuration file
   template: src=mongos.conf.j2 dest=/etc/mongos.conf
@@ -32,7 +32,7 @@
 
 - name: Link mongos log
   file: path=/var/log/mongos.log
-        src=/ebs/mongo-log/mongos.log
+        src=/ssd/mongo-log/mongos.log
         state=link
         force=yes
 

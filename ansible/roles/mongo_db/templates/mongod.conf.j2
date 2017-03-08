@@ -1,5 +1,5 @@
 storage:
-  dbPath: /ebs/mongod-data
+  dbPath: /ssd/mongod-data
   journal:
     enabled: false
   engine: wiredTiger
@@ -9,7 +9,7 @@ storage:
 systemLog:
   destination: file
   logAppend: true
-  path: /ebs/mongo-log/mongod.log
+  path: /ssd/mongo-log/mongod.log
 net:
   port: 27019
   bindIp: {{ private_ip }}

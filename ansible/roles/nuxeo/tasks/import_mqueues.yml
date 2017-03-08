@@ -5,7 +5,7 @@
     nbDocumentsPerNode: "{{( impnbNodes/counts.nuxeo/impnbThreads)|int }}"
     blobInfos: "/ssd/nuxeo-data/import/blob-infos"
     mqueuesBlob: "/ssd/nuxeo-data/import/mqueues-blob"
-    mqueuesDoc: "/ebs/nuxeo-data/import/mqueues-doc"
+    mqueuesDoc: "/ssd/nuxeo-data/import/mqueues-doc"
   tags:
   - continue
 
