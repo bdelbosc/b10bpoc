@@ -6,6 +6,7 @@
     blobInfos: "/ssd/nuxeo-data/import/blob-infos"
     mqueuesBlob: "/ssd/nuxeo-data/import/mqueues-blob"
     mqueuesDoc: "/ssd/nuxeo-data/import/mqueues-doc"
+    mqueuesBatchThresholdS: "45"
   tags:
   - continue
 
@@ -34,6 +35,6 @@
   tags:
   - continue
 - name: Import documents
-  shell: 'curl -X POST ''http://localhost:8080/nuxeo/site/automation/MQImporter.runDocumentConsumers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"rootFolder": "/default-domain/workspaces", "queuePath": "{{mqueuesDoc}}", "batchSize": {{impbatchSize}}}}'''
+  shell: 'curl -X POST ''http://localhost:8080/nuxeo/site/automation/MQImporter.runDocumentConsumers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"rootFolder": "/default-domain/workspaces", "queuePath": "{{mqueuesDoc}}", "batchThresholdS": "{{mqueuesBatchThresholdS}}", "batchSize": {{impbatchSize}}}}'''
   tags:
   - continue
