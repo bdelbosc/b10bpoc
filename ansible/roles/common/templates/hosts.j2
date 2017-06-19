@@ -14,6 +14,11 @@
 {{ hostvars[host].private_ip }} elastic{{loop.index}}
 {% endfor %}
 {% endif %}
+{% if groups['kafka'] is defined %}
+{% for host in groups['kafka'] %}
+{{ hostvars[host].private_ip }} kafka{{loop.index}}
+{% endfor %}
+{% endif %}
 {% if groups['gatling'] is defined %}
 {% for host in groups['gatling'] %}
 {{ hostvars[host].private_ip }} gatling{{loop.index}}

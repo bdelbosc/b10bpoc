@@ -6,80 +6,28 @@ keypair: bdelbosc
 # --------------------------------------------------
 # 1B target
 
-### Type of ec2
-types:
-  mongodb: m4.4xlarge
-  nuxeo: c4.2xlarge
-  elastic: m4.4xlarge
-  gatling: c4.2xlarge
-  monitor: c4.xlarge
-
-counts:
-  mongodb: 2
-  nuxeo: 2
-  elastic: 2
-  gatling: 1
-  monitor: 1
-
-# ebs volume size per disk per instance: total size for a group is: counts * volsizes * raid0
-volsizes:
-  mongodb: 125  # 1t: 2*4*125, 10kIOPS
-  nuxeo: 200    # 800g: 2*2*200
-  elastic: 180  # 1.44t: 2*4*180, 10kIOPS
-  gatling: 30   # 30g
-  monitor: 30   # 60g: 1*2*30
-
-voltypes:
-  mongodb: io1
-  nuxeo: gp2
-  elastic: io1
-  gatling: gp2
-  monitor: gp2
-
-raid0:
-  mongodb: 4
-  nuxeo: 2
-  elastic: 4
-  gatling: 0
-  monitor: 2
-
-# provisioned iops for io1 ebs disk, limited to 40k iops per region
-iops: 1250
-
-# Mass Import configuration
-impnbThreads: 128
-impbatchSize: 64
-impnbNodes:  1000000000
-impnbBlobs:    10000000
-impBlobsSizeKB: 1
-
-
-# --------------------------------------------------
-# 100m target testing
-
-## Type of ec2 to use for testing
+#### Type of ec2
 #types:
-#  mongodb: m4.xlarge
+#  mongodb: m4.4xlarge
 #  nuxeo: c4.2xlarge
-#  elastic: c4.2xlarge
+#  elastic: m4.4xlarge
 #  gatling: c4.2xlarge
 #  monitor: c4.xlarge
 #
-## Number of nodes
 #counts:
-#  mongodb: 4
+#  mongodb: 2
 #  nuxeo: 2
-#  elastic: 3
+#  elastic: 2
 #  gatling: 1
 #  monitor: 1
 #
 ## ebs volume size per disk per instance: total size for a group is: counts * volsizes * raid0
 #volsizes:
-#  mongodb: 25
-#  nuxeo: 125
-#  elastic: 40
-#  gatling: 40
-#  monitor: 20
+#  mongodb: 125  # 1t: 2*4*125, 10kIOPS
+#  nuxeo: 200    # 800g: 2*2*200
+#  elastic: 180  # 1.44t: 2*4*180, 10kIOPS
+#  gatling: 30   # 30g
+#  monitor: 30   # 60g: 1*2*30
 #
 #voltypes:
 #  mongodb: io1
@@ -88,7 +36,6 @@ impBlobsSizeKB: 1
 #  gatling: gp2
 #  monitor: gp2
 #
-## number of ebs disk to aggregate in raid0
 #raid0:
 #  mongodb: 4
 #  nuxeo: 2
@@ -96,14 +43,81 @@ impBlobsSizeKB: 1
 #  gatling: 0
 #  monitor: 2
 #
-#iops: 2000
+## provisioned iops for io1 ebs disk, limited to 40k iops per region
+#iops: 1250
 #
-## Mass Import configuration with nuxeo-platform-importer
-#impnbThreads: 90
-#impbatchSize: 200
-#impnbNodes:  100000000
-#impnbBlobs:    100000
+## Mass Import configuration
+#impnbThreads: 128
+#impbatchSize: 64
+#impnbNodes:  1000000000
+#impnbBlobs:    10000000
 #impBlobsSizeKB: 1
+
+
+# --------------------------------------------------
+# 100m target testing
+
+# Type of ec2 to use for testing
+types:
+  mongodb: m4.xlarge
+  nuxeo: c4.2xlarge
+  elastic: c4.2xlarge
+  gatling: c4.2xlarge
+  kafka: c4.xlarge
+  monitor: c4.xlarge
+
+# Number of nodes
+#counts:
+#  mongodb: 4
+#  nuxeo: 2
+#  elastic: 3
+#  gatling: 1
+#  kafka: 1
+#  monitor: 1
+
+counts:
+  mongodb: 0
+  nuxeo: 0
+  elastic: 0
+  gatling: 0
+  kafka: 1
+  monitor: 1
+
+# ebs volume size per disk per instance: total size for a group is: counts * volsizes * raid0
+volsizes:
+  mongodb: 25
+  nuxeo: 125
+  elastic: 40
+  gatling: 40
+  kafka: 300
+  monitor: 20
+
+voltypes:
+  mongodb: io1
+  nuxeo: gp2
+  elastic: io1
+  gatling: gp2
+  kafka: gp2
+  monitor: gp2
+
+# number of ebs disk to aggregate in raid0
+raid0:
+  mongodb: 4
+  nuxeo: 2
+  elastic: 4
+  gatling: 0
+  kafka: 2
+  monitor: 2
+
+#iops: 2000
+iops: 100
+
+# Mass Import configuration with nuxeo-platform-importer
+impnbThreads: 90
+impbatchSize: 200
+impnbNodes:  100000000
+impnbBlobs:    100000
+impBlobsSizeKB: 1
 
 # --------------------------------------------------
 # Tag used to flag ec2 used for the bench
@@ -130,6 +144,7 @@ amis:
   nuxeo: ami-910fa9e2
   mongodb: ami-55452e26
   elastic: ami-55452e26
+  kafka: ami-55452e26
   gatling: ami-55452e26
   monitor: ami-55452e26
 

@@ -1,0 +1,53 @@
+---
+# install java 8
+- name: Install add-apt-repostory
+  apt: name=software-properties-common state=latest
+
+- name: Add Oracle Java Repository
+  apt_repository: repo='ppa:webupd8team/java'
+
+- name: Accept Java 8 License
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+- name: Install Oracle Java 8 and Zookeeper
+  apt: name={{item}} state=latest
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
+    - zookeeperd
+
+# Install kafka
+- name: Check if already installed
+  stat: path=/opt/kafka
+  register: stkafka
+
+- name: Download Kafka
+  get_url: url=http://mirror.netcologne.de/apache.org/kafka/0.10.2.0/kafka_2.11-0.10.2.0.tgz dest=/tmp/kafka_2.11-0.10.2.0.tgz
+  when: not stkafka.stat.exists
+
+- name: Untar Kafka
+  shell: chdir=/tmp creates=/opt/kafka_2.11-0.10.2.0 tar -zxf kafka_2.11-0.10.2.0.tgz -C /opt
+  when: not stkafka.stat.exists
+
+- name: Move Kafka
+  shell: mv /opt/kafka_2.11-0.10.2.0 /opt/kafka
+  when: not stkafka.stat.exists
+
+- name: Copy kafkad init
+  copy: src=kafkad dest=/etc/init.d/kafkad mode=0755
+
+- name: Copy kafka server conf
+  copy: src=server.properties dest=/etc/kafka-server.properties
+
+- name: Copy kafka server conf
+  copy: src=log4j.properties dest=/etc/kafka-log4j.properties
+
+- name: Create a kafka user
+  user: name=kafka
+
+- name: Create a kafka directory
+  file: path=/ssd/kafka state=directory owner=kafka group=kafka mode=0755
+
+- name: Start kafka
+  service: name=kafkad state=started

@@ -6,10 +6,11 @@
   roles:
   - role: s3
   - {role: ec2, type: monitor}
+  - {role: ec2, type: kafka}
   - {role: ec2, type: mongodb}
   - {role: ec2, type: nuxeo}
 
-- hosts: mongodb:nuxeo:monitor
+- hosts: kafka:mongodb:nuxeo:monitor
   gather_facts: no
   sudo: yes
   roles:
@@ -20,6 +21,13 @@
   sudo: yes
   roles:
   - role: monitor
+  - role: diamond
+
+- hosts: kafka
+  gather_facts: no
+  sudo: yes
+  roles:
+  - role: kafka
   - role: diamond
 
 - hosts: mongodb
@@ -48,4 +56,4 @@
   gather_facts: no
   tasks:
   - name: Summary
-    debug: msg="Monitoring {{groups.monitor.0}}   Nuxeo {{groups.nuxeo}}   Mongo {{groups.mongodb}}"
+    debug: msg="Monitoring {{groups.monitor.0}}   Nuxeo {{groups.nuxeo}}   Mongo {{groups.mongodb}}  Kafka {{groups.kafka}}"
