@@ -86,29 +86,3 @@
     src: ../files/elastic/
     dest: /opt/nuxeo/server/templates/b10b/nxserver/config
     owner: nuxeo
-
-- name: Install Redis
-  apt: name=redis-server state=latest
-  sudo: yes
-
-- name: Redis bind
-  sudo: yes
-  lineinfile:
-    dest: /etc/redis/redis.conf
-    regexp: '^#?bind\s*(.*)'
-    line: "bind {{ private_ip }}"
-
-- name: Redis in memory
-  sudo: yes
-  lineinfile:
-    dest: /etc/redis/redis.conf
-    regexp: '^save'
-    state: absent
-
-- name: Restart Redis
-  sudo: yes
-  service: name=redis-server state=restarted
-
-- name: Restore pristine bundles
-  shell: cp -a /opt/nuxeo/server/nxserver/bundles.pristine/*.jar /opt/nuxeo/server/nxserver/bundles/
-
