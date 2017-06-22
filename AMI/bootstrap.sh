@@ -41,13 +41,12 @@ apt-get -q -y install \
     atop sysstat
 
 # Install Java 8
-mkdir -p /usr/lib/jvm
-curl -o/tmp/jdk-8-linux-x64.tgz -L --insecure --header 'Cookie: oraclelicense=accept-securebackup-cookie' 'http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jdk-8u65-linux-x64.tar.gz'
-tar xzf /tmp/jdk-8-linux-x64.tgz -C /usr/lib/jvm
-rm /tmp/jdk-8-linux-x64.tgz
-ln -s /usr/lib/jvm/jdk1.8.0_65 /usr/lib/jvm/java-8
-update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8/jre/bin/java 1081
-update-alternatives --set java /usr/lib/jvm/java-8/jre/bin/java
+apt-add-repository -y ppa:webupd8team/java
+apt-get update
+echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+apt-get -q -y install oracle-java8-installer
+
+ln -s /usr/lib/jvm/java-8-oracle /usr/lib/jvm/java-8
 
 # Get logstash image
 docker pull logstash:2.1
