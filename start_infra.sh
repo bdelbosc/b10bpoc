@@ -3,7 +3,7 @@
 cd $(dirname $0)
 HERE=`readlink -e .`
 #distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip"
-distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.1-SNAPSHOT.zip"
+distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.2-SNAPSHOT.zip"
 clid=/opt/build/hudson/instance.clid
 set -e
 
@@ -44,7 +44,7 @@ function prepare_deploy_directory() {
   mkdir $HERE/deploy
   cp $clid $HERE/deploy/ || /bin/true
   echo "nuxeo-web-ui" > $HERE/deploy/mp-list
-  echo "/deploy/marketplace/marketplace-mqueues-1.0.0-SNAPSHOT.zip" >> $HERE/deploy/mp-list
+  echo "nuxeo-mqueues-1.0.1-SNAPSHOT" >> $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
   cp -r ./custom/marketplace $HERE/deploy/ || /bin/true
 }
@@ -72,7 +72,10 @@ function run_ansible() {
   pushd ansible
   # --limit nuxeo
   #  --tags "hh"
+  #ansible-playbook -vv  -i inventory.py --extra-vars "nuxeo_distribution=$distrib_url" site.yml --limit @/home/ben/dev/tools/nuxeo-bench-10b/ansible/site.retry
   ansible-playbook -vv  -i inventory.py --extra-vars "nuxeo_distribution=$distrib_url" site.yml
+
+
   popd
 }
 

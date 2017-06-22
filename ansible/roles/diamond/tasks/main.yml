@@ -6,7 +6,7 @@
   register: diamond_exists
 
 - name: Get diamond deb package
-  copy: src=diamond_4.0.468_all.deb dest=/tmp/diamond_4.0.468_all.deb force=no
+  copy: src=diamond_4.0.809_all.deb dest=/tmp/diamond_4.0.809_all.deb force=no
   when: not diamond_exists.stat.exists
 
 - name: Install diamond dep
@@ -17,7 +17,7 @@
     - python-redis
 
 - name: Install package
-  shell: dpkg -i /tmp/diamond_4.0.468_all.deb
+  shell: dpkg -i /tmp/diamond_4.0.809_all.deb
   when: not diamond_exists.stat.exists
 
 - name: Get hostname

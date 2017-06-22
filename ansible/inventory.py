@@ -121,6 +121,7 @@ if "monitor" in groups:
         inventory["nuxeo"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["elastic"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["mongodb"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
+        inventory["kafka"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["monitor"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["gatling"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
 

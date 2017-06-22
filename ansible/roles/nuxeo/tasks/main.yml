@@ -141,7 +141,7 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.mongodb\.server\s*='
     #line: "nuxeo.mongodb.server=mongodb://{% for host in groups['mongodb'] -%}{{ hostvars[host]['private_ip'] }}{%- if not loop.last %},{% endif -%}{%- endfor %}/bench"
-    line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench?socketTimeoutMS=600000&maxPoolSize=150"
+    line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench%3FsocketTimeoutMS%3D600000%26maxPoolSize%3D150"
   tags:
     - hh
 - name: Config - nuxeo.mongodb.dbname
@@ -253,6 +253,11 @@
   shell: nuxeoctl --accept=true --relax=true mp-install $(cat /deploy/mp-list | tr '\n' ' ')
   when: installpkg.stat.exists and not nuxeorunning
 
+# Add kafka configuration
+- name: Setup hosts names
+  include: ./config_kafka.yml
+  when: "counts[group_names[0]] > 0"
+
 # Backup pristine bundles
 - name: Backup custom bundles
   shell: cp -ar /opt/nuxeo/server/nxserver/bundles /opt/nuxeo/server/nxserver/bundles.pristine
@@ -261,6 +266,7 @@
 - name: Check for custom bundles
   stat: path=/deploy/bundles
   register: custombundles
+
 - name: Copy custom bundles
   shell: cp -a /deploy/bundles/* /opt/nuxeo/server/nxserver/bundles/
   when: custombundles.stat.exists

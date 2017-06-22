@@ -172,6 +172,14 @@ enabled = True
 instances = nuxeo1@nuxeo1
 {% endif %}
 
+{% if hostname.stdout == 'kafka1' %}
+[[KafkaCollector]]
+enabled = True
+host = 127.0.0.1
+port = 8082
+path = kafka
+{% endif %}
+
 ################################################################################
 ### Options for logging
 # for more information on file format syntax:

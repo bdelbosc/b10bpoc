@@ -68,18 +68,12 @@ types:
 
 # Number of nodes
 #counts:
-#  mongodb: 4
-#  nuxeo: 2
-#  elastic: 3
-#  gatling: 1
-#  kafka: 1
-#  monitor: 1
 
 counts:
-  mongodb: 0
-  nuxeo: 0
-  elastic: 0
-  gatling: 0
+  mongodb: 4
+  nuxeo: 3
+  elastic: 3
+  gatling: 1
   kafka: 1
   monitor: 1
 
@@ -94,8 +88,8 @@ volsizes:
 
 voltypes:
   mongodb: io1
-  nuxeo: gp2
   elastic: io1
+  nuxeo: gp2
   gatling: gp2
   kafka: gp2
   monitor: gp2
@@ -113,10 +107,16 @@ raid0:
 iops: 100
 
 # Mass Import configuration with nuxeo-platform-importer
-impnbThreads: 90
-impbatchSize: 200
-impnbNodes:  100000000
-impnbBlobs:    100000
+#impnbThreads: 90
+#impbatchSize: 200
+#impnbNodes:  100000000
+#impnbBlobs:    100000
+#impBlobsSizeKB: 1
+
+impnbThreads: 20
+impbatchSize: 20
+impnbNodes:  10000000
+impnbBlobs:    1000
 impBlobsSizeKB: 1
 
 # --------------------------------------------------
@@ -132,21 +132,25 @@ bucket_results: nuxeo-b10b-results
 
 # The default Nuxeo distribution to use
 #nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
-nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.1-SNAPSHOT.zip
+nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.2-SNAPSHOT.zip
 
 # AWS config
+# ami-d37961b5 hvm:ebs-ssd 20170619 ubuntu 14.04
+# ami-1c78607a hvm:ebs-io1 20170619 ubuntu 14.04
+# ami-8febf3e9 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04
+
 aws_region: eu-west-1
 security_group: jenkins-vpc
 subnet_id: subnet-dbac2a82
 instance_profile: JenkinsRole
 dbprofile: mongodb
 amis:
-  nuxeo: ami-910fa9e2
-  mongodb: ami-55452e26
-  elastic: ami-55452e26
-  kafka: ami-55452e26
-  gatling: ami-55452e26
-  monitor: ami-55452e26
+  nuxeo: ami-8febf3e9
+  mongodb: ami-1c78607a
+  elastic: ami-1c78607a
+  kafka: ami-d37961b5
+  gatling: ami-d37961b5
+  monitor: ami-d37961b5
 
 # should we apt-get update && apt-get distupgrade ?
 dist_upgrade: false

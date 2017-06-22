@@ -1,10 +1,10 @@
 ---
-- name: List stopped instances
+- name: "{{type}} List stopped instances"
   shell: aws ec2 describe-instances --filters "Name=tag:bench,Values={{bench}}" "Name=tag:bench_role,Values={{type}}" "Name=instance-state-name,Values=stopped" --region={{aws_region}} --no-paginate --query "Reservations[*].Instances[*].InstanceId" | grep "i-" | tr -d '" ,' | paste -d, -s
   changed_when: False
   register: stopped_instances
 
-- name: Start stopped instances
+- name: "{{type}} Start stopped instances"
   ec2:
     region: "{{aws_region}}"
     instance_ids: "{{stopped_instances.stdout}}"
@@ -18,7 +18,7 @@
   when: stopped_instances.stdout != ""
   register: started_instances
 
-- name: Register empty list for started instances
+- name: "{{type}} Register empty list for started instances"
   set_fact:
     started_instances: {"instances": []}
   when: stopped_instances.stdout == ""
@@ -27,20 +27,20 @@
   add_host: hostname={{item.private_ip if keypair == "Jenkins" else item.public_ip}} groupname={{type}}
   with_items: "{{ started_instances.instances }}"
 
-- name: Get an existing bench tag
+- name: "{{type}} Get an existing bench tag"
   shell: echo "{{ hostvars[groups['nuxeo'][0]]['bench_tag'] }}"
   register: existing_tag
   when: (stamp_tag is not defined) and (groups['nuxeo'][0] is defined)
 
-- name: Create a default bench tag
+- name: "{{type}} Create a default bench tag"
   shell: echo "$(date +%y%m%d-%H%M)_{{counts.nuxeo}}nuxeo-{{types.nuxeo}}_{{counts.mongodb}}mongo-{{types.mongodb}}_{{counts.elastic}}es-{{types.elastic}}"
   register: new_tag
 
 # this is a big hack because skipped task still register variable
-- name: Find the bench tag to use
+- name: "{{type}} Find the bench tag to use"
   set_fact: stamp_tag="{{stamp_tag if (stamp_tag is defined) else existing_tag.stdout if (groups['nuxeo'][0] is defined) else new_tag.stdout}}"
 
-- name: Create/destroy instances
+- name: "{{type}} Create/destroy instances"
   ec2:
     region: "{{aws_region}}"
     key_name: "{{keypair}}"
@@ -65,7 +65,7 @@
     wait: yes
   register: created_instances
 
-- name: Create ebs volume 1 xvdf
+- name: "{{type}} Create ebs volume 1 xvdf"
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
@@ -77,7 +77,7 @@
   with_items: "{{ created_instances.instances }}"
   when: raid0[type] >= 1
 
-- name: Create ebs volume 2 xvdg
+- name: "{{type}} Create ebs volume 2 xvdg"
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
@@ -89,7 +89,7 @@
   with_items: "{{ created_instances.instances }}"
   when: raid0[type] >= 2
 
-- name: Create ebs volume 3 xvdh
+- name: "{{type}} Create ebs volume 3 xvdh"
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
@@ -101,7 +101,7 @@
   with_items: "{{ created_instances.instances }}"
   when: raid0[type] >= 3
 
-- name: Create ebs volume 4 xvdi
+- name: "{{type}} Create ebs volume 4 xvdi"
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
@@ -113,15 +113,14 @@
   with_items: "{{ created_instances.instances }}"
   when: raid0[type] >= 4
 
-
-- name: Add new instances to group
+- name: "{{type}} Add new instances to group"
   add_host:
     hostname: "{{item.private_ip if keypair == 'Jenkins' else item.public_ip}}"
     groupname: "{{type}}"
   with_items: "{{ created_instances.instances }}"
   when: "{{ created_instances.changed }}"
 
-- name: Wait for SSH to be available on all instances
+- name: "{{type}} Wait for SSH to be available on all instances"
   wait_for:
     host: "{{ item.private_ip if keypair == 'Jenkins' else item.public_ip }}"
     port: 22
