@@ -44,7 +44,7 @@
   copy: src=log4j.properties dest=/etc/kafka-log4j.properties
 
 - name: Download mx4j to get jmx exposed as http
-  get_url: url=http://central.maven.org/maven2/mx4j/mx4j-tools/3.0.1/mx4j-tools-3.0.1.jar /opt/kafka/libs
+  get_url: url=http://central.maven.org/maven2/mx4j/mx4j-tools/3.0.1/mx4j-tools-3.0.1.jar dest=/opt/kafka/libs
   when: not stkafka.stat.exists
 
 - name: Create a kafka user

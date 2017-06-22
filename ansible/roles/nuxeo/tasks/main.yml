@@ -65,7 +65,6 @@
   when: not nuxeoserver.stat.exists
 - name: Unzip distribution
   shell: unzip -q -d /opt/nuxeo/ansible_tmp /deploy/nuxeo-distribution.zip
-  become_user: nuxeo
   when: not nuxeoserver.stat.exists
 - name: Find out distribution directory
   shell: ls /opt/nuxeo/ansible_tmp/
@@ -73,7 +72,6 @@
   when: not nuxeoserver.stat.exists
 - name: Move distribution to final location
   shell: mv /opt/nuxeo/ansible_tmp/{{distrib_dir.stdout}} /opt/nuxeo/server
-  become_user: nuxeo
   when: not nuxeoserver.stat.exists
 - name: Remove temporary dir
   file: path=/opt/nuxeo/ansible_tmp state=absent
@@ -82,7 +80,6 @@
   register: jdbclibs
 - name: Install JDBC libs
   shell: cp /deploy/jdbc-libs/* /opt/nuxeo/server/lib/
-  become_user: nuxeo
   when: jdbclibs.stat.exists
 - name: Create config dir
   file: path=/opt/nuxeo/conf state=directory owner=nuxeo group=nuxeo mode=0755
@@ -94,7 +91,6 @@
   file: path=/opt/nuxeo/tmp state=directory owner=nuxeo group=nuxeo mode=0755
 - name: Move config file
   shell: mv /opt/nuxeo/server/bin/nuxeo.conf /opt/nuxeo/conf/nuxeo.conf || /bin/true
-  become_user: nuxeo
   when: not nuxeoserver.stat.exists
 - name: Make nuxeoctl executable
   file: path=/opt/nuxeo/server/bin/nuxeoctl mode=0755
@@ -274,3 +270,6 @@
 
 - name: Add history
   copy: src=bash_history dest=/opt/nuxeo/.bash_history owner=nuxeo force=no
+
+- name: Make sure nuxeo is the owner
+  file: dest=/opt/nuxeo/ owner=nuxeo group=nuxeo recurse=yes
