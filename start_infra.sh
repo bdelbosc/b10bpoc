@@ -3,7 +3,7 @@
 cd $(dirname $0)
 HERE=`readlink -e .`
 #distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip"
-distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.2-SNAPSHOT.zip"
+distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.3-SNAPSHOT.zip"
 clid=/opt/build/hudson/instance.clid
 set -e
 
@@ -43,8 +43,8 @@ function prepare_deploy_directory() {
   fi
   mkdir $HERE/deploy
   cp $clid $HERE/deploy/ || /bin/true
-  echo "nuxeo-web-ui" > $HERE/deploy/mp-list
-  echo "nuxeo-mqueues-1.0.1-SNAPSHOT" >> $HERE/deploy/mp-list
+  echo "nuxeo-web-jsf" > $HERE/deploy/mp-list
+  echo "nuxeo-mqueues-1.0.2-SNAPSHOT" >> $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
   cp -r ./custom/marketplace $HERE/deploy/ || /bin/true
 }

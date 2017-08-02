@@ -37,7 +37,10 @@
   shell: echo -n {{ hname }} > /etc/hostname
 
 - name: Backup hosts
-  shell: cp /etc/hosts /etc/hosts.bak
+  shell: cp /etc/hosts /etc/hosts.bak1
 
 - name: Set /etc/hosts
   template: src=hosts.j2 dest=/etc/hosts
+
+- name: Backup hosts
+  shell: mv /etc/hosts.bak1 /etc/hosts.bak
