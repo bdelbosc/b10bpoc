@@ -21,10 +21,14 @@
   - role: elastic
   - role: diamond
 
+
+
 - hosts: nuxeo
   gather_facts: no
   sudo: yes
   serial: 1
+  roles:
+  - redis
   tasks:
   - include: ./roles/nuxeo/tasks/config_elastic.yml
   - include: ./roles/nuxeo/tasks/start.yml

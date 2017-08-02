@@ -204,6 +204,9 @@
     regexp: '^#?JAVA_OPTS\s*(.*)Dcom.sun.management.jmxremote(.*)'
     line: "JAVA_OPTS=$JAVA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1089 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
 
+- name: Make sure nuxeo is the owner
+  file: dest=/opt/nuxeo owner=nuxeo group=nuxeo recurse=yes
+
 # Add distribution packages
 - name: Add distribution packages
   shell: nuxeoctl mp-init
@@ -238,6 +241,7 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.s3storage\.cachesize\s*='
     line: "nuxeo.s3storage.cachesize=100MB"
+
 - name: Install S3 package
   shell: nuxeoctl --relax=false --accept=true mp-install amazon-s3-online-storage
 
@@ -246,11 +250,11 @@
   stat: path=/deploy/mp-list
   register: installpkg
 - name: Install custom packages
-  shell: nuxeoctl --accept=true --relax=true mp-install $(cat /deploy/mp-list | tr '\n' ' ')
+  shell: nuxeoctl --accept=true --relax=false mp-install $(cat /deploy/mp-list | tr '\n' ' ')
   when: installpkg.stat.exists and not nuxeorunning
 
 # Add kafka configuration
-- name: Setup hosts names
+- name: Add kafka configuration
   include: ./config_kafka.yml
   when: "counts[group_names[0]] > 0"
 

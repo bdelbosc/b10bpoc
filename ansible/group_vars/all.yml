@@ -137,7 +137,7 @@ nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tom
 # AWS config
 # ami-d37961b5 hvm:ebs-ssd 20170619 ubuntu 14.04
 # ami-1c78607a hvm:ebs-io1 20170619 ubuntu 14.04
-# ami-8febf3e9 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04
+# ami-44455e22 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04
 
 aws_region: eu-west-1
 security_group: jenkins-vpc
@@ -145,7 +145,7 @@ subnet_id: subnet-dbac2a82
 instance_profile: JenkinsRole
 dbprofile: mongodb
 amis:
-  nuxeo: ami-8febf3e9
+  nuxeo: ami-44455e22
   mongodb: ami-1c78607a
   elastic: ami-1c78607a
   kafka: ami-d37961b5

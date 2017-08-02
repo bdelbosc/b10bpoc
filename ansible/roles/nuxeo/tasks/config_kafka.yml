@@ -10,7 +10,7 @@
 - name: Config - Kafka brokers
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?kafka.zkServers\s*(.*)'
+    regexp: '^#?kafka.bootstrap.servers\s*(.*)'
     line: "kafka.bootstrap.servers={% for host in groups['kafka'] -%}{{ hostvars[host]['private_ip'] }}:9092{%- if not loop.last %},{% endif -%}{%- endfor %}"
 
 - name: Config - Kafka and Workmanager templates
