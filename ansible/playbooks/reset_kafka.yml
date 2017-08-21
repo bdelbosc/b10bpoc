@@ -1,0 +1,16 @@
+---
+- hosts: kafka
+  gather_facts: no
+  user: ubuntu
+  sudo: yes
+  tasks:
+  - name: Stop kafka
+    service: name=kafkad state=stop
+  - name: Stop zookeeper
+    service: name=zookeeper state=stop
+  - name: Reset Data
+    include: ../roles/kafka/tasks/reset_data.yml
+  - name: Start zookeeper
+    service: name=zookeeper state=start
+  - name: Start kafka
+    service: name=kafkad state=start

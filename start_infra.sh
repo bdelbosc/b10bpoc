@@ -43,7 +43,7 @@ function prepare_deploy_directory() {
   fi
   mkdir $HERE/deploy
   cp $clid $HERE/deploy/ || /bin/true
-  echo "nuxeo-web-jsf" > $HERE/deploy/mp-list
+  echo "nuxeo-jsf-ui" > $HERE/deploy/mp-list
   echo "nuxeo-mqueues-1.0.2-SNAPSHOT" >> $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
   cp -r ./custom/marketplace $HERE/deploy/ || /bin/true

@@ -30,7 +30,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch.reindex.bucketReadSize\s*(.*)'
-    line: "elasticsearch.reindex.bucketReadSize=100000"
+    line: "elasticsearch.reindex.bucketReadSize=10000"
 - name: Config - bucket write
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -40,7 +40,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch.indexing.maxThreads\s*(.*)'
-    line: "elasticsearch.indexing.maxThreads=40"
+    line: "elasticsearch.indexing.maxThreads=30"
 - name: Config - cluster info
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
