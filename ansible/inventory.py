@@ -28,17 +28,17 @@ args = parser.parse_args()
 ec2 = boto.ec2.connect_to_region(region)
 reservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag-key": "bench_role"})
 instances = [i for r in reservations for i in r.instances]
-dbreservations = ec2.get_all_instances(filters={"tag:bench_role": "db", "tag:dbprofile": "*" + dbprofile + "*"})
+dbreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "db", "tag:dbprofile": "*" + dbprofile + "*"})
 dbinstances = [i for r in dbreservations for i in r.instances]
-mongodbreservations = ec2.get_all_instances(filters={"tag:bench_role": "db", "tag:dbprofile": "*mongodb*"})
+mongodbreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "db", "tag:dbprofile": "*mongodb*"})
 mongodbinstances = [i for r in mongodbreservations for i in r.instances]
-elasticreservations = ec2.get_all_instances(filters={"tag:bench_role": "elastic"})
+elasticreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "elastic"})
 elasticinstances = [i for r in elasticreservations for i in r.instances]
-kafkareservations = ec2.get_all_instances(filters={"tag:bench_role": "kafka"})
+kafkareservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "kafka"})
 kafkainstances = [i for r in kafkareservations for i in r.instances]
-monitorreservations = ec2.get_all_instances(filters={"tag:bench_role": "monitor"})
+monitorreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "monitor"})
 monitorinstances = [i for r in monitorreservations for i in r.instances]
-gatlingreservations = ec2.get_all_instances(filters={"tag:bench_role": "gatling"})
+gatlingreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "gatling"})
 gatlinginstances = [i for r in gatlingreservations for i in r.instances]
 
 hostvars = {}

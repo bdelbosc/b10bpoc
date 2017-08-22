@@ -1,0 +1,14 @@
+---
+- name: Step 1 - Set facts
+  set_fact:
+    nbBlobsPerNode: "{{ (impnbBlobs/counts.nuxeo/impnbThreads)|int}}"
+    mqSize: "{{ (counts.nuxeo*impnbThreads)|int }}"
+    pause: "{{ 10 | random }}"
+
+- name: Step 1 - Random pause to prevent conflict in queue creation
+  shell: 'sleep {{pause}}'
+- name: Step 1 - Notify graphite
+  shell:  'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Generating blobs", "tags":"phases import", "data": "Step 1 - From {{inventory_hostname}} nbNuxeo={{counts.nuxeo}} nbThreads={{impnbThreads}} nbBlobs={{nbBlobsPerNode}}"}'''
+- name: Step 1 - Generating blobs
+  shell: 'curl -X POST ''http://localhost:8080/nuxeo/site/automation/MQImporter.runRandomBlobProducers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest''  -d ''{"params":{"nbBlobs": {{nbBlobsPerNode}}, "nbThreads": {{impnbThreads}}, "avgBlobSizeKB": {{impBlobsSizeKB}}, "mqName": "import-blobs", "mqSize": {{mqSize}}, "kafkaConfig": "default"} }'''
+

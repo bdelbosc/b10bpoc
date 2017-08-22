@@ -1,0 +1,11 @@
+---
+- name: Step 2 - Set facts
+  set_fact:
+    pause: "{{ 10 | random }}"
+
+- name: Step 2 - Random pause to prevent conflict in queue creation
+  shell: 'sleep {{pause}}'
+- name: Step 2 - Notify graphite
+  shell:  'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Import blobs", "tags":"phases import", "data": "Step 2 - From {{inventory_hostname}}"}'''
+- name: Step 2 - Uploading blobs into binarystore
+  shell: 'curl -X POST ''http://localhost:8080/nuxeo/site/automation/MQImporter.runBlobConsumers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"blobProviderName": "default", "nbThreads": {{impnbThreads}}, "mqBlobInfo": "import-blobs-info", "mqName": "import-blobs", "kafkaConfig": "default"}}'''

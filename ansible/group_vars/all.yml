@@ -114,10 +114,10 @@ iops: 100
 #impBlobsSizeKB: 1
 
 impnbThreads: 20
-impbatchSize: 20
 impnbNodes:  10000000
 impnbBlobs:    1000
 impBlobsSizeKB: 1
+impbatchSize: 20
 
 # --------------------------------------------------
 # Tag used to flag ec2 used for the bench
