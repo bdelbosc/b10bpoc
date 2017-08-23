@@ -4,25 +4,5 @@
   user: ubuntu
   sudo: yes
   tasks:
-  - include: ../roles/nuxeo/tasks/import_kafka_1.yml
+  - include: ../roles/nuxeo/tasks/import_mqueues_kafka.yml
 
-- hosts: nuxeo
-  gather_facts: no
-  user: ubuntu
-  sudo: yes
-  tasks:
-  - include: ../roles/nuxeo/tasks/import_kafka_2.yml
-
-- hosts: nuxeo
-  gather_facts: no
-  user: ubuntu
-  sudo: yes
-  tasks:
-  - include: ../roles/nuxeo/tasks/import_kafka_3.yml
-
-- hosts: nuxeo
-  gather_facts: no
-  user: ubuntu
-  sudo: yes
-  tasks:
-  - include: ../roles/nuxeo/tasks/import_kafka_4.yml

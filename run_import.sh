@@ -13,6 +13,7 @@ function nuxeo_start() {
 function run_import() {
   pushd ansible
   ansible-playbook -vv -i inventory.py ./playbooks/import.yml -v
+  #ansible-playbook --tags "continue" -vv -i inventory.py ./playbooks/import.yml -v
   popd
 }
 

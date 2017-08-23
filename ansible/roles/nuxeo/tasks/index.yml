@@ -2,7 +2,7 @@
 
 - name: Send graphite event to notify indexing start
   run_once: true
-  shell:  'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Start indexing", "tags":"phases index", "data": "From {{inventory_hostname}}"}'''
+  shell:  'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Indexing", "tags":"phases index", "data": "From {{inventory_hostname}}"}'''
 
 - name: Run imdexing
   run_once: true
