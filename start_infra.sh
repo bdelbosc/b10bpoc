@@ -2,20 +2,21 @@
 # Start the required infra to run a bench
 cd $(dirname $0)
 HERE=`readlink -e .`
-#distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip"
-distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.3-SNAPSHOT.zip"
+distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.10-SNAPSHOT.zip"
 clid=/opt/build/hudson/instance.clid
+profile=b10m
 set -e
 
 function help {
-    echo "Usage: $0 -c<instance.clid> -d<distribution>"
+    echo "Usage: $0 -i<profile> -c<instance.clid> -d<distribution>"
     echo "  -d distribution : nuxeo distribution (default: lastbuild) (see bin/get-nuxeo-distribution.py for details)"
+    echo "  -i profile: b10m, b100m, b1b"
     echo "  -u nuxeo zip url, conflict with -d option"
     echo "  -c instance.clid : path to a nuxeo instance clid"
     exit 0
 }
 
-while getopts "d:c:u:h" opt; do
+while getopts "d:c:u:i:h" opt; do
     case $opt in
         h)
             help
@@ -25,6 +26,9 @@ while getopts "d:c:u:h" opt; do
             ;;
         u)
             distrib_url=$OPTARG
+            ;;
+        i)
+            profile=$OPTARG
             ;;
         c)
             clid=$OPTARG
@@ -44,7 +48,7 @@ function prepare_deploy_directory() {
   mkdir $HERE/deploy
   cp $clid $HERE/deploy/ || /bin/true
   echo "nuxeo-jsf-ui" > $HERE/deploy/mp-list
-  echo "nuxeo-mqueues-1.0.2-SNAPSHOT" >> $HERE/deploy/mp-list
+  echo "nuxeo-mqueues-1.0.3-SNAPSHOT" >> $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
   cp -r ./custom/marketplace $HERE/deploy/ || /bin/true
 }
@@ -72,10 +76,8 @@ function run_ansible() {
   pushd ansible
   # --limit nuxeo
   #  --tags "hh"
-  #ansible-playbook -vv  -i inventory.py --extra-vars "nuxeo_distribution=$distrib_url" site.yml --limit @/home/ben/dev/tools/nuxeo-bench-10b/ansible/site.retry
-  ansible-playbook -vv  -i inventory.py --extra-vars "nuxeo_distribution=$distrib_url" site.yml
-
-
+  set -x
+  ansible-playbook -vv  -i environments/$profile --extra-vars "nuxeo_distribution=$distrib_url" site.yml
   popd
 }
 

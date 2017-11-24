@@ -1,0 +1,57 @@
+---
+# --------------------------------------------------
+# b10m Benchmark 10 Millions
+
+# Type of ec2 to use for testing
+types:
+  mongodb: m4.xlarge
+  nuxeo: c4.xlarge
+  elastic: m4.xlarge
+  gatling: c4.xlarge
+  kafka: c4.xlarge
+  monitor: c4.xlarge
+
+# Number of nodes
+counts:
+  mongodb: 2
+  nuxeo: 2
+  elastic: 1
+  gatling: 1
+  kafka: 1
+  monitor: 1
+
+# ebs volume size per disk per instance: total size for a group is: counts * volsizes * raid0
+volsizes:
+  mongodb: 25
+  nuxeo: 25
+  elastic: 50
+  gatling: 40
+  kafka: 25
+  monitor: 20
+
+voltypes:
+  mongodb: io1
+  elastic: io1
+  nuxeo: gp2
+  gatling: gp2
+  kafka: gp2
+  monitor: gp2
+
+# number of ebs disk to aggregate in raid0
+raid0:
+  mongodb: 2
+  nuxeo: 2
+  elastic: 2
+  gatling: 0
+  kafka: 2
+  monitor: 2
+
+#iops: 2000
+iops: 100
+
+# Mass Import configuration with nuxeo-platform-importer
+impnbThreads: 40
+impnbNodes:  10000000
+impnbBlobs:    10000
+impBlobsSizeKB: 1
+impbatchSize: 20

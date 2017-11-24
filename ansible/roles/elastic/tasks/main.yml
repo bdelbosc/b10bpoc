@@ -21,19 +21,18 @@
     - ca-certificates
     - oracle-java8-set-default
 
-
 # install elastic
 - name: Check if elastic is already setup
   stat: path=/etc/elasticsearch/elasticsearch.yml
   register: stes
 
 - name: Add elastic repo key
-  shell: wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  shell: wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
   sudo: yes
   when: not stes.stat.exists
 
 - name: Add elastic repo
-  shell: echo "deb https://packages.elastic.co/elasticsearch/2.x/debian stable main" | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
+  shell: echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list
   sudo: yes
   when: not stes.stat.exists
 

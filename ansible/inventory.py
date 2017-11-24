@@ -11,7 +11,7 @@ abspath = os.path.abspath(__file__)
 dirname = os.path.dirname(abspath)
 os.chdir(dirname)
 
-f = open("group_vars/all.yml", "r")
+f = open("group_vars/all/000_all.yml", "r")
 default = yaml.load(f)
 f.close()
 

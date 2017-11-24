@@ -1,0 +1,52 @@
+---
+# --------------------------------------------------
+# b1b Benchmark 1 Billion
+
+### Type of ec2
+types:
+  mongodb: m4.4xlarge
+  nuxeo: c4.2xlarge
+  elastic: m4.4xlarge
+  gatling: c4.2xlarge
+  monitor: c4.xlarge
+
+counts:
+  mongodb: 2
+  nuxeo: 2
+  elastic: 2
+  gatling: 1
+  monitor: 1
+
+# ebs volume size per disk per instance: total size for a group is: counts * volsizes * raid0
+volsizes:
+  mongodb: 125  # 1t: 2*4*125, 10kIOPS
+  nuxeo: 200    # 800g: 2*2*200
+  elastic: 180  # 1.44t: 2*4*180, 10kIOPS
+  gatling: 30   # 30g
+  monitor: 30   # 60g: 1*2*30
+
+voltypes:
+  mongodb: io1
+  nuxeo: gp2
+  elastic: io1
+  gatling: gp2
+  monitor: gp2
+
+raid0:
+  mongodb: 4
+  nuxeo: 2
+  elastic: 4
+  gatling: 0
+  monitor: 2
+
+# provisioned iops for io1 ebs disk, limited to 40k iops per region
+iops: 1250
+
+# Mass Import configuration
+impnbThreads: 128
+impbatchSize: 64
+impnbNodes:  1000000000
+impnbBlobs:    10000000
+impBlobsSizeKB: 1
+
+
