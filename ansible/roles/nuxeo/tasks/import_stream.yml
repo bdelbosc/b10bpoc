@@ -1,0 +1,46 @@
+---
+- name: Set facts
+  set_fact:
+    nbBlobsPerThread: "{{ (impnbBlobs/counts.nuxeo/impnbThreads)|int}}"
+    logSize: "{{ (counts.nuxeo*impnbThreads)|int }}"
+    nbDocumentsPerThread: "{{ (impnbNodes/(counts.nuxeo * counts.nuxeo * impnbThreads))|int }}"
+    logueuesBatchThresholdS: "45"
+    totalBlobs: "{{ (counts.nuxeo*impnbThreads*(impnbBlobs/counts.nuxeo/impnbThreads))|int }}"
+    totalDocs: "{{ (counts.nuxeo*counts.nuxeo*impnbThreads*(impnbNodes/(counts.nuxeo * counts.nuxeo * impnbThreads)))|int }}"
+    logPrefix: "nx-imp-"
+    logConfig: "kafka-import"
+    #logConfig: "chronicle-import"
+  tags:
+  - continue
+
+- name: Step 1 - Notify graphite
+  run_once: true
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Step 1 - Generating blobs", "tags":"phases import", "data": "nbNuxeo={{counts.nuxeo}} nbThreads={{impnbThreads}} nbBlobsPerThread={{nbBlobsPerThread}}"}'''
+- name: Step 1 - Generating blobs
+  shell: 'curl $(sleep $(echo $RANDOM % 10 |bc)) -X POST ''http://localhost:8080/nuxeo/site/automation/StreamImporter.runRandomBlobProducers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest''  -d ''{"params":{"nbBlobs": {{nbBlobsPerThread}}, "nbThreads": {{impnbThreads}}, "avgBlobSizeKB": {{impBlobsSizeKB}}, "logName": "{{logPrefix}}blobs", "logSize": {{logSize}}, "logConfig": "{{logConfig}}"} }'''
+
+- name: Step 2 - Notify graphite
+  run_once: true
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Step 2 - Importing blobs", "tags":"phases import", "data": "totalBlobs={{totalBlobs}} "}'''
+- name: Step 2 - Uploading blobs into binarystore
+  shell: 'curl $(sleep $(echo $RANDOM % 10 |bc)) -X POST ''http://localhost:8080/nuxeo/site/automation/StreamImporter.runBlobConsumers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"blobProviderName": "default", "nbThreads": {{impnbThreads}}, "logBlobInfo": "{{logPrefix}}blobs-info", "logName": "{{logPrefix}}blobs", "logConfig": "{{logConfig}}"}}'''
+
+- name: Step 3 - Notify graphite
+  run_once: true
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Step 3 - Generating documents", "tags":"phases import", "data": "nbNuxeo={{counts.nuxeo}} nbThreads={{logSize}} nbDocsPerThread={{nbDocumentsPerThread}}"}'''
+- name: Step 3 - Generating documents
+  shell: 'curl $(sleep $(echo $RANDOM % 10 |bc)) -X POST ''http://localhost:8080/nuxeo/site/automation/StreamImporter.runRandomDocumentProducers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"nbDocuments": {{nbDocumentsPerThread}}, "nbThreads": {{logSize}}, "logBlobInfo": "{{logPrefix}}blobs-info", "logName": "{{logPrefix}}documents", "logSize": {{logSize}}, "logConfig": "{{logConfig}}" }}'''
+
+- name: Step 4 - Notify graphite
+  run_once: true
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Step 4 - Importing documents", "tags":"phases import", "data": "totalDocs={{totalDocs}} nbNuxeo={{counts.nuxeo}} nbThreads={{impnbThreads}} batchSize={{impbatchSize}}"}'''
+  tags:
+  - continue
+- name: Step 4 - Importing documents
+  shell: 'curl -X POST ''http://localhost:8080/nuxeo/site/automation/StreamImporter.runDocumentConsumers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"rootFolder": "/default-domain/workspaces", "nbThreads": {{impnbThreads}}, "logName": "{{logPrefix}}documents", "logConfig": "{{logConfig}}", "batchThresholdS": "{{logueuesBatchThresholdS}}", "batchSize": {{impbatchSize}}}}'''
+  tags:
+  - continue
+
+- name: End - Notify graphite
+  run_once: true
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Import Completed", "tags":"phases import", "data": "End"}'''

@@ -1,0 +1,15 @@
+<component name="org.nuxeo.stream.b10b.config">
+  <require>org.nuxeo.stream.defaultConfig</require>
+
+  <extension target="org.nuxeo.runtime.stream.service" point="logConfig">
+    <logConfig name="kafka-import" type="kafka">
+      <option name="kafkaConfig">default</option>
+    </logConfig>
+    <logConfig name="chronicle-import" type="chronicle">
+      <option name="retention">7d</option>
+    </logConfig>
+  </extension>
+</component>
+
+
+

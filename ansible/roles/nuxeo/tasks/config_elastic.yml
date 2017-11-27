@@ -81,8 +81,8 @@
 - name: Remove contrib that disable es
   file: path=/opt/nuxeo/server/templates/b10b/nxserver/config/disable-es-config.xml state=absent
 
-- name: Setup an Elasticsearch configuration
-  copy:
-    src: ../files/elastic/
-    dest: /opt/nuxeo/server/templates/b10b/nxserver/config
-    owner: nuxeo
+#- name: Setup an Elasticsearch configuration
+#  copy:
+#    src: ../files/elastic/
+#    dest: /opt/nuxeo/server/templates/b10b/nxserver/config
+#    owner: nuxeo

@@ -125,7 +125,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.templates\s*='
-    line: "nuxeo.templates=default,mongodb,perf,b10b"
+    line: "nuxeo.templates=mongodb,perf,b10b"
 - name: Config - db pool
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -212,17 +212,17 @@
   when: not nuxeorunning
 
 # Add custom packages
-- name: Check for custom packages to add
-  stat: path=/deploy/mp-add
-  register: custompkg
-- name: List custom packages
-  command: ls -1 /deploy/mp-add
-  register: pkgaddlist
-  when: custompkg.stat.exists
-- name: Add custom packages
-  command: nuxeoctl mp-add /deploy/mp-add/{{item}}
-  with_items: pkgaddlist.stdout.strip().split('\n')
-  when: custompkg.stat.exists and pkgaddlist.stdout.strip() != ''
+#- name: Check for custom packages to add
+#  stat: path=/deploy/mp-add
+#  register: custompkg
+#- name: List custom packages
+#  command: ls -1 /deploy/mp-add
+#  register: pkgaddlist
+#  when: custompkg.stat.exists
+#- name: Add custom packages
+#  command: nuxeoctl mp-add /deploy/mp-add/{{item}}
+#  with_items: pkgaddlist.stdout.strip().split('\n')
+#  when: custompkg.stat.exists and pkgaddlist.stdout.strip() != ''
 
 # Add S3 config
 - name: Config - nuxeo.s3storage.region

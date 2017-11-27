@@ -4,5 +4,5 @@
   user: ubuntu
   sudo: yes
   tasks:
-  - include: ../roles/nuxeo/tasks/import_mqueues_kafka.yml
+  - include: ../roles/nuxeo/tasks/import_stream.yml
 

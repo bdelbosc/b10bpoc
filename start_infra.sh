@@ -48,9 +48,9 @@ function prepare_deploy_directory() {
   mkdir $HERE/deploy
   cp $clid $HERE/deploy/ || /bin/true
   echo "nuxeo-jsf-ui" > $HERE/deploy/mp-list
-  echo "nuxeo-mqueues-1.0.3-SNAPSHOT" >> $HERE/deploy/mp-list
+#  echo "nuxeo-platform-importer-1.8.3-SNAPSHOT" >> $HERE/deploy/mp-list
   cp -r ./custom/bundles $HERE/deploy/ || /bin/true
-  cp -r ./custom/marketplace $HERE/deploy/ || /bin/true
+  cp -r ./custom/mp-add $HERE/deploy/ || /bin/true
 }
 
 function get_nuxeo_distribution() {
