@@ -15,23 +15,12 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 ## AWS instance
 
-  Use AWS ec2 instance with ephemeral storage instance because SSD is faster than EBS.
+  Use AWS ec2 instance with ssd ebs storage.
 
-  We also expect to have 2 ssd disk so instances must be of type:
+## Stream importer
 
-  - c3.*
-  - m3.*
-  - i2.*
-
-## No attached file (binaries) for mass import
-
-  Importing with attached file is a bottleneck per se. It requires lots of network and storage resources.
-
-  In real life for large import this should be done separately as the Nuxeo document import,
-  by using an existing S3 bucket and/or creating an ad hoc binarystore so data don't have to be moved.
-  This way Nuxeo has just to import a reference to a binary.
-
-  For this bench the attached file per document is a null file so we don't even need to define a binary storage.
+  The mass import is done in 4 steps with the `nuxeo-importer-stream`:
+  TODO 
 
 
 ## Document identifier is a big int sequence
@@ -39,7 +28,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
    Why ?
    - 1b of UUID is 36g of data
    - Generating random uid is an expensive operation and a bottleneck when done concurrently
-   - Index work much better on int than string
+   - Index on UUID are bloated and not as efficient as with bigint.
 
 
 # Tuning
@@ -80,22 +69,9 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
   - No fulltext extraction
   - No audit
   - Elasticsearch disabled
-  - Use Nuxeo patches to make sure that Nuxeo limits the number of MongoDB `find` operations that
-    requires lots of `mongos` resource and prevent write scaling. 
-    
-    The patch are part of the branch: [`test-NXBT-1103-import-tuning-1b`](https://github.com/nuxeo/nuxeo/compare/test-NXBT-1103-import-tuning-1b?expand=1), 
-    the following jars must be present on `./custom/bundles`
-
-    - nuxeo-core-8.4-SNAPSHOT.jar
-    - nuxeo-core-storage-dbs-8.4-SNAPSHOT.jar
-    - nuxeo-core-storage-mongodb-8.4-SNAPSHOT.jar
-    - nuxeo-importer-core-8.4-SNAPSHOT.jar
-
 
 Elasticsearch indexing:
 
-  - Use pristine jars (no more patch)
-  - The Elasticsearch mapping is static and fulltext does not escape html.
   - TODO: describe tuning of bulk mode
 
 
@@ -110,38 +86,25 @@ Elasticsearch indexing:
             IdentityFile "/home/XXX/.ssh/your-key-pair.pem"
 
 
-2. Edit `ansible/group_vars/all.yml` to set your keypair and the ec2 type target for 1b can be:
-
-        types:
-          mongodb: m3.2xlarge
-          nuxeo: c3.4xlarge
-          elastic: i2.2xlarge
-          gatling: c3.2xlarge
-          monitor: c3.xlarge
-        counts:
-          mongodb: 4
-          nuxeo: 2
-          elastic: 3
-          gatling: 1
-          monitor: 1
+2. Edit `ansible/group_vars/all.yml` to set your keypair and region
 
 ## Step 1 - Import
 
-1. Create MongoDB cluster and setup Nuxeo using latest 8.4 snapshot:
+1. Create MongoDB cluster and setup Nuxeo using latest Nuxeo snapshot:
 
-        ./start_infra.sh -c /opt/build/hudson/instance.clid
+        ./start_infra.sh -i b10m -c /opt/build/hudson/instance.clid
 
 
 2. Start Nuxeo and run the importer on each Nuxeo nodes:
 
-        ./run_import.sh
+        ./run_import.sh -i b10m
 
 
 ## Step 2 - Indexing
 
 1. Create an Elasticsearch cluster and reconfigure Nuxeo to use it:
 
-        ./start_elastic.sh
+        ./start_elastic.sh -i b10m
 
 
 2. Run a reindexing process:

@@ -50,44 +50,8 @@ raid0:
 iops: 100
 
 # Mass Import configuration with nuxeo-platform-importer
-impnbThreads: 40
+impnbThreads: 20
 impnbNodes:  100000000
 impnbBlobs:    100000
 impBlobsSizeKB: 1
 impbatchSize: 20
-
-# --------------------------------------------------
-# Tag used to flag ec2 used for the bench
-bench: b10b
-
-# An s3 bucket for the binarystore
-bucket: nuxeo-{{bench}}
-
-# An s3 bucket used to save bench results
-bucket_results: nuxeo-b10b-results
-
-
-# The default Nuxeo distribution to use
-#nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
-nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.10-SNAPSHOT.zip
-
-# AWS config
-# ami-d37961b5 hvm:ebs-ssd 20170619 ubuntu 14.04
-# ami-1c78607a hvm:ebs-io1 20170619 ubuntu 14.04
-# ami-44455e22 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04
-
-aws_region: eu-west-1
-security_group: jenkins-vpc
-subnet_id: subnet-dbac2a82
-instance_profile: JenkinsRole
-dbprofile: mongodb
-amis:
-  nuxeo: ami-44455e22
-  mongodb: ami-1c78607a
-  elastic: ami-1c78607a
-  kafka: ami-d37961b5
-  gatling: ami-d37961b5
-  monitor: ami-d37961b5
-
-# should we apt-get update && apt-get distupgrade ?
-dist_upgrade: false

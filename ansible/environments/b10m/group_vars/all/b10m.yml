@@ -1,6 +1,6 @@
 ---
 # --------------------------------------------------
-# b10m Benchmark 10 Millions
+# b10m Benchmark 10 Million
 
 # Type of ec2 to use for testing
 types:
@@ -50,7 +50,7 @@ raid0:
 iops: 100
 
 # Mass Import configuration with nuxeo-platform-importer
-impnbThreads: 40
+impnbThreads: 20
 impnbNodes:  10000000
 impnbBlobs:    10000
 impBlobsSizeKB: 1
