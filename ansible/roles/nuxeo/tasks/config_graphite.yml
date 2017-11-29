@@ -26,3 +26,8 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?metrics\.tomcat\.enabled\s*='
     line: "metrics.tomcat.enabled=true"
+- name: Config - metrics.log4j
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?metrics\.log4j\.enabled\s*='
+    line: "metrics.log4j.enabled=true"
