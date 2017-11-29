@@ -44,9 +44,28 @@
   shell: "{{ format_cmd }} /dev/md0"
   when: "mounted.stdout == ''"
 
-- name: Mount /ssd
-  mount: name=/ssd fstype={{fstype}} src=/dev/md0 opts=noatime,nodiratime state=mounted
+- name: Label ext4 disk
+  shell: e2label /dev/md0 RAID0
+  when: "mounted.stdout == '' and 'mongodb' not in group_names"
+
+- name: Label xfs disk
+  shell: xfs_admin -L RAID0 /dev/md0
+  when: "mounted.stdout == '' and 'mongodb' in group_names"
+
+- name: Mount {{fstype}} /ssd
+  mount:
+    name: /ssd
+    src: LABEL=RAID0
+    fstype: "{{fstype}}"
+    opts: noatime,nodiratime,nofail
+    state: mounted
   when: mounted.stdout == ""
+
+- name: Persist raid config
+  shell: mdadm --verbose --detail --scan >> /etc/mdadm/mdadm.conf
+  when: "mounted.stdout == ''"
+
+# TODO: persist this setting on boot
 
 - name: Set /ssd read ahead
   # 32 sector is 16k

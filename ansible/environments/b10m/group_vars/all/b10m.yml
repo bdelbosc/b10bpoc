@@ -22,7 +22,7 @@ counts:
 
 # ebs volume size per disk per instance: total size for a group is: counts * volsizes * raid0
 volsizes:
-  mongodb: 25
+  mongodb: 25  # 50g per node, total 100g
   nuxeo: 25
   elastic: 50
   gatling: 40
