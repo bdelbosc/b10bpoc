@@ -1,0 +1,22 @@
+---
+- hosts: kafka
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - name: Wake up kafka
+    service: name=kafkad state=started
+
+- hosts: monitor
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - name: Start docker compose
+    shell: docker-compose up -d
+    args:
+      chdir: /ssd/monitor
+
+- hosts: nuxeo
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - name: Start mongod router

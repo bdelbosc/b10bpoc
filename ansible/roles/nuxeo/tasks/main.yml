@@ -166,7 +166,7 @@
 - name: Config - enable flight recorder
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
-    line: "JAVA_OPTS=$JAVA_OPTS -Dcom.sun.management.jmxremote.autodiscovery=true -Dcom.sun.management.jdp.name=Nuxeo -XX:+UnlockCommercialFeatures -XX:+FlightRecorder"
+    line: "JAVA_OPTS=$JAVA_OPTS -XX:+UnlockCommercialFeatures -XX:+FlightRecorder"
 
 # Tuning
 - name: Config - low softref
