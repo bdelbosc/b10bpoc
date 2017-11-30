@@ -15,8 +15,3 @@
     args:
       chdir: /ssd/monitor
 
-- hosts: nuxeo
-  gather_facts: no
-  sudo: yes
-  tasks:
-  - name: Start mongod router

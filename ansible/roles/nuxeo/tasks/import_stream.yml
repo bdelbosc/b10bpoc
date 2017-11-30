@@ -43,4 +43,4 @@
 
 - name: End - Notify graphite
   run_once: true
-  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Import Completed", "tags":"phases import", "data": "End"}'''
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Step 5 - Import Completed", "tags":"phases import", "data": "{{totalDocs}} docs imported"}'''

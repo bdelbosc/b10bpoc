@@ -12,5 +12,7 @@ nuxeo.dbs.cache.ttl=60
 
 # kafka
 kafka.request.timeout.ms=300000
+kafka.max.poll.records=3
 kafka.max.poll.interval.ms=290000
-kafka.session.timeout.ms=280000
+kafka.session.timeout.ms=30000
+kafka.heartbeat.interval.ms=3000

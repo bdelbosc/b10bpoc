@@ -20,7 +20,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?metrics\.graphite\.period\s*='
-    line: "metrics.graphite.period=15"
+    line: "metrics.graphite.period=30"
 - name: Config - metrics.tomcat.enabled
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf

@@ -111,7 +111,7 @@ batch = 1
 # instance_prefix = instances
 
 # Default Poll Interval (seconds)
-interval = 15
+interval = 30
 
 ################################################################################
 # Default enabled collectors
@@ -178,6 +178,7 @@ enabled = True
 host = 127.0.0.1
 port = 8082
 path = kafka
+metrics_whitelist = Log.LogEndOffset.topic|BrokerTopicMetrics.MessagesInPerSec|BrokerTopicMetrics.TotalProduceRequestsPerSec|GarbageCollector
 {% endif %}
 
 ################################################################################

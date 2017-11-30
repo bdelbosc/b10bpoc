@@ -10,7 +10,7 @@ case "$1" in
   start)
         # Start daemon.
         echo "Starting $DAEMON_NAME";
-        su kafka -c "JMX_PORT=1089 KAFKA_HEAP_OPTS=\"-Xmx4G -Xms4G\" LOG_DIR=\"/ssd/kafka\" nohup $DAEMON_PATH/kafka-server-start.sh -daemon /etc/kafka-server.properties > /ssd/kafka/kafka.log 2>&1 &"
+        su kafka -c "JMX_PORT=1089 KAFKA_HEAP_OPTS=\"-Xmx4G -Xms4G -Dkafka_mx4jenable=true\" LOG_DIR=\"/ssd/kafka\" nohup $DAEMON_PATH/kafka-server-start.sh -daemon /etc/kafka-server.properties > /ssd/kafka/kafka.log 2>&1 &"
         ;;
   stop)
         # Stop daemons.
@@ -18,6 +18,8 @@ case "$1" in
         pid=`ps ax | grep -i 'kafka.Kafka' | grep -v grep | awk '{print $1}'`
         if [ -n "$pid" ]
           then
+          su kafka -c "$DAEMON_PATH/kafka-server-stop.sh"
+          sleep 5
           kill -9 $pid
         else
           echo "Kafka was not Running"
