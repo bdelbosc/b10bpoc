@@ -69,9 +69,6 @@
     },
     "analyzer": {
       "fulltext": {
-        "char_filter": [
-          "html_strip"
-        ],
         "filter": [
           "word_delimiter_filter",
           "lowercase",
