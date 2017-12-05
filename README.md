@@ -19,9 +19,8 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
 ## Stream importer
 
-  The mass import is done in 4 steps with the `nuxeo-importer-stream`:
-  TODO 
-
+  The mass import is done in 4 steps with the [`nuxeo-importer-stream`](https://github.com/nuxeo/nuxeo-platform-importer/tree/master/nuxeo-importer-stream).
+  Using Nuxeo Stream with Kafka configuration. 
 
 ## Document identifier is a big int sequence
 
@@ -37,8 +36,8 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
   We follow the [Performance Best Practices forMongoDB - MongoDB 3.2 March 2016](https://www.mongodb.com/collateral/mongodb-performance-best-practices):
 
+  - Use a RAID 0 of EBS io1 disk with provisioned IO
   - Use `XFS` filesystem, `atime` and `diratime` disabled
-  - Use different disk for data and index
   - `readahead` block size to 32 (16kb)
   - Use a `NOOP` scheduler
   - Huge pages disabled
@@ -53,6 +52,7 @@ Helper script to deploy tuned Nuxeo/MongoDB on AWS.
 
   We follow the Elasticsearch best practices:
 
+  - Use a RAID 0 of EBS io1 disk with provisioned IO
   - Use `ext4` filestystem, atime and diratime disabled
   - use multiple drives to stripe data across them via multiple path.data directories
   - Disable merge throttling entirely
@@ -76,6 +76,9 @@ Elasticsearch indexing:
 
 
 # Running
+
+There is multiple profile: b10m for 10 millions, b100m for 100 million and b1b for 1 billion.
+Use `i` option in shell script like: `-i b100m`.  
 
 ## Configure access and nodes
 
@@ -129,9 +132,25 @@ Save all metrics in an s3 bucket:
 
         ./save_results.sh
 
+
+## Pause and resume
+
+Simple as:
+
+        ./pause.sh
+        ./resume.sh
+
+
 ## Shutdown all resources
 
        ./terminate_infra.sh
+
+
+## Misc
+
+      cd ansible
+      ansible -i inventory.py mongodb -m ping
+      
 
 # About Nuxeo
 

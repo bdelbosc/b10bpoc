@@ -5,12 +5,12 @@
   sudo: yes
   tasks:
   - name: Stop kafka
-    service: name=kafkad state=stop
+    service: name=kafkad state=stopped
   - name: Stop zookeeper
-    service: name=zookeeper state=stop
+    service: name=zookeeper state=stopped
   - name: Reset Data
     include: ../roles/kafka/tasks/reset_data.yml
   - name: Start zookeeper
-    service: name=zookeeper state=start
+    service: name=zookeeper state=started
   - name: Start kafka
-    service: name=kafkad state=start
+    service: name=kafkad state=started

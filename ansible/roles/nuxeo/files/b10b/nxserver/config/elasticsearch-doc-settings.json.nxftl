@@ -1,5 +1,6 @@
 {
   "index.translog.durability": "${elasticsearch.index.translog.durability}",
+  "index.refresh_interval": "30s",
 <#if "${elasticsearch.addressList}" != "">
   "number_of_shards": "${elasticsearch.indexNumberOfShards}",
   "number_of_replicas": "${elasticsearch.indexNumberOfReplicas}",

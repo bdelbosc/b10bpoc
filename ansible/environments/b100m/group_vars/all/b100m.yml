@@ -47,7 +47,7 @@ raid0:
   monitor: 2
 
 #iops: 2000
-iops: 100
+iops: 1000
 
 # Mass Import configuration with nuxeo-platform-importer
 impnbThreads: 20

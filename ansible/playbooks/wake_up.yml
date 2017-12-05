@@ -15,3 +15,9 @@
     args:
       chdir: /ssd/monitor
 
+- hosts: elastic
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - name: Wake up elastic
+    service: name=elasticsearch state=started

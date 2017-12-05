@@ -1,0 +1,8 @@
+---
+
+- name: Erase all kafka data
+  shell: rm -rf /ssd/kafka/*
+
+- name: Erase all zookeeper
+  shell: rm -rf /var/lib/zookeeper/*
+

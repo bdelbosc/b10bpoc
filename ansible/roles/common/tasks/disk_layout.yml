@@ -38,19 +38,19 @@
 
 - name: Create raid0 volume for 1 disk :)
   shell: mdadm --create --run --verbose /dev/md0 --level=0 --raid-devices=1 --force /dev/xvdf
-  when: "mounted.stdout == '' and raid0[group_names[0]] < 2"
+  when: "mounted.stdout == '' and raid0[group_names[0]] == 1"
 
 - name: Format raid0 /ssd volume
   shell: "{{ format_cmd }} /dev/md0"
-  when: "mounted.stdout == ''"
+  when: "mounted.stdout == '' and raid0[group_names[0]] > 0"
 
 - name: Label ext4 disk
   shell: e2label /dev/md0 RAID0
-  when: "mounted.stdout == '' and 'mongodb' not in group_names"
+  when: "mounted.stdout == '' and 'mongodb' not in group_names and raid0[group_names[0]] > 0"
 
 - name: Label xfs disk
   shell: xfs_admin -L RAID0 /dev/md0
-  when: "mounted.stdout == '' and 'mongodb' in group_names"
+  when: "mounted.stdout == '' and 'mongodb' in group_names and raid0[group_names[0]] > 0"
 
 - name: Mount {{fstype}} /ssd
   mount:
@@ -59,11 +59,11 @@
     fstype: "{{fstype}}"
     opts: noatime,nodiratime,nofail
     state: mounted
-  when: mounted.stdout == ""
+  when: "mounted.stdout == '' and raid0[group_names[0]] > 0"
 
 - name: Persist raid config
   shell: mdadm --verbose --detail --scan >> /etc/mdadm/mdadm.conf
-  when: "mounted.stdout == ''"
+  when: "mounted.stdout == '' and raid0[group_names[0]] > 0"
 
 # TODO: persist this setting on boot
 
@@ -74,7 +74,7 @@
 
 - name: Use noop scheduler /ssd
   shell: echo noop > /sys/block/md0/queue/scheduler
-  when: mounted.stdout == ""
+  when: "mounted.stdout == '' and raid0[group_names[0]] > 0"
 
 # hugepage
 - name: Disable hugepage defrag
