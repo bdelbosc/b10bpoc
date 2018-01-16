@@ -4,5 +4,5 @@
   user: ubuntu
   sudo: yes
   tasks:
-  - include: ../roles/nuxeo/tasks/import_stream.yml
+  - include: ../roles/nuxeo/tasks/import_file_stream.yml
 

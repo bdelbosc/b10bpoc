@@ -94,6 +94,8 @@
   when: not nuxeoserver.stat.exists
 - name: Make nuxeoctl executable
   file: path=/opt/nuxeo/server/bin/nuxeoctl mode=0755
+- name: Make stream.sh executable
+  file: path=/opt/nuxeo/server/bin/stream.sh mode=0755
 - name: Check for instance.clid
   stat: path=/deploy/instance.clid
   register: instanceclid
