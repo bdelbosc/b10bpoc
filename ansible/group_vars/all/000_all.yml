@@ -14,7 +14,7 @@ bucket_results: nuxeo-b10b-results
 
 # The default Nuxeo distribution to use
 #nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
-nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-9.10-SNAPSHOT.zip
+nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-10.1-SNAPSHOT.zip
 
 # AWS config
 # ami-d37961b5 hvm:ebs-ssd 20170619 ubuntu 14.04
