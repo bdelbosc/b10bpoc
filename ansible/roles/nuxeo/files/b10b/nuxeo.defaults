@@ -16,3 +16,8 @@ kafka.max.poll.records=3
 kafka.max.poll.interval.ms=290000
 kafka.session.timeout.ms=30000
 kafka.heartbeat.interval.ms=3000
+
+# s3 for import
+nuxeo.s3storage.cachesize=100MB
+nuxeo.s3storage.cachecount=200
+nuxeo.s3storage.cacheminage=1
