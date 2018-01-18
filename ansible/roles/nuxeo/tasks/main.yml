@@ -127,7 +127,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.templates\s*='
-    line: "nuxeo.templates=mongodb,perf,b10b"
+    line: "nuxeo.templates=mongodb, b10b"
 - name: Config - db pool
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
@@ -272,8 +272,21 @@
   when: custombundles.stat.exists
   failed_when: False
 
+- name: Check for custom lib
+  stat: path=/deploy/lib
+  register: customlib
+
+- name: Copy custom lib
+  shell: cp -a /deploy/lib/* /opt/nuxeo/server/nxserver/lib/
+  when: customlib.stat.exists
+  failed_when: False
+
 - name: Add history
   copy: src=bash_history dest=/opt/nuxeo/.bash_history owner=nuxeo force=no
 
 - name: Make sure nuxeo is the owner
   file: dest=/opt/nuxeo/ owner=nuxeo group=nuxeo recurse=yes
+
+# Copy metdia files
+- name: Copy media files
+  include: ./copy_media.yml

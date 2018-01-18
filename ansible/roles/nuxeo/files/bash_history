@@ -1,5 +1,7 @@
 tail -f /opt/nuxeo/server/nxserver/*.csv
 less /opt/nuxeo/logs/server.log
 jcmd Bootstrap JFR.start duration=60s filename=/opt/nuxeo/logs/record-00.jfr
+/opt/nuxeo/server/bin/stream.sh lag -k /opt/nuxeo/server/nxserver/config/kafka-config.xml
+
 redis-cli -h nuxeo1
 mongo --host nuxeo1

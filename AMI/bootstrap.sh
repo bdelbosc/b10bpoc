@@ -24,9 +24,11 @@ curl -sSL https://get.docker.com/ | sh
 # Compile & install ffmpeg
 git clone git://github.com/nuxeo/nuxeo-tools-docker.git
 pushd nuxeo-tools-docker/ffmpeg
+# to get mpeg 4 support
+perl -pi -e "s,build-all.sh false,build-all.sh true,g" package-all.sh
 docker build -t nuxeo/ffmpeg-deb-pkg .
 docker run --rm=true -v $(pwd)/packages:/packages:rw nuxeo/ffmpeg-deb-pkg
-dpkg -i packages/ffmpeg-nuxeo_2.7.2-1_amd64.deb
+dpkg -i packages/ffmpeg-nuxeo_2.8.12-1_amd64.deb
 popd
 rm -rf nuxeo-tools-docker
 docker images -q | xargs docker rmi

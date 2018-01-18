@@ -36,3 +36,5 @@ amis:
 
 # should we apt-get update && apt-get distupgrade ?
 dist_upgrade: false
+
+use_oracle_jdk: false

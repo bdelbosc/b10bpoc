@@ -11,7 +11,7 @@
     basePath: "/ssd/files"
     watermark: "b10b"
     logPrefix: "nx-imp-"
-    logConfig: "default"
+    logConfig: "kafka-import"
     #logConfig: "chronicle-import"
   tags:
   - continue
@@ -40,7 +40,7 @@
   tags:
   - continue
 - name: Step 4 - Importing documents
-  shell: 'curl -X POST ''http://localhost:8080/nuxeo/site/automation/StreamImporter.runDocumentConsumers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"rootFolder": "/default-domain/workspaces", "nbThreads": {{impnbThreads}}, "logName": "{{logPrefix}}documents", "logConfig": "{{logConfig}}", "batchThresholdS": "{{logueuesBatchThresholdS}}", "batchSize": {{impbatchSize}}}}'''
+  shell: 'curl -XPOST ''http://localhost:8080/nuxeo/site/automation/StreamImporter.runDocumentConsumers'' -u Administrator:Administrator -H ''content-type: application/json+nxrequest'' -d ''{"params":{"rootFolder": "/default-domain/workspaces", "nbThreads": {{impnbThreads}}, "logName": "{{logPrefix}}documents", "logConfig": "{{logConfig}}", "batchThresholdS": "{{logueuesBatchThresholdS}}", "batchSize": {{impbatchSize}}}}'''
   tags:
   - continue
 

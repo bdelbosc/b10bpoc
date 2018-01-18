@@ -1,0 +1,9 @@
+---
+- name: Create a files directory
+  file: path=/ssd/files state=directory owner=nuxeo group=nuxeo mode=0755
+
+- name: Get the media files
+  shell: "aws --region {{aws_region}} s3 sync s3://nuxeo-benchmarks-media/ /ssd/files/"
+
+- name: Setup ffmeg with MPEG 4 support
+  shell: "dpkg -i /ssd/files/ffmpeg-nuxeo_2.8.12-1_amd64.deb"
