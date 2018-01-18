@@ -127,7 +127,7 @@
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.templates\s*='
-    line: "nuxeo.templates=mongodb, b10b"
+    line: "nuxeo.templates=mongodb,b10b"
 - name: Config - db pool
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
