@@ -25,9 +25,10 @@ kafka.session.timeout.ms=30000
 kafka.heartbeat.interval.ms=3000
 
 # s3 for import
-nuxeo.s3storage.cachesize=100MB
-nuxeo.s3storage.cachecount=200
-nuxeo.s3storage.cacheminage=1
+nuxeo.s3storage.cachesize=1000MB
+nuxeo.s3storage.cachecount=2000
+# in seconds
+nuxeo.s3storage.cacheminage=120
 
 
 # Tune Elasticsearch indexing
