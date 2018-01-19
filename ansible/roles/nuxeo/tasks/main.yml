@@ -176,11 +176,11 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?JAVA_OPTS\s*(.*)SoftRefLRUPolicyMSPerMB'
     line: "JAVA_OPTS=$JAVA_OPTS -XX:SoftRefLRUPolicyMSPerMB=1"
-- name: Config - Disable fulltext
-  lineinfile:
-    dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?nuxeo.vcs.fulltext.disabled\s*(.*)'
-    line: "nuxeo.vcs.fulltext.disabled=true"
+#- name: Config - Disable fulltext
+#  lineinfile:
+#    dest: /opt/nuxeo/conf/nuxeo.conf
+#    regexp: '^#?nuxeo.vcs.fulltext.disabled\s*(.*)'
+#    line: "nuxeo.vcs.fulltext.disabled=true"
 - name: Config - Disable elastic
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf

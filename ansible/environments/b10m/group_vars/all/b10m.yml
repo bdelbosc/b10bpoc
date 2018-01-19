@@ -55,3 +55,10 @@ impnbNodes:  1000000
 impnbBlobs:    10000
 impBlobsSizeKB: 1
 impbatchSize: 20
+
+# Test
+#impnbThreads: 2
+#impnbNodes:  500
+#impnbBlobs:    100
+#impBlobsSizeKB: 1
+#impbatchSize: 10

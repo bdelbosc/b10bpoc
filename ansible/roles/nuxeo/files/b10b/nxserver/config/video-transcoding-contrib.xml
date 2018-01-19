@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<component name="b10b-video-config">
-  <require>org.nuxeo.ecm.platform.video.service.contrib</require>
-  <extension point="automaticVideoConversions" target="org.nuxeo.ecm.platform.video.service.VideoService">
-    <automaticVideoConversion name="WebM 480p" order="10" enabled="false"/>
-  </extension>
-</component>

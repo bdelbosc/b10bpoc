@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<component name="b10b-binary-metadata-config">
+<component name="b10b-picture-exif-config">
   <require>org.nuxeo.ecm.platform.picture.binary.metadata.contrib</require>
   <extension point="metadataRules" target="org.nuxeo.binary.metadata">
     <rule async="true" enabled="true" id="iptc" order="0">

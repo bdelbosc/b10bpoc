@@ -1,5 +1,9 @@
 b10b.target=.
 
+# disable dbs fulltext search not fulltext extraction
+nuxeo.vcs.fulltext.disabled=false
+nuxeo.vcs.fulltext.search.disabled=true
+
 # Use a descent cache size for directories
 nuxeo.cache.maxsize=510
 nuxeo.cache.ttl=20
@@ -25,11 +29,10 @@ kafka.session.timeout.ms=30000
 kafka.heartbeat.interval.ms=3000
 
 # s3 for import
-nuxeo.s3storage.cachesize=1000MB
-nuxeo.s3storage.cachecount=2000
+nuxeo.s3storage.cachesize=3000MB
+nuxeo.s3storage.cachecount=1200000
 # in seconds
 nuxeo.s3storage.cacheminage=120
-
 
 # Tune Elasticsearch indexing
 elasticsearch.indexing.maxThreads=6
