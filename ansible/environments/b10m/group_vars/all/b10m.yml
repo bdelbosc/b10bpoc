@@ -1,13 +1,13 @@
 ---
 # --------------------------------------------------
-# b10m Benchmark 10 Million
+# b10m custom config for DAM
 
 # Type of ec2 to use for testing
 types:
-  mongodb: m4.xlarge
-  nuxeo: c4.xlarge
-  elastic: m4.xlarge
-  gatling: c4.xlarge
+  mongodb: m4.2xlarge
+  nuxeo: c4.2xlarge
+  elastic: c4.4xlarge
+  gatling: c4.2xlarge
   kafka: c4.xlarge
   monitor: c4.xlarge
 
@@ -22,17 +22,17 @@ counts:
 
 # ebs volume size per disk per instance: total size for a group is: counts * volsizes * raid0
 volsizes:
-  mongodb: 25  # 50g per node, total 100g
-  nuxeo: 25
-  elastic: 50
+  mongodb: 50  # 100g per node -> 200g total
+  nuxeo: 50    # 100g per node -> 200g total
+  elastic: 100 # 200g per node -> 200g total
+  kafka: 50    # 100g per node -> 100g total
   gatling: 40
-  kafka: 25
   monitor: 20
 
 voltypes:
   mongodb: io1
   elastic: io1
-  nuxeo: gp2
+  nuxeo: io1
   gatling: gp2
   kafka: gp2
   monitor: gp2
@@ -47,14 +47,14 @@ raid0:
   monitor: 2
 
 #iops: 2000
-iops: 100
+iops: 300
 
 # Mass Import configuration with nuxeo-platform-importer
 impnbThreads: 20
-impnbNodes:  1000000
-impnbBlobs:    10000
-impBlobsSizeKB: 1
-impbatchSize: 20
+impnbNodes:  10000000
+impnbBlobs:     10000
+impBlobsSizeKB:  1
+impbatchSize: 10
 
 # Test
 #impnbThreads: 2

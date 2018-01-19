@@ -5,12 +5,12 @@
   <extension target="org.nuxeo.ecm.core.work.service" point="queues">
     <!-- make video conversion thread pool greater to one to scale on multi node -->
     <queue id="videoConversion">
-      <maxThreads>2</maxThreads>
+      <maxThreads>4</maxThreads>
     </queue>
 
     <!-- create a dedicated pool for thumbnail -->
     <queue id="updateThumbListener">
-      <maxThreads>2</maxThreads>
+      <maxThreads>4</maxThreads>
       <category>updateThumbListener</category>
     </queue>
 

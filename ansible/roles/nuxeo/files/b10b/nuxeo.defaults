@@ -35,10 +35,9 @@ nuxeo.s3storage.cachecount=1200000
 nuxeo.s3storage.cacheminage=120
 
 # Tune Elasticsearch indexing
-elasticsearch.indexing.maxThreads=6
+elasticsearch.indexing.maxThreads=4
 elasticsearch.reindex.bucketReadSize=1000
 elasticsearch.reindex.bucketWriteSize=200
-#elasticsearch.indexing.clearCompletedAfterSeconds=30
 elasticsearch.adminCenter.displayClusterInfo=true
 elasticsearch.index.translog.durability=async
 
