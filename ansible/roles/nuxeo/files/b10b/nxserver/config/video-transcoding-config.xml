@@ -8,10 +8,11 @@
     <automaticVideoConversion name="WebM 480p" order="10" enabled="false" />
   </extension>
 
-  <!-- make listener async because it access the blob -->
+  <!-- Replace the default sync listener that is slow and generate too much async works -->
   <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
-    <listener name="videoChangedListener" async="true" postCommit="true"
-      class="org.nuxeo.ecm.platform.video.listener.VideoChangedListener" priority="20">
+    <listener name="videoChangedListener" enabled="false" />
+    <listener name="videoImportListener" async="false" postCommit="false"
+      class="org.nuxeo.ecm.platform.video.listener.VideoImportListener" priority="20">
       <event>documentCreated</event>
     </listener>
   </extension>

@@ -181,7 +181,7 @@
 #    dest: /opt/nuxeo/conf/nuxeo.conf
 #    regexp: '^#?nuxeo.vcs.fulltext.disabled\s*(.*)'
 #    line: "nuxeo.vcs.fulltext.disabled=true"
-- name: Config - Disable elastic
+- name: Config - Disable elastic for import
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?elasticsearch.enabled\s*(.*)'
@@ -191,6 +191,13 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?audit.elasticsearch.enabled=\s*(.*)'
     line: "audit.elasticsearch.enabled=false"
+
+# Disable async work processing
+- name: Config - Disable Async work processing for import
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?nuxeo.stream.work.processing.disable=\s*(.*)'
+    line: "nuxeo.stream.work.processing.disable=true"
 
 # Monitoring
 - name: Config - enable flame graph
@@ -236,11 +243,6 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.s3storage\.bucket\s*='
     line: "nuxeo.s3storage.bucket={{bucket}}"
-- name: Config - nuxeo.s3storage.cachesize
-  lineinfile:
-    dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?nuxeo\.s3storage\.cachesize\s*='
-    line: "nuxeo.s3storage.cachesize=100MB"
 
 - name: Install S3 package
   shell: nuxeoctl --relax=false --accept=true mp-install amazon-s3-online-storage
