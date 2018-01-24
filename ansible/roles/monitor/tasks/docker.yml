@@ -76,23 +76,18 @@
     line: "DEFAULT_FORWARD_POLICY=\"ACCEPT\""
   when: ufw_default_exists.stat.exists
 
-- name: Change docker root
+- name: Change systemd docker root
   lineinfile:
-    dest: /etc/default/docker
-    regexp: "^#?DOCKER_OPTS="
-    line: "DOCKER_OPTS=\"-g /ssd/docker\""
-    #line: "DOCKER_OPTS=\"-dns 8.8.8.8 -dns 8.8.4.4 -g /ssd/docker\""
+    dest: /lib/systemd/system/docker.service
+    regexp: "^ExecStart="
+    line: "ExecStart=/usr/bin/dockerd -H fd:// -g /ssd/docker"
   when: ufw_default_exists.stat.exists
 
 - name: Stop docker
-  service:
-    name: docker
-    state: stopped
+  shell: /etc/init.d/docker stop
 
 - name: Move docker
   shell: mv /var/lib/docker /ssd/docker
 
 - name: Start docker
-  service:
-    name: docker
-    state: started
+  shell: /etc/init.d/docker start
