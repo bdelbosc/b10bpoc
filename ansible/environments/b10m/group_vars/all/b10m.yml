@@ -4,9 +4,9 @@
 
 # Type of ec2 to use for testing
 types:
-  mongodb: m4.2xlarge
-  nuxeo: c4.4xlarge
-  elastic: c4.4xlarge
+  mongodb: m5.2xlarge
+  nuxeo: c5.4xlarge
+  elastic: c5.4xlarge
   gatling: c4.2xlarge
   kafka: c4.xlarge
   monitor: c4.xlarge
@@ -55,6 +55,13 @@ impnbNodes:  10000000
 impnbBlobs:     10000
 impBlobsSizeKB:  1
 impbatchSize: 10
+
+
+#impnbThreads: 20
+#impnbNodes:   100000
+#impnbBlobs:     1000
+#impBlobsSizeKB:  1
+#impbatchSize: 10
 
 # Test
 #impnbThreads: 2
