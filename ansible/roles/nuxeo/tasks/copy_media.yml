@@ -5,5 +5,6 @@
 - name: Get the media files
   shell: "aws --region {{aws_region}} s3 sync s3://nuxeo-benchmarks-media/ /ssd/files/"
 
-- name: Setup ffmeg with MPEG 4 support
-  shell: "dpkg -i /ssd/files/ffmpeg-nuxeo_2.8.12-1_amd64.deb"
+# already present with ami-cc1473b5
+#- name: Setup ffmeg with MPEG 4 support
+#  shell: "dpkg -i /ssd/files/ffmpeg-nuxeo_2.8.12-1_amd64.deb"

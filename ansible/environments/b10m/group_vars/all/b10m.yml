@@ -7,9 +7,9 @@ types:
   mongodb: m5.2xlarge
   nuxeo: c5.4xlarge
   elastic: c5.4xlarge
-  gatling: c4.2xlarge
-  kafka: c4.xlarge
-  monitor: c4.xlarge
+  gatling: c5.2xlarge
+  kafka: c5.xlarge
+  monitor: c5.xlarge
 
 # Number of nodes
 counts:

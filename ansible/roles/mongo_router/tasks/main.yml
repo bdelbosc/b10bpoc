@@ -2,7 +2,7 @@
 # Setup mongos router
 
 - name: Check if mongos is already setup
-  stat: path=/etc/init/mongos.conf
+  stat: path=/etc/systemd/system/mongos.service
   register: sts
 
 - name: Install mongos
@@ -19,8 +19,11 @@
 - name: Set mongos configuration file
   template: src=mongos.conf.j2 dest=/etc/mongos.conf
 
-- name: Set mongos upstart file
-  template: src=mongos.j2 dest=/etc/init/mongos.conf
+#- name: Set mongos upstart file
+#  template: src=mongos.j2 dest=/etc/init/mongos.conf
+
+- name: Set mongos systemd file
+  copy: src=mongos.service dest=/etc/systemd/system/mongos.service
 
 - name: Restart mongos
   service: name=mongos state=restarted

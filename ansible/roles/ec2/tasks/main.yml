@@ -69,7 +69,8 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    device_name: /dev/xvdf
+    device_name: /dev/nvme1n1
+#    device_name: /dev/xvdf
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"
@@ -81,7 +82,8 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    device_name: /dev/xvdg
+    #device_name: /dev/xvdg
+    device_name: /dev/nvme2n1
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"
@@ -93,7 +95,8 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    device_name: /dev/xvdh
+    #device_name: /dev/xvdh
+    device_name: /dev/nvme3n1
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"
@@ -105,7 +108,8 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    device_name: /dev/xvdi
+    #device_name: /dev/xvdi
+    device_name: /dev/nvme4n1
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"

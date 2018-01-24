@@ -1,7 +1,7 @@
 ---
 # mongocs or mongo config server replica set setup
 - name: Check if mongocs is already setup
-  stat: path=/etc/init/mongocs.conf
+  stat: path=/etc/systemd/system/mongocs.service
   register: stcs
 
 - name: Install mongo
@@ -13,8 +13,11 @@
 - name: Set mongocs configuration file
   template: src=mongocs.conf.j2 dest=/etc/mongocs.conf
 
-- name: Set mongocs upstart file
-  template: src=mongocs.j2 dest=/etc/init/mongocs.conf
+#- name: Set mongocs upstart file
+#  template: src=mongocs.j2 dest=/etc/init/mongocs.conf
+
+- name: Set mongocs systemd file
+  copy: src=mongocs.service dest=/etc/systemd/system/mongocs.service
 
 - name: Create mongocs directory
   file: path=/ssd/mongocs state=directory owner=mongodb group=mongodb

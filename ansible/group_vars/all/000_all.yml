@@ -20,7 +20,7 @@ nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tom
 # ami-d37961b5 hvm:ebs-ssd 20170619 ubuntu 14.04
 # ami-1c78607a hvm:ebs-io1 20170619 ubuntu 14.04
 # ami-7a187c03 hvm:ebs-ssd 20180122 ubuntu 16.04
-# ami-44455e22 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04
+# ami-44455e22 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04 ffmeg broken
 # ami-cc1473b5 nuxeo base on ami-7a187c03 hvm:ebs-ssd 20180122 ubuntu 16.04
 
 aws_region: eu-west-1
@@ -32,9 +32,9 @@ amis:
   nuxeo: ami-cc1473b5
   mongodb: ami-7a187c03
   elastic: ami-7a187c03
-  kafka: ami-1c78607a
-  gatling: ami-1c78607a
-  monitor: ami-1c78607a
+  kafka: ami-7a187c03
+  gatling: ami-7a187c03
+  monitor: ami-7a187c03
 
 # should we apt-get update && apt-get distupgrade ?
 dist_upgrade: false

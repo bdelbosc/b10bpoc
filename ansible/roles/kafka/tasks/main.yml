@@ -71,4 +71,5 @@
   file: path=/ssd/kafka state=directory owner=kafka group=kafka mode=0755
 
 - name: Start kafka
-  service: name=kafkad state=started
+  shell: /etc/init.d/kafkad start
+#  service: name=kafkad state=started

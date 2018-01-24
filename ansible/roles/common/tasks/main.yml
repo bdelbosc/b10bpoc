@@ -65,4 +65,4 @@
     line: "INTERVAL=120"
   notify: Restart atop
 
-- include: disk_layout.yml
+- include: disk_layout_nvme.yml
