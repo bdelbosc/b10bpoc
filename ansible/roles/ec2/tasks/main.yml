@@ -11,8 +11,8 @@
     instance_tags:
       bench: "{{bench}}"
       bench_role: "{{type}}"
-      billing-category: build
-      billing-subcategory: bench
+      billing-category: "{{billing-category}}"
+      billing-subcategory: "{{billing-subcategory}}"
     state: "running"
     wait: yes
   when: stopped_instances.stdout != ""
@@ -55,8 +55,8 @@
       Name: bench-{{bench}}-{{type}}
       bench: "{{bench}}"
       bench_role: "{{type}}"
-      billing-category: build
-      billing-subcategory: bench
+      billing-category: "{{billing-category}}"
+      billing-subcategory: "{{billing-subcategory}}"
       bench_tag: "{{stamp_tag}}"
     exact_count: "{{counts[type]}}"
     count_tag:
@@ -69,8 +69,7 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    device_name: /dev/nvme1n1
-#    device_name: /dev/xvdf
+    device_name: /dev/xvdf
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"
@@ -82,8 +81,7 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    #device_name: /dev/xvdg
-    device_name: /dev/nvme2n1
+    device_name: /dev/xvdg
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"
@@ -95,8 +93,7 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    #device_name: /dev/xvdh
-    device_name: /dev/nvme3n1
+    device_name: /dev/xvdh
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"
@@ -108,8 +105,7 @@
   ec2_vol:
     instance: "{{ item.id }}"
     region: "{{aws_region}}"
-    #device_name: /dev/xvdi
-    device_name: /dev/nvme4n1
+    device_name: /dev/xvdi
     volume_type: "{{voltypes[type]}}"
     volume_size: "{{volsizes[type]}}"
     iops: "{{iops}}"
