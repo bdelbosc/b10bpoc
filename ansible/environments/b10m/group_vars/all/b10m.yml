@@ -6,6 +6,7 @@
 types:
   mongodb: m5.2xlarge
   nuxeo: c5.4xlarge
+  nuxeospot: c5.4xlarge
   elastic: c5.4xlarge
   gatling: c5.2xlarge
   kafka: c5.xlarge
@@ -15,6 +16,7 @@ types:
 counts:
   mongodb: 2
   nuxeo: 2
+  nuxeospot: 1
   elastic: 1
   gatling: 1
   kafka: 1
@@ -24,6 +26,7 @@ counts:
 volsizes:
   mongodb: 50  # 100g per node -> 200g total
   nuxeo: 50    # 100g per node -> 200g total
+  nuxeospot: 50    # 1 disk
   elastic: 100 # 200g per node -> 200g total
   kafka: 50    # 100g per node -> 100g total
   gatling: 40
@@ -33,6 +36,7 @@ voltypes:
   mongodb: io1
   elastic: io1
   nuxeo: io1
+  nuxeospot: gp2
   gatling: gp2
   kafka: gp2
   monitor: gp2
@@ -41,10 +45,15 @@ voltypes:
 raid0:
   mongodb: 2
   nuxeo: 2
+  nuxeospot: 1
   elastic: 2
   gatling: 0
   kafka: 2
   monitor: 2
+
+# To use spot instance set a price
+spot_price:
+  nuxeospot: "0.3"
 
 #iops: 2000
 iops: 500

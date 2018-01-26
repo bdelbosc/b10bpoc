@@ -1,0 +1,6 @@
+---
+- name: Config - Enable Async work processing for import
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?nuxeo.stream.work.processing.disable=\s*(.*)'
+    line: "#nuxeo.stream.work.processing.disable=true"

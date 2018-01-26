@@ -40,13 +40,15 @@ monitorreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:be
 monitorinstances = [i for r in monitorreservations for i in r.instances]
 gatlingreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "gatling"})
 gatlinginstances = [i for r in gatlingreservations for i in r.instances]
+nuxeospotreservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag:bench_role": "nuxeospot"})
+nuxeospotinstances = [i for r in nuxeospotreservations for i in r.instances]
 
 hostvars = {}
 groups = {}
 
 allinstances = []
 allids = []
-for i in instances + dbinstances + mongodbinstances + elasticinstances + kafkainstances + monitorinstances + gatlinginstances:
+for i in instances + dbinstances + mongodbinstances + elasticinstances + kafkainstances + monitorinstances + gatlinginstances + nuxeospotinstances:
     if i.id not in allids:
         allinstances.append(i)
         allids.append(i.id)
@@ -95,9 +97,12 @@ if "kafka" not in inventory:
     inventory["kafka"] = {}
 if "gatling" not in inventory:
     inventory["gatling"] = {}
+if "nuxeospot" not in inventory:
+    inventory["nuxeospot"] = {}
 if "monitor" not in inventory:
     inventory["monitor"] = {}
 inventory["nuxeo"]["vars"] = {"db_hosts": [], "elastic_hosts": [], "mongodb_hosts": [], "kafka_hosts": [], "monitor_hosts": []}
+inventory["nuxeospot"]["vars"] = {"db_hosts": [], "elastic_hosts": [], "mongodb_hosts": [], "kafka_hosts": [], "monitor_hosts": []}
 inventory["elastic"]["vars"] = {"monitor_hosts": []}
 inventory["mongodb"]["vars"] = {"monitor_hosts": []}
 inventory["kafka"]["vars"] = {"monitor_hosts": []}
@@ -107,18 +112,23 @@ inventory["gatling"]["vars"] = {"monitor_hosts": []}
 if "db" in groups:
     for i in groups["db"]["hosts"]:
         inventory["nuxeo"]["vars"]["db_hosts"].append(hostvars[i]["private_ip"])
+        inventory["nuxeospot"]["vars"]["db_hosts"].append(hostvars[i]["private_ip"])
 if "elastic" in groups:
     for i in groups["elastic"]["hosts"]:
         inventory["nuxeo"]["vars"]["elastic_hosts"].append(hostvars[i]["private_ip"])
+        inventory["nuxeospot"]["vars"]["elastic_hosts"].append(hostvars[i]["private_ip"])
 if "mongodb" in groups:
     for i in groups["mongodb"]["hosts"]:
         inventory["nuxeo"]["vars"]["mongodb_hosts"].append(hostvars[i]["private_ip"])
+        inventory["nuxeospot"]["vars"]["mongodb_hosts"].append(hostvars[i]["private_ip"])
 if "kafka" in groups:
     for i in groups["kafka"]["hosts"]:
         inventory["nuxeo"]["vars"]["kafka_hosts"].append(hostvars[i]["private_ip"])
+        inventory["nuxeospot"]["vars"]["kafka_hosts"].append(hostvars[i]["private_ip"])
 if "monitor" in groups:
     for i in groups["monitor"]["hosts"]:
         inventory["nuxeo"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
+        inventory["nuxeospot"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["elastic"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["mongodb"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])
         inventory["kafka"]["vars"]["monitor_hosts"].append(hostvars[i]["private_ip"])

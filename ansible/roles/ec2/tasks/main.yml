@@ -11,8 +11,8 @@
     instance_tags:
       bench: "{{bench}}"
       bench_role: "{{type}}"
-      billing-category: "{{billing-category}}"
-      billing-subcategory: "{{billing-subcategory}}"
+      billing-category: "{{billing_category}}"
+      billing-subcategory: "{{billing_subcategory}}"
     state: "running"
     wait: yes
   when: stopped_instances.stdout != ""
@@ -55,8 +55,8 @@
       Name: bench-{{bench}}-{{type}}
       bench: "{{bench}}"
       bench_role: "{{type}}"
-      billing-category: "{{billing-category}}"
-      billing-subcategory: "{{billing-subcategory}}"
+      billing-category: "{{billing_category}}"
+      billing-subcategory: "{{billing_subcategory}}"
       bench_tag: "{{stamp_tag}}"
     exact_count: "{{counts[type]}}"
     count_tag:
@@ -64,6 +64,34 @@
       bench_role: "{{type}}"
     wait: yes
   register: created_instances
+  when: "spot_price[type] is not defined"
+
+- name: "{{type}} Create/destroy SPOT instances"
+  ec2:
+    spot_price: "{{spot_price[type]}}"
+    region: "{{aws_region}}"
+    key_name: "{{keypair}}"
+    instance_type: "{{types[type]}}"
+    image: "{{amis[type]}}"
+    vpc_subnet_id: "{{subnet_id}}"
+    group: "{{security_group}}"
+    instance_profile_name: "{{instance_profile}}"
+    assign_public_ip: yes
+    ebs_optimized: true
+    instance_tags:
+      Name: bench-{{bench}}-{{type}}
+      bench: "{{bench}}"
+      bench_role: "{{type}}"
+      billing-category: "{{billing_category}}"
+      billing-subcategory: "{{billing_subcategory}}"
+      bench_tag: "{{stamp_tag}}"
+    exact_count: "{{counts[type]}}"
+    count_tag:
+      bench: "{{bench}}"
+      bench_role: "{{type}}"
+    wait: yes
+  register: created_instances
+  when: "spot_price[type] is defined"
 
 - name: "{{type}} Create ebs volume 1 xvdf"
   ec2_vol:

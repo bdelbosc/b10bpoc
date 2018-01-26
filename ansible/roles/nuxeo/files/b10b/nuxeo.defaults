@@ -64,3 +64,7 @@ elasticsearch.index.translog.durability=async
 # Stream WorkManager ------------
 # Disable the work execution
 # nuxeo.stream.work.processing.disable=true
+nuxeo.stream.work.over.provisioning.factor=4
+
+# on start no picture slow request for unnecessary migration
+nuxeo.picture.migration.enabled=false

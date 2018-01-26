@@ -10,6 +10,11 @@
     hname: nuxeo{{ groups.nuxeo.index(inventory_hostname) + 1 }}
   when: "'nuxeo' in group_names"
 
+- name: Find nuxeospot hostname
+  set_fact:
+    hname: nuxeospot{{ groups.nuxeospot.index(inventory_hostname) + 1 }}
+  when: "'nuxeospot' in group_names"
+
 - name: Find elastic hostname
   set_fact:
     hname: elastic{{ groups.elastic.index(inventory_hostname) + 1 }}

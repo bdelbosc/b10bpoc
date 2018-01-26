@@ -9,6 +9,11 @@
 {{ hostvars[host].private_ip }} nuxeo{{loop.index}}
 {% endfor %}
 {% endif %}
+{% if groups['nuxeospot'] is defined %}
+{% for host in groups['nuxeospot'] %}
+{{ hostvars[host].private_ip }} nuxeospot{{loop.index}}
+{% endfor %}
+{% endif %}
 {% if groups['elastic'] is defined %}
 {% for host in groups['elastic'] %}
 {{ hostvars[host].private_ip }} elastic{{loop.index}}
