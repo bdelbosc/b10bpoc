@@ -16,7 +16,7 @@ types:
 counts:
   mongodb: 2
   nuxeo: 2
-  nuxeospot: 1
+  nuxeospot: 3
   elastic: 1
   gatling: 1
   kafka: 1

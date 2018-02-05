@@ -72,6 +72,9 @@ function setup_ansible() {
   pip install -q -r ansible/requirements.txt
   # prevent ssh auth checking fingerprints
   export ANSIBLE_HOST_KEY_CHECKING=False
+  export ANSIBLE_PIPELINING=True
+  export ANSIBLE_RETRIES=2
+  export ANSIBLE_TIMEOUT=60
 }
 
 function run_ansible() {

@@ -20,3 +20,6 @@
 #
 # - action: fail
 #   when: "'true' not in runningstatus.content"
+
+- name: Notify graphite
+  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Nuxeo started {{inventory_hostname}}", "tags":"admin", "data": ""}'''
