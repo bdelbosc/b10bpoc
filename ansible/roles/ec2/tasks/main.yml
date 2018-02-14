@@ -63,7 +63,7 @@
       bench: "{{bench}}"
       bench_role: "{{type}}"
     wait: yes
-  register: created_instances
+  register: created_instances_regular
   when: "spot_price[type] is not defined"
 
 - name: "{{type}} Create/destroy SPOT instances"
@@ -90,8 +90,12 @@
       bench: "{{bench}}"
       bench_role: "{{type}}"
     wait: yes
-  register: created_instances
+  register: created_instances_spot
   when: "spot_price[type] is defined"
+
+- name: "Build list of created_instance"
+  set_fact:
+    created_instances: "{{ created_instances_spot if spot_price[type] is defined else created_instances_regular }}"
 
 - name: "{{type}} Create ebs volume 1 xvdf"
   ec2_vol:

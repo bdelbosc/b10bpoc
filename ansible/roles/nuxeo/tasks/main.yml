@@ -139,7 +139,8 @@
     dest: /opt/nuxeo/conf/nuxeo.conf
     regexp: '^#?nuxeo\.mongodb\.server\s*='
     #line: "nuxeo.mongodb.server=mongodb://{% for host in groups['mongodb'] -%}{{ hostvars[host]['private_ip'] }}{%- if not loop.last %},{% endif -%}{%- endfor %}/bench"
-    line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench%3FsocketTimeoutMS%3D600000%26maxPoolSize%3D150"
+    # line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench%3FsocketTimeoutMS%3D600000%26maxPoolSize%3D150"
+    line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench%?socketTimeoutMS=600000&maxPoolSize=150"
   tags:
     - hh
 - name: Config - nuxeo.mongodb.dbname
