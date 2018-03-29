@@ -3,3 +3,7 @@
 - name: Raz mongo data
   run_once: true
   shell: /usr/bin/mongo nuxeo1/bench --eval 'db.dropDatabase();'
+
+- name: Enable shard
+  run_once: true
+  shell: /usr/bin/mongo nuxeo1/bench  /tmp/add_shards.js

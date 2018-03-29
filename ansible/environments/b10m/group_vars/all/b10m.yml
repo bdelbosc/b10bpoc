@@ -47,7 +47,7 @@ raid0:
   nuxeo: 2
   nuxeospot: 1
   elastic: 2
-  gatling: 0
+  gatling: 1
   kafka: 2
   monitor: 2
 

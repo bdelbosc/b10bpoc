@@ -135,6 +135,9 @@ enabled = True
 [[VMStatCollector]]
 enabled = True
 
+[[NetworkCollector]]
+enabled = True
+
 {% if hostname.stdout == 'monitor1' %}
 # check mongo
 {% if groups['mongodb']|length > 0 %}
