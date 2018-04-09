@@ -1,0 +1,18 @@
+---
+# init the elasticsearch infra needed to run indexing
+
+- hosts: 34.241.210.55
+  gather_facts: no
+  sudo: yes
+  pre_tasks:
+  - name: install python 2
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  roles:
+  - role: common
+  - role: mongo_common
+  - role: mongo_router
+  - role: nuxeo
+  - role: diamond
+  - role: flame
+  post_tasks:
+  - include: ./roles/nuxeo/tasks/config_graphite.yml
