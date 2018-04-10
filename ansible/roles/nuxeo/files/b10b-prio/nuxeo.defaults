@@ -1,4 +1,4 @@
-b10b.target=.
+b10b-prio.target=.
 
 # misc
 # Use a descent cache size for directories
@@ -33,11 +33,13 @@ nuxeo.dbs.cache.ttl=60
 
 
 # kafka ------------------------
-kafka.request.timeout.ms=3610000
-kafka.max.poll.records=1
-kafka.max.poll.interval.ms=3600000
-kafka.session.timeout.ms=300000
+kafka.request.timeout.ms=610000
+kafka.max.poll.records=2
+kafka.max.poll.interval.ms=600000
+kafka.session.timeout.ms=60000
 kafka.heartbeat.interval.ms=3000
+kafka.topicPrefix=priority-
+
 
 
 # s3 ---------------------------
@@ -45,9 +47,6 @@ nuxeo.s3storage.connection.max=20
 nuxeo.s3storage.connection.retry=3
 nuxeo.s3storage.connection.timeout=610000
 nuxeo.s3storage.socket.timeout=610000
-nuxeo.s3storage.directdownload=true
-nuxeo.s3storage.directdownload.expire=3600
-
 # cache
 nuxeo.s3storage.cachesize=3000MB
 nuxeo.s3storage.cachecount=1200000
@@ -67,6 +66,6 @@ elasticsearch.index.translog.durability=async
 # Stream WorkManager ------------
 # Disable the work execution
 # nuxeo.stream.work.processing.disable=true
+nuxeo.stream.work.over.provisioning.factor=1
 
-# on start no picture slow request for unnecessary migration
-nuxeo.picture.migration.enabled=false
+session.timeout=1440

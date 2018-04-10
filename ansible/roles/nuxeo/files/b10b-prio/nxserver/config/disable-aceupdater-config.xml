@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="b10b-acescheduler-config">
+  <require>org.nuxeo.ecm.core.schedulers</require>
+    <extension target="org.nuxeo.ecm.platform.scheduler.core.service.SchedulerRegistryService" point="schedule">
+    <schedule id="aceScheduler" enabled="false"/>
+  </extension>
+</component>

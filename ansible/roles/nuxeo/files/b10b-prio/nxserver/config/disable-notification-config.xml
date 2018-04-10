@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="b10b-notification-config">
+  <require>org.nuxeo.ecm.platform.notification.listener</require>
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="proxySubscriptionPropagationListener" enabled="false" />
+    <listener name="notificationListener" enabled="false" />
+  </extension>
+</component>

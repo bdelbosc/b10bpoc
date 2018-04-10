@@ -1,16 +1,11 @@
 <?xml version="1.0"?>
 <component name="b10b-video-config">
   <require>org.nuxeo.ecm.platform.video.service.contrib</require>
-  
+  <require>org.nuxeo.platform.video.core.listeners</require>
+
   <!-- disable very slow webm conversion -->
   <extension point="automaticVideoConversions" target="org.nuxeo.ecm.platform.video.service.VideoService">
     <automaticVideoConversion name="WebM 480p" order="10" enabled="false" />
-    <automaticVideoConversion name="MP4 480p" order="0" enabled="false"/>
-    <automaticVideoConversion name="MP4 720p" order="1"/>
   </extension>
 
-  <extension point="videoConversions" target="org.nuxeo.ecm.platform.video.service.VideoService">
-    <videoConversion converter="convertToMP4" height="720" name="MP4 720p" rendition="true"/>
-  </extension>
-
- </component>
+</component>

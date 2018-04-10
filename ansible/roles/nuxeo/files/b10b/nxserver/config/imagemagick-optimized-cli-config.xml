@@ -1,0 +1,12 @@
+<component name="org.nuxeo.apple.conversions.config">
+  <require>org.nuxeo.ecm.platform.commandline.executor.service.defaultContrib</require>
+  <require>org.nuxeo.labs.dam.converters.commandline</require>
+  <extension point="command" target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent">
+    <command enabled="true" name="MultiOutputPictureResize">
+      <commandLine>convert</commandLine>
+      <parameterString>-define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white -flatten #{inputFilePath}[0] -resize "1280x>" -write #{FullHDOutputFilePath}.png -resize "319x>" -write #{SmallOutputFilePath}.png -resize "140x>" -write #{MediumOutputFilePath}.png -resize "48x>" #{ThumbnailOutputFilePath}.png</parameterString>
+      <testParameterString>-version</testParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+  </extension>
+</component>
