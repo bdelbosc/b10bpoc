@@ -1,23 +1,22 @@
 # --------------------------------------------------
 # AWS keypair used to access the ec2 instances
-keypair: bdelbosc
+keypair: bdelbosc2
 
 # Tag used to flag ec2 used for the bench
-bench: b10b
+bench: apl1b
 
 # An s3 bucket for the binarystore
 bucket: nuxeo-{{bench}}
 
 # An s3 bucket used to save bench results
-bucket_results: nuxeo-b10b-results
+bucket_results: nuxeo-apl1b-results
 
 # The default Nuxeo distribution to use
-#nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-distribution-tomcat-8.4-SNAPSHOT-nuxeo-cap.zip
-nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-10.1-SNAPSHOT.zip
+nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-10.2-SNAPSHOT.zip
 
 # billing category
-billing_category: build
-billing_subcategory: bench
+billing_category: presales
+billing_subcategory: apl1
 
 # AWS config
 # ami-d37961b5 hvm:ebs-ssd 20170619 ubuntu 14.04
@@ -27,9 +26,9 @@ billing_subcategory: bench
 # ami-cc1473b5 nuxeo base on ami-7a187c03 hvm:ebs-ssd 20180122 ubuntu 16.04
 
 aws_region: eu-west-1
-security_group: jenkins-vpc
-subnet_id: subnet-dbac2a82
-instance_profile: JenkinsRole
+security_group: SUPINT-1029-sg
+subnet_id: subnet-3eed0964
+instance_profile: SUPINT-1029-Role
 dbprofile: mongodb
 amis:
   nuxeo: ami-cc1473b5
