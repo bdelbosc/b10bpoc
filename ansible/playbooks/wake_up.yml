@@ -15,6 +15,29 @@
     args:
       chdir: /ssd/monitor
 
+- hosts: nuxeo:mongodb:kafka:elastic:gatling
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - name: Wake up diamond
+    service: name=diamond state=started
+
+- hosts: mongodb
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - name: Wake up mongod
+    service: name=mongod state=started
+  - name: Wake up mongocs
+    service: name=mongocs state=started
+
+- hosts: nuxeo
+  gather_facts: no
+  sudo: yes
+  tasks:
+  - name: Wake up mongos
+    service: name=mongos state=started
+
 - hosts: elastic
   gather_facts: no
   sudo: yes

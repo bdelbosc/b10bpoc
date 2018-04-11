@@ -291,5 +291,5 @@
   file: dest=/opt/nuxeo/ owner=nuxeo group=nuxeo recurse=yes
 
 # Copy metdia files
-- name: Copy media files
-  include: ./copy_media.yml
+#- name: Copy media files
+#  include: ./copy_media.yml

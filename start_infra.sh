@@ -2,7 +2,7 @@
 # Start the required infra to run a bench
 cd $(dirname $0)
 HERE=`readlink -e .`
-distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-10.1-SNAPSHOT.zip"
+distrib_url="http://community.nuxeo.com/static/snapshots/nuxeo-server-tomcat-10.2-SNAPSHOT.zip"
 clid=/opt/build/hudson/instance.clid
 profile=b10m
 set -e

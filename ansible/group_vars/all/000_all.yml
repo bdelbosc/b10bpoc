@@ -1,9 +1,9 @@
 # --------------------------------------------------
 # AWS keypair used to access the ec2 instances
-keypair: bdelbosc2
+keypair: bdelbosc
 
 # Tag used to flag ec2 used for the bench
-bench: apl1b
+bench: a1b
 
 # An s3 bucket for the binarystore
 bucket: nuxeo-{{bench}}
@@ -25,19 +25,19 @@ billing_subcategory: apl1
 # ami-44455e22 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04 ffmeg broken
 # ami-cc1473b5 nuxeo base on ami-7a187c03 hvm:ebs-ssd 20180122 ubuntu 16.04
 
-aws_region: eu-west-1
+aws_region: eu-west-3
 security_group: SUPINT-1029-sg
-subnet_id: subnet-3eed0964
+subnet_id: subnet-6de51f04
 instance_profile: SUPINT-1029-Role
 dbprofile: mongodb
 amis:
-  nuxeo: ami-cc1473b5
-  nuxeospot: ami-cc1473b5
-  mongodb: ami-7a187c03
-  elastic: ami-7a187c03
-  kafka: ami-7a187c03
-  gatling: ami-7a187c03
-  monitor: ami-7a187c03
+  nuxeo: ami-bff746c2
+  nuxeospot: ami-bff746c2
+  mongodb: ami-9a03b5e7
+  elastic: ami-9a03b5e7
+  kafka: ami-9a03b5e7
+  gatling: ami-9a03b5e7
+  monitor: ami-9a03b5e7
 
 # should we apt-get update && apt-get distupgrade ?
 dist_upgrade: false
