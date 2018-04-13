@@ -5,6 +5,8 @@
   sudo: no
   roles:
   - role: s3
+# efs need to be created by hand
+#  - role: efs
   - {role: ec2, type: monitor}
   - {role: ec2, type: kafka}
   - {role: ec2, type: mongodb}
@@ -64,3 +66,4 @@
   tasks:
   - name: Summary
     debug: msg="Monitoring {{groups.monitor.0}}   Nuxeo {{groups.nuxeo}}   Mongo {{groups.mongodb}}  Kafka {{groups.kafka}}"
+

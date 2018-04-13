@@ -5,4 +5,5 @@
     bucket: "{{bucket}}"
     mode: create
     region: "{{aws_region}}"
+  when: useS3Binarystore
 

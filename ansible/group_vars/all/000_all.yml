@@ -3,9 +3,15 @@
 keypair: bdelbosc
 
 # Tag used to flag ec2 used for the bench
-bench: a1b
+bench: a500m
 
-# An s3 bucket for the binarystore
+# Use EFS binary store
+useEfsBinarystore: true
+
+# Use an S3 binary store
+useS3Binarystore: false
+
+# The s3 bucket for the binary store
 bucket: nuxeo-{{bench}}
 
 # An s3 bucket used to save bench results
@@ -16,7 +22,7 @@ nuxeo_distribution: http://community.nuxeo.com/static/snapshots/nuxeo-server-tom
 
 # billing category
 billing_category: presales
-billing_subcategory: apl1
+billing_subcategory: apple
 
 # AWS config
 # ami-d37961b5 hvm:ebs-ssd 20170619 ubuntu 14.04
@@ -25,19 +31,19 @@ billing_subcategory: apl1
 # ami-44455e22 nuxeo base on ami-58475f3e hvm:ebs 20170619 ubuntu 14.04 ffmeg broken
 # ami-cc1473b5 nuxeo base on ami-7a187c03 hvm:ebs-ssd 20180122 ubuntu 16.04
 
-aws_region: eu-west-3
+aws_region: eu-central-1
 security_group: SUPINT-1029-sg
-subnet_id: subnet-6de51f04
+subnet_id: subnet-f686878e
 instance_profile: SUPINT-1029-Role
 dbprofile: mongodb
 amis:
-  nuxeo: ami-bff746c2
-  nuxeospot: ami-bff746c2
-  mongodb: ami-9a03b5e7
-  elastic: ami-9a03b5e7
-  kafka: ami-9a03b5e7
-  gatling: ami-9a03b5e7
-  monitor: ami-9a03b5e7
+  nuxeo: ami-76643c9d
+  nuxeospot: ami-76643c9d
+  mongodb: ami-9515487e
+  elastic: ami-9515487e
+  kafka: ami-9515487e
+  gatling: ami-9515487e
+  monitor: ami-9515487e
 
 # should we apt-get update && apt-get distupgrade ?
 dist_upgrade: false

@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--hosts", help="List the hosts for the specified group")
 parser.add_argument("--list", help="List the whole inventory", action="store_true")
 args = parser.parse_args()
-region = "eu-west-3"
+
 ec2 = boto.ec2.connect_to_region(region)
 reservations = ec2.get_all_instances(filters={"tag:bench": bench, "tag-key": "bench_role"})
 instances = [i for r in reservations for i in r.instances]

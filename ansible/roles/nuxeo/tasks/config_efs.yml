@@ -1,16 +1,36 @@
 ---
+- name: EFS - Install nfs deps
+  apt: name={{item}} state=latest
+  with_items:
+    - nfs-common
 
-# Add S3 config
-- name: Config - nuxeo.s3storage.region
+- name: EFS - Check if efs volume is mounted
+  shell: cat /proc/mounts | grep "/efs"
+  changed_when: False
+  failed_when: False
+  register: mounted
+
+- name: EFS - Create mount point
+  file: path=/efs owner=nuxeo group=nuxeo mode=0755 state=directory
+
+- name: EFS - Mount
+#  mount:
+#    name: /efs
+#    src: fs-3efe0e67.efs.eu-central-1.amazonaws.com
+#    fstype: nfs4
+#    opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noatime,nodiratime,nofail
+#    state: mounted
+  shell: mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs-3efe0e67.efs.eu-central-1.amazonaws.com:/ /efs
+  when: "mounted.stdout == ''"
+
+# Add EFS config
+- name: EFS - Create binary store directory
+  file: path=/efs/nuxeo-binary-store owner=nuxeo group=nuxeo mode=0755 state=directory
+
+
+- name: Config - Binary store to use EFS
   lineinfile:
     dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?nuxeo\.s3storage\.region\s*='
-    line: "nuxeo.s3storage.region={{aws_region}}"
-- name: Config - nuxeo.s3storage.bucket
-  lineinfile:
-    dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?nuxeo\.s3storage\.bucket\s*='
-    line: "nuxeo.s3storage.bucket={{bucket}}"
+    regexp: '^#?repository\.binary\.store\s*='
+    line: "repository.binary.store=/efs/nuxeo-binary-store"
 
-- name: Install S3 package
-  shell: nuxeoctl --relax=false --accept=true mp-install amazon-s3-online-storage

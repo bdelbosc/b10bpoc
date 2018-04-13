@@ -1,8 +1,14 @@
 ---
 
-- name: Create an empty bucket
-  s3:
-    bucket: "{{bucket}}"
-    mode: create
-    region: "{{aws_region}}"
+- name: Provision an EFS
+  efs:
+    state: present
+    name: "efs-{{bench}}"
+    tags:
+        billing-category: presales
+        billing-subcategory: apple
+    targets:
+        - subnet_id: subnet-f686878e
+    performance_mode: max_io
+  when: useEfsBinarystore
 

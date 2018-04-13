@@ -39,6 +39,11 @@
   get_url: url={{ nuxeo_distribution }} dest=/deploy/nuxeo-distribution.zip
   when: not nuxeozip.stat.exists
 
+- name: Remove crap
+  file:
+    state: absent
+    path: /opt/microsoft
+
 - name: Create /opt
   file: path=/ssd/opt state=directory
 
@@ -140,7 +145,7 @@
     regexp: '^#?nuxeo\.mongodb\.server\s*='
     #line: "nuxeo.mongodb.server=mongodb://{% for host in groups['mongodb'] -%}{{ hostvars[host]['private_ip'] }}{%- if not loop.last %},{% endif -%}{%- endfor %}/bench"
     # line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench%3FsocketTimeoutMS%3D600000%26maxPoolSize%3D150"
-    line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench%?socketTimeoutMS=600000&maxPoolSize=150"
+    line: "nuxeo.mongodb.server=mongodb://{{private_ip}}/bench?socketTimeoutMS=600000&maxPoolSize=150"
   tags:
     - hh
 - name: Config - nuxeo.mongodb.dbname
@@ -233,20 +238,13 @@
 #  with_items: pkgaddlist.stdout.strip().split('\n')
 #  when: custompkg.stat.exists and pkgaddlist.stdout.strip() != ''
 
-# Add S3 config
-- name: Config - nuxeo.s3storage.region
-  lineinfile:
-    dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?nuxeo\.s3storage\.region\s*='
-    line: "nuxeo.s3storage.region={{aws_region}}"
-- name: Config - nuxeo.s3storage.bucket
-  lineinfile:
-    dest: /opt/nuxeo/conf/nuxeo.conf
-    regexp: '^#?nuxeo\.s3storage\.bucket\s*='
-    line: "nuxeo.s3storage.bucket={{bucket}}"
+- name: Use S3
+  include: ./config_s3.yml
+  when: useS3Binarystore
 
-- name: Install S3 package
-  shell: nuxeoctl --relax=false --accept=true mp-install amazon-s3-online-storage
+- name: Use S3
+  include: ./config_efs.yml
+  when: useEfsBinarystore
 
 # Install custom packages list
 - name: Check for custom packages to install
