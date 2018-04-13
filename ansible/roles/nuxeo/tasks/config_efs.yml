@@ -1,0 +1,16 @@
+---
+
+# Add S3 config
+- name: Config - nuxeo.s3storage.region
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?nuxeo\.s3storage\.region\s*='
+    line: "nuxeo.s3storage.region={{aws_region}}"
+- name: Config - nuxeo.s3storage.bucket
+  lineinfile:
+    dest: /opt/nuxeo/conf/nuxeo.conf
+    regexp: '^#?nuxeo\.s3storage\.bucket\s*='
+    line: "nuxeo.s3storage.bucket={{bucket}}"
+
+- name: Install S3 package
+  shell: nuxeoctl --relax=false --accept=true mp-install amazon-s3-online-storage
