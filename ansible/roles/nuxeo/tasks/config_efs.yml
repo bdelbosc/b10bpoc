@@ -20,7 +20,7 @@
 #    fstype: nfs4
 #    opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noatime,nodiratime,nofail
 #    state: mounted
-  shell: mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs-3efe0e67.efs.eu-central-1.amazonaws.com:/ /efs
+  shell: mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noatime,nodiratime fs-3efe0e67.efs.eu-central-1.amazonaws.com:/ /efs
   when: "mounted.stdout == ''"
 
 # Add EFS config

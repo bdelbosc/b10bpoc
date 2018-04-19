@@ -39,11 +39,6 @@
   get_url: url={{ nuxeo_distribution }} dest=/deploy/nuxeo-distribution.zip
   when: not nuxeozip.stat.exists
 
-- name: Remove crap
-  file:
-    state: absent
-    path: /opt/microsoft
-
 - name: Create /opt
   file: path=/ssd/opt state=directory
 

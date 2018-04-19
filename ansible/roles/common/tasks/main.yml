@@ -20,6 +20,15 @@
   when: not hostdone.stat.exists
 
 # apt
+- name: Remove crap
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/opt/microsoft"
+    - "/etc/apt/sources.list.d/microsoft.list"
+    - "/etc/apt/sources.list.d/microsoft-prod.list"
+
 - name: Update apt cache
   shell: apt-get update
   when: dist_upgrade and not hostdone.stat.exists

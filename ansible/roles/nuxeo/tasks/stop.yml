@@ -3,5 +3,5 @@
   shell: nuxeoctl stop
 
 # TODO: save gc log
-- name: Notify graphite
-  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Nuxeo stopped {{inventory_name}}", "tags":"admin", "data": ""}'''
+#- name: Notify graphite
+#  shell: 'curl -XPOST http://monitor1:8080/events/  -d ''{"what": "Nuxeo stopped {{inventory_name}}", "tags":"admin", "data": ""}'''
