@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="b10b-disable-count-config">
+  <require>org.nuxeo.ecm.core.management.listener</require>
+    <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="CounterListener" enabled="false" />
+  </extension>
+</component>

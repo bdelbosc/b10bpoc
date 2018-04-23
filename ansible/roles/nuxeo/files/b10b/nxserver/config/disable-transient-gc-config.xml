@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="b10b-disable-transient-gc-config">
+  <require>org.nuxeo.ecm.core.transientstore.TransientStorageComponent</require>
+    <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="transientStoreGCTrigger" enabled="false" />
+  </extension>
+</component>

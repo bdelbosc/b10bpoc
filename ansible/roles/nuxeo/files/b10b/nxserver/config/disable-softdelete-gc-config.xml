@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="b10b-disable-softdelete-gc-config">
+  <require>org.nuxeo.ecm.platform.rendition.scheduler</require>
+    <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="softDeleteCleanup" enabled="false" />
+  </extension>
+</component>
