@@ -8,8 +8,8 @@ nuxeo.cache.concurrencylevel=50
 # Do not use Redis for directory cache
 nuxeo.cache.type=memory
 
-# tx timeout 10min, this is the limit all other timeout must be greater
-nuxeo.db.transactiontimeout=600
+nuxeo.db.transactiontimeout=86400
+nuxeo.server.http.maxThreads=120
 
 # vcs --------------------------
 # disable dbs fulltext search not fulltext extraction

@@ -18,7 +18,7 @@ counts:
   nuxeo: 2
   nuxeospot: 0
   elastic: 1
-  gatling: 1
+  gatling: 2
   kafka: 1
   monitor: 1
 

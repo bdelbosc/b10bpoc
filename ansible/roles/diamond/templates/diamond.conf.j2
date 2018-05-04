@@ -138,6 +138,11 @@ enabled = True
 [[NetworkCollector]]
 enabled = True
 
+#[[NginxCollector]]
+#req_port = 8180
+#enabled = True
+
+
 {% if hostname.stdout == 'monitor1' %}
 # check mongo
 {% if groups['mongodb']|length > 0 %}

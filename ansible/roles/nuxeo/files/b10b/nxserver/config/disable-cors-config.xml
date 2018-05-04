@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="b10b-disable-cors-config">
+<extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService" point="corsConfig">
+    <!-- THIS IS INSECURE -->
+    <corsConfig name="insecure" allowOrigin="*" supportedMethods="GET,HEAD,OPTIONS,POST,PUT,DELETE" >
+      <pattern>/.*</pattern>
+    </corsConfig>
+</extension>
+</component>
